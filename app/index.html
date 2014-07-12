@@ -23,16 +23,16 @@
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <div class="container">
+    <div id="main" class="container">
       <div class="header">
         <ul class="nav nav-pills pull-right">
           <li class="active"><a ng-href="#">Home</a></li>
-          <li><a ng-href="#/about">About</a></li>
-          <li><a ng-href="#/ajax">Ajax</a></li>
-          <li><a ng-href="#/ngReact">NgReact</a></li>
-          <li><a ng-href="#/ngReactGrid">NgReactGrid</a></li>
-          <li><a ng-href="#/mergely">mergely</a></li>
-          <li><a ng-href="#/tiny-mce">tiny-mce</a></li>
+          <li><a href="#/about">About</a></li>
+          <li><a href="#/ajax">Ajax</a></li>
+          <li><a href="#/ngReact">NgReact</a></li>
+          <li><a href="#/ngReactGrid">NgReactGrid</a></li>
+          <li><a href="#/mergely">mergely</a></li>
+          <li><a href="#/tiny-mce">tiny-mce</a></li>
         </ul>
         <h3 class="text-muted"><i class="icon-camera-retro icon-large brown"></i><span class="glyphicon glyphicon-tower"  style="color: red;"></span>angularJsSample</h3>
         <i class="fa fa-floppy-o brown text-warning"></i> 
@@ -54,13 +54,17 @@
 
     <!-- build:js(.) scripts/vendor.js -->
     <!-- bower:js -->
-    <script src="bower_components/es5-shim/es5-shim.js">
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/lodash/dist/lodash.min.js"></script>
     <!-- endbower -->
     <!-- endbuild -->
 
     <!-- other library -->
+    <script src="lib/summy.min.js"></script>
     <!-- library end -->
-        <!-- build:js scripts.min.js -->
-        <!-- endbuild -->
+
+    <!-- build:js scripts.min.js -->
+    <script src="scripts/route.js"></script>
+    <!-- endbuild -->
 </body>
 </html>
