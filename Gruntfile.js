@@ -13,7 +13,7 @@ grunt.initConfig({
     // 連結するファイル
     src: 'app/scripts/**/*.js',
     // 結果として生成されるJSファイル
-    dest: 'build/<%= pkg.name %>.js'
+    dest: 'build/scripts.js'
   }
 },
 
@@ -25,7 +25,7 @@ uglify: {
           // uglifyするファイル
     src: '<%= concat.dist.dest %>',
     // 結果として生成されるJSファイル
-    dest: 'build/<%= pkg.name %>.min.js'
+    dest: 'build/scripts.min.js'
       }
     },
     
@@ -42,7 +42,7 @@ uglify: {
             // concat&minifyするファイル
     src: 'app/styles/**/*.css',
     // 結果として生成されるJSファイル
-    dest: 'build/<%= pkg.name %>.min.css'
+    dest: 'build/styles.min.css'
             }
         },
         
@@ -97,6 +97,13 @@ uglify: {
             }
         },
         
+        usemin: {
+      options: {
+        dirs: ['build/']
+        },
+      html: ['build/*.html']
+      },
+        
         connect: {
       server: {
         options: {
@@ -108,7 +115,7 @@ uglify: {
       
        /* プロキシサーバの設定 */
             proxies: [{
-                context: '/json_api', //http://localhost:3000/json_api/api/1
+                context: '/jsonApi', //http://localhost:3000/jsonApi/api/1
                 host: 'localhost',
                 port: '3000',
                 https: false,
@@ -118,7 +125,7 @@ uglify: {
     
     /* easymockの設定 */
         easymock: {
-            json_api: {
+            jsonApi: {
                 options: {
                     port: 3000,
                     path: 'app',
@@ -152,8 +159,9 @@ uglify: {
   grunt.loadNpmTasks('grunt-contrib-watch');
   grunt.loadNpmTasks('grunt-contrib-qunit');
   grunt.loadNpmTasks('grunt-easymock');
+  grunt.loadNpmTasks('grunt-usemin');
   
-  grunt.registerTask('default', ['clean', 'jshint', 'qunit', 'copy', 'htmlmin','imagemin',  'concat', 'uglify', 'cssmin']);
+  grunt.registerTask('default', ['clean', 'jshint', 'qunit', 'copy', 'htmlmin','imagemin', 'concat', 'uglify', 'cssmin', 'usemin']);
   
   grunt.registerTask('server', ['connect', 'easymock', 'watch']);
 };
