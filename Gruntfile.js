@@ -128,22 +128,27 @@ uglify: {
             jsonApi: {
                 options: {
                     port: 3000,
-                    path: 'app',
-                },
-            },
+                    path: 'app'
+                }
+            }
         },
     
     watch: {
         files: 'app/**/*.*',
-      options: {
-        livereload: true // 変更があればリロード
-      }
+        livereload: {
+            options: {
+                livereload: true
+            },
+            files: [
+                'app/**/*.*'
+            ]
+        }
     },
     
     
     qunit: {
       files: ['test/*.html']
-    },
+    }
     
   });
   
