@@ -12,25 +12,32 @@ simpleWebDevTool.service.pathService = function(){
     return {
         func1 : function(){
             console.log('func1 ' + serviceName);
-            serviceData.load =  _.map(serviceData.load, function(num) { return num - 1; });
+            serviceData.data =  _.map(serviceData.data, function(num) { return num + 3; });
             controller.refresh();
         },
 
         func2 : function(){
             console.log('func2 '  + serviceName);
-            serviceData.load = _.filter(serviceData.load, function(num) { return num % 2 === 1; });
+            serviceData.data = _.filter(serviceData.data, function(num) { return num % 2 === 1; });
+            controller.refresh();
+        },
+
+        search : function(searchStr){
+            console.log('func2 '  + serviceName);
+            serviceData.str = searchStr;
+            serviceData.data = _.filter(serviceData.data, function(num) { return num == searchStr; });
             controller.refresh();
         },
 
         load : function(){
             console.log('load '  + serviceName);
-            serviceData = dao.load();
+            dao.load(serviceData);
             console.log(serviceData);
         },
 
-        refresh : function(){
+        getData : function(){
             console.log('refresh '  + serviceName);
-            return serviceData.load;
+            return serviceData;
         }
     };
 };

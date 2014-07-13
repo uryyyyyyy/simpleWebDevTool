@@ -20,12 +20,23 @@ simpleWebDevTool.controller.pathController = function(){
             service.func2();
             console.log('func2 done');
         },
+        search : function(){
+            console.log('search '  + controllerName);
+            var searchStr = $('#searchForm').val();
+            service.search(searchStr);
+            console.log('search done');
+        },
+
         init : function(){
+            simpleWebDevTool.util.countStart();
             console.log('init '  + controllerName);
             service.load();
+            simpleWebDevTool.util.timeShow();
         },
         refresh : function() {
-            $('#template').html(_.template(simpleWebDevTool.util.render('template1'), { 'people': service.refresh()}));
+            var data = service.getData();
+            $('#template').html(_.template(simpleWebDevTool.util.render('template1'), { 'people': data.data}));
+            $('#searchPanel').text(data.str);
         }
     };
 };

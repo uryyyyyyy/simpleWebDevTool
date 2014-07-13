@@ -8,13 +8,13 @@ simpleWebDevTool.dao.pathDao = function(){
     var daoName = 'pathDao';
 
     return {
-        load : function(){
+        load : function(serviceData){
             console.log('load '  + daoName);
-            return simpleWebDevTool.util.getAjaxAsync('jsonApi/path/2', controller.refresh);
+            return simpleWebDevTool.util.getAjaxAsync('jsonApi/path/2', serviceData, controller.refresh);
         },
-        save : function(reqData){
+        save : function(serviceData, reqData){
             console.log('save '  + daoName);
-            return simpleWebDevTool.util.putAjaxAsync('jsonApi/path/2', reqData, controller.refresh);
+            return simpleWebDevTool.util.putAjaxAsync('jsonApi/path/2', serviceData, reqData, controller.refresh);
         }
     };
 };

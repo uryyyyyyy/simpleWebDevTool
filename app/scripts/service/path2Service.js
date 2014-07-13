@@ -23,12 +23,12 @@ simpleWebDevTool.service.path2Service = function(){
         },
         save : function(data){
             console.log('save '  + serviceName);
-            serviceData = dao2.save(data);
+            dao2.save(serviceData, data);
         },
 
         load : function(){
             console.log('load '  + serviceName);
-            serviceData = dao2.load();
+            dao2.load(serviceData);
         },
 
         refresh : function(){
