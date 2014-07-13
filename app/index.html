@@ -1,5 +1,5 @@
 <!doctype html>
-<html class="no-js">
+<html id="SimpleWebDevTool">
   <head>
     <meta charset="utf-8">
     <title></title>
@@ -42,7 +42,7 @@
 </span>
       </div>
 
-      <div ui-view></div>
+      <div id="template"></div>
 
       <div class="footer">
         <p><span class="glyphicon glyphicon-tower"></span> from uryyyyyyy </p>
@@ -60,11 +60,13 @@
     <!-- endbuild -->
 
     <!-- other library -->
-    <script src="lib/summy.min.js"></script>
+    <script src="bower_components/sammy/lib/min/sammy-0.7.5.min.js"></script>
     <!-- library end -->
 
     <!-- build:js scripts.min.js -->
     <script src="scripts/route.js"></script>
+    <script src="scripts/controller/pathController.js"></script>
+    <script src="scripts/controller/path2Controller.js"></script>
     <!-- endbuild -->
 </body>
 </html>

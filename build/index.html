@@ -1,12 +1,12 @@
 <!doctype html>
-<html class="no-js">
+<html id="SimpleWebDevTool">
   <head>
     <meta charset="utf-8">
     <title></title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-
+    <link rel="stylesheet" href="styles/vendor.css">
     <link rel="stylesheet" href="styles.min.css">
     <!-- other CSS -->
     <!-- other end -->
@@ -17,16 +17,16 @@
     <![endif]-->
 
     <!-- Add your site or application content here -->
-    <div class="container">
+    <div id="main" class="container">
       <div class="header">
         <ul class="nav nav-pills pull-right">
           <li class="active"><a ng-href="#">Home</a></li>
-          <li><a ng-href="#/about">About</a></li>
-          <li><a ng-href="#/ajax">Ajax</a></li>
-          <li><a ng-href="#/ngReact">NgReact</a></li>
-          <li><a ng-href="#/ngReactGrid">NgReactGrid</a></li>
-          <li><a ng-href="#/mergely">mergely</a></li>
-          <li><a ng-href="#/tiny-mce">tiny-mce</a></li>
+          <li><a href="#/about">About</a></li>
+          <li><a href="#/ajax">Ajax</a></li>
+          <li><a href="#/ngReact">NgReact</a></li>
+          <li><a href="#/ngReactGrid">NgReactGrid</a></li>
+          <li><a href="#/mergely">mergely</a></li>
+          <li><a href="#/tiny-mce">tiny-mce</a></li>
         </ul>
         <h3 class="text-muted"><i class="icon-camera-retro icon-large brown"></i><span class="glyphicon glyphicon-tower" style="color: red"></span>angularJsSample</h3>
         <i class="fa fa-floppy-o brown text-warning"></i> 
@@ -36,7 +36,7 @@
 </span>
       </div>
 
-      <div ui-view></div>
+      <div id="template"></div>
 
       <div class="footer">
         <p><span class="glyphicon glyphicon-tower"></span> from uryyyyyyy </p>
@@ -44,14 +44,14 @@
     </div>
 
     <!--[if lt IE 9]>
-    <script src="bower_components/es5-shim/es5-shim.js"></script>
-    <script src="bower_components/json3/lib/json3.min.js"></script>
     <![endif]-->
 
-
+    <script src="scripts/vendor.js"></script>
 
     <!-- other library -->
+    <script src="bower_components/sammy/lib/min/sammy-0.7.5.min.js"></script>
     <!-- library end -->
-        <script src="scripts.min.js"></script>
+
+    <script src="scripts.min.js"></script>
 </body>
 </html>

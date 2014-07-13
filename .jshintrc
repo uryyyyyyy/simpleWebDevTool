@@ -10,6 +10,7 @@
   "indent": 2,
   "latedef": true,
   "newcap": true,
+  "nonew": false,
   "noarg": true,
   "quotmark": "single",
   "regexp": true,
@@ -17,5 +18,11 @@
   "unused": true,
   "strict": true,
   "trailing": true,
-  "smarttabs": true
+  "smarttabs": true,
+  "globals": {
+    "$": false,
+    "jQuery": false,
+    "simpleWebDevTool": false
+  }
 }
+
