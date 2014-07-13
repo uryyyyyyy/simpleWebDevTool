@@ -8,35 +8,61 @@ simpleWebDevTool.controller.pathController = function(){
     var controllerName = 'pathController';
     var service = simpleWebDevTool.service.pathService();
 
-    return {
-        func1 : function(){
-            console.log('func1 ' + controllerName);
-            service.func1();
-            console.log('func1 done');
-        },
+    tinymce.init({
+        selector: "h1.editable",
+        inline: true,
+        toolbar: "undo redo",
+        menubar: false
+    });
 
-        func2 : function(){
-            console.log('func2 '  + controllerName);
-            service.func2();
-            console.log('func2 done');
+    tinymce.init({
+        selector: "div.editable",
+        inline: true,
+        plugins: [
+            "advlist autolink lists link image charmap print preview anchor",
+            "searchreplace visualblocks code fullscreen",
+            "insertdatetime media table contextmenu paste"
+        ],
+        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+    });
+
+    $("div.editable").keyup(function () {
+        controller.refer();
+    });
+
+    return {
+        add : function(){
+            console.log('func1 ' + controllerName);
+            var addStr = $('#sampleForm').val();
+            service.add(addStr);
+            controller.refresh();
+            console.log('func1 done');
         },
         search : function(){
             console.log('search '  + controllerName);
-            var searchStr = $('#searchForm').val();
+            var searchStr = $('#sampleForm').val();
             service.search(searchStr);
+            controller.refresh();
             console.log('search done');
         },
-
         init : function(){
-            simpleWebDevTool.util.countStart();
+            //simpleWebDevTool.util.countStart();
             console.log('init '  + controllerName);
             service.load();
-            simpleWebDevTool.util.timeShow();
+            //simpleWebDevTool.util.timeShow();
+        },
+        refer : function(){
+            var str = $("div.editable").html();
+            service.refer(str);
+            controller.refresh();
         },
         refresh : function() {
             var data = service.getData();
-            $('#template').html(_.template(simpleWebDevTool.util.render('template1'), { 'people': data.data}));
-            $('#searchPanel').text(data.str);
+            $('#list').empty();
+            _.forEach(data.data, function(elem){
+                $('#list').append('<li>'+ elem + '</li>');
+            });
+            $('#text').text(data.refHtml);
         }
     };
 };

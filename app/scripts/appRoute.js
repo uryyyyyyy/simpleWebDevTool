@@ -14,6 +14,7 @@ jQuery(function() {
 
         // define a 'get' route that will be triggered at '#/path'
         this.get('#/path', function() {
+            $('#template').html(_.template(simpleWebDevTool.util.render('template1')));
             controller = simpleWebDevTool.controller.pathController();
             controller.init();
         });
