@@ -20,7 +20,13 @@ jQuery(function() {
         });
 
         this.get('#/path2', function() {
+            $('#template').html(_.template(simpleWebDevTool.util.render('template2')));
             controller = simpleWebDevTool.controller.path2Controller();
+            controller.init();
+        });
+        this.get('#/vue', function() {
+            $('#template').html(_.template(simpleWebDevTool.util.render('vueTemplate')));
+            controller = simpleWebDevTool.controller.vueController();
             controller.init();
         });
         this.get('#/path2/:id', function() {

@@ -33,8 +33,11 @@ simpleWebDevTool.controller.path2Controller = function(){
         },
         refresh : function() {
             console.log('refresh '  + controllerName);
-            var res = service.refresh();
-            $('#template').html(_.template(simpleWebDevTool.util.render('template2'), { 'people': res}));
+            $('#list').empty();
+            _.forEach(data.data, function(elem){
+                $('#list').append('<li>'+ elem + '</li>');
+            });
+            $('#text').text(data.refHtml);
         }
     };
 };
