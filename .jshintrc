@@ -22,7 +22,8 @@
   "globals": {
     "$": false,
     "jQuery": false,
-    "simpleWebDevTool": false
+    "simpleWebDevTool": false,
+    "_": false
   }
 }
 

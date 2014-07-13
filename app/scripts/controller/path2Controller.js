@@ -9,7 +9,7 @@ simpleWebDevTool.controller.path2Controller = function(){
     var controllerData = {};
     var service = simpleWebDevTool.service.path2Service();
     var refresh = function() {
-        $("#template").html(_.template(simpleWebDevTool.views._render('template2'), { 'people': controllerData}));
+        $('#template').html(_.template(simpleWebDevTool.views._render('template2'), { 'people': controllerData}));
     };
 
     return {

@@ -6,7 +6,10 @@
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-    <link rel="stylesheet" href="styles/vendor.css">
+    <!-- bower:css -->
+    <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
+    <!-- endbower -->
+
     <link rel="stylesheet" href="styles.min.css">
     <!-- other CSS -->
     <!-- other end -->
@@ -21,12 +24,9 @@
       <div class="header">
         <ul class="nav nav-pills pull-right">
           <li class="active"><a ng-href="#">Home</a></li>
-          <li><a href="#/about">About</a></li>
-          <li><a href="#/ajax">Ajax</a></li>
-          <li><a href="#/ngReact">NgReact</a></li>
-          <li><a href="#/ngReactGrid">NgReactGrid</a></li>
-          <li><a href="#/mergely">mergely</a></li>
-          <li><a href="#/tiny-mce">tiny-mce</a></li>
+          <li><a href="#/path">path</a></li>
+          <li><a href="#/path2">path2</a></li>
+          <li><a href="#/path2/3">path2_id</a></li>
         </ul>
         <h3 class="text-muted"><i class="icon-camera-retro icon-large brown"></i><span class="glyphicon glyphicon-tower" style="color: red"></span>angularJsSample</h3>
         <i class="fa fa-floppy-o brown text-warning"></i> 
@@ -46,7 +46,10 @@
     <!--[if lt IE 9]>
     <![endif]-->
 
-    <script src="scripts/vendor.js"></script>
+    <!-- bower:js -->
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/lodash/dist/lodash.min.js"></script>
+    <!-- endbower -->
 
     <!-- other library -->
     <script src="bower_components/sammy/lib/min/sammy-0.7.5.min.js"></script>

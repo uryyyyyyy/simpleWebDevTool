@@ -20,7 +20,7 @@ simpleWebDevTool.service.pathService = function(){
 
         load : function(){
             console.log('load '  + serviceName);
-            return  _.filter([1, 2, 3, 4, 5, 6], function(num) { return num % 2 == 0; });
+            return  _.filter([1, 2, 3, 4, 5, 6], function(num) { return num % 2 === 0; });
         }
     };
 };

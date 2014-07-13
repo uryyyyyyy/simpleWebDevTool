@@ -64,11 +64,12 @@ uglify: {
             dist: {
                 files: [{
                 expand: true, //なぜか必要
+                    dot: true,
                     cwd: 'app',
                     dest: 'build',
                     src: [
-                        'bower_components/*',
-                        'styles/main.css'
+                        'bower_components/**',
+                        'views/**'
                     ]
                 }]
             }

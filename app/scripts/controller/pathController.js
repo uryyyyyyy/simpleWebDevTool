@@ -9,8 +9,8 @@ simpleWebDevTool.controller.pathController = function(){
     var controllerData = {};
     var service = simpleWebDevTool.service.pathService();
     var refresh = function() {
-        $("#template").html(_.template(simpleWebDevTool.views._render('template1'), { 'people': controllerData}));
-    }
+        $('#template').html(_.template(simpleWebDevTool.views._render('template1'), { 'people': controllerData}));
+    };
 
     return {
         func1 : function(){
