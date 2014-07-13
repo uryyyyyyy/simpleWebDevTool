@@ -5,28 +5,10 @@ var simpleWebDevTool = {};
 simpleWebDevTool.controller = {};
 simpleWebDevTool.views = {};
 simpleWebDevTool.service = {};
+simpleWebDevTool.dao = {};
+simpleWebDevTool.util = {};
 
-// this function is cache, you don't need to change
-simpleWebDevTool.views._render = function(tmpl_name) {
-    var tmpl_cache = [];
-    if ( ! tmpl_cache[tmpl_name] ) {
-        var tmpl_url = 'views/' + tmpl_name + '.html';
-        var tmpl_string;
-        $.ajax({
-            url: tmpl_url,
-            method: 'GET',
-            async: false,
-            dataType: "html",
-            success: function(data) {
-                tmpl_string = data;
-            }
-        });
-        tmpl_cache[tmpl_name] = tmpl_string;
-    }
-    return tmpl_cache[tmpl_name];
-}
-
-jQuery(function($) {
+jQuery(function() {
 // define a new Sammy.Application bound to the #main element selector
     var app = Sammy('#SimpleWebDevTool', function() {
 
@@ -44,11 +26,6 @@ jQuery(function($) {
             // this context is a Sammy.EventContext
             console.log(this.params.id);
         });
-
-
-
-
-
 
     });
     app.run();

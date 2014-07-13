@@ -3,16 +3,16 @@
     "cors": false,
     "jsonp": false,
     "proxy": {
-        "server": "localhost",
+        "server": "localhost:9000",
         "default": false,
         "calls": {
 
         }
     },
     "variables": {
-        "server": "localhost"
+        "server": "localhost:9000"
     },
     "routes": [
-        "/api/:groupid"
+        "/path/:id"
     ]
 }

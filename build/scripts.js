@@ -5,26 +5,8 @@ var simpleWebDevTool = {};
 simpleWebDevTool.controller = {};
 simpleWebDevTool.views = {};
 simpleWebDevTool.service = {};
-
-// this function is cache, you don't need to change
-simpleWebDevTool.views._render = function(tmpl_name) {
-    var tmpl_cache = [];
-    if ( ! tmpl_cache[tmpl_name] ) {
-        var tmpl_url = 'views/' + tmpl_name + '.html';
-        var tmpl_string;
-        $.ajax({
-            url: tmpl_url,
-            method: 'GET',
-            async: false,
-            dataType: "html",
-            success: function(data) {
-                tmpl_string = data;
-            }
-        });
-        tmpl_cache[tmpl_name] = tmpl_string;
-    }
-    return tmpl_cache[tmpl_name];
-}
+simpleWebDevTool.dao = {};
+simpleWebDevTool.util = {};
 
 jQuery(function($) {
 // define a new Sammy.Application bound to the #main element selector
@@ -61,28 +43,35 @@ jQuery(function($) {
 
 simpleWebDevTool.controller.path2Controller = function(){
     var controllerName = 'path2Controller';
-    var controllerData = {};
     var service = simpleWebDevTool.service.path2Service();
-    var refresh = function() {
-        $('#template').html(_.template(simpleWebDevTool.views._render('template2'), { 'people': controllerData}));
-    };
 
     return {
         func1 : function(){
             console.log('func1 ' + controllerName);
-            controllerData = service.func1(controllerData);
-            refresh();
+            service.func1();
+            console.log('func1 done');
         },
 
         func2 : function(){
             console.log('func2 '  + controllerName);
-            controllerData = service.func2(controllerData);
-            refresh();
+            service.func2();
+            console.log('func2 done');
+        },
+        func3 : function(){
+            var uiData = [1, 3];
+            console.log('func3 '  + controllerName);
+            service.save(uiData);
+            console.log('func3 done');
         },
         init : function(){
             console.log('init '  + controllerName);
-            controllerData = service.load();
-            refresh();
+            service.load();
+            console.log('init done');
+        },
+        refresh : function() {
+            console.log('refresh '  + controllerName);
+            var res = service.refresh();
+            $('#template').html(_.template(simpleWebDevTool.util.render('template2'), { 'people': res}));
         }
     };
 };;/**
@@ -93,28 +82,64 @@ simpleWebDevTool.controller.path2Controller = function(){
 
 simpleWebDevTool.controller.pathController = function(){
     var controllerName = 'pathController';
-    var controllerData = {};
     var service = simpleWebDevTool.service.pathService();
-    var refresh = function() {
-        $('#template').html(_.template(simpleWebDevTool.views._render('template1'), { 'people': controllerData}));
-    };
 
     return {
         func1 : function(){
-        console.log('func1 ' + controllerName);
-        controllerData = service.func1(controllerData);
-        refresh();
+            console.log('func1 ' + controllerName);
+            service.func1();
+            console.log('func1 done');
         },
 
         func2 : function(){
             console.log('func2 '  + controllerName);
-            controllerData = service.func2(controllerData);
-            refresh();
+            service.func2();
+            console.log('func2 done');
         },
         init : function(){
             console.log('init '  + controllerName);
-            controllerData = service.load();
-            refresh();
+            service.load();
+        },
+        refresh : function() {
+            $('#template').html(_.template(simpleWebDevTool.util.render('template1'), { 'people': service.refresh()}));
+        }
+    };
+};;/**
+ * Created by shiba on 14/07/13.
+ */
+
+'use strict';
+
+simpleWebDevTool.dao.path2Dao = function(){
+    var daoName = 'path2Dao';
+
+    return {
+        load : function(){
+            console.log('load '  + daoName);
+            return simpleWebDevTool.util.getAjaxAsync('jsonApi/path/2', controller.refresh);
+        },
+        save : function(reqData){
+            console.log('save '  + daoName);
+            return simpleWebDevTool.util.putAjaxAsync('jsonApi/path/2', reqData, controller.refresh);
+        }
+    };
+};;/**
+ * Created by shiba on 14/07/13.
+ */
+
+'use strict';
+
+simpleWebDevTool.dao.pathDao = function(){
+    var daoName = 'pathDao';
+
+    return {
+        load : function(){
+            console.log('load '  + daoName);
+            return simpleWebDevTool.util.getAjaxAsync('jsonApi/path/2', controller.refresh);
+        },
+        save : function(reqData){
+            console.log('save '  + daoName);
+            return simpleWebDevTool.util.putAjaxAsync('jsonApi/path/2', reqData, controller.refresh);
         }
     };
 };;'use strict';
@@ -170,21 +195,34 @@ InfoWindowStock.prototype = {
 
 simpleWebDevTool.service.path2Service = function(){
     var serviceName = 'path2Service';
+    var dao2 = simpleWebDevTool.dao.path2Dao();
+    var serviceData = {};
 
     return {
-        func1 : function(data){
+        func1 : function(){
             console.log('func1 ' + serviceName);
-            return  _.map(data, function(num) { return num + 1; });
+            serviceData.data = _.map(serviceData.data, function(num) { return num + 1; });
+            controller.refresh();
         },
 
-        func2 : function(data){
+        func2 : function(){
             console.log('func2 '  + serviceName);
-            return  _.map(data, function(num) { return num + 2; });
+            serviceData.data = _.filter(serviceData.data, function(num) { return num % 2 === 0; });
+            controller.refresh();
+        },
+        save : function(data){
+            console.log('save '  + serviceName);
+            serviceData = dao2.save(data);
         },
 
         load : function(){
             console.log('load '  + serviceName);
-            return  _.filter([1, 2, 3, 4, 5, 6], function(num) { return num % 2 === 1; });
+            serviceData = dao2.load();
+        },
+
+        refresh : function(){
+            console.log('refresh '  + serviceName);
+            return serviceData.data;
         }
     };
 };;/**
@@ -195,21 +233,107 @@ simpleWebDevTool.service.path2Service = function(){
 
 simpleWebDevTool.service.pathService = function(){
     var serviceName = 'pathService';
+    var dao = simpleWebDevTool.dao.pathDao();
+    var serviceData = {};
 
     return {
-        func1 : function(data){
+        func1 : function(){
             console.log('func1 ' + serviceName);
-            return  _.map(data, function(num) { return num - 1; });
+            serviceData.load =  _.map(serviceData.load, function(num) { return num - 1; });
+            controller.refresh();
         },
 
-        func2 : function(data){
+        func2 : function(){
             console.log('func2 '  + serviceName);
-            return  _.map(data, function(num) { return num * 2; });
+            serviceData.load = _.filter(serviceData.load, function(num) { return num % 2 === 1; });
+            controller.refresh();
         },
 
         load : function(){
             console.log('load '  + serviceName);
-            return  _.filter([1, 2, 3, 4, 5, 6], function(num) { return num % 2 === 0; });
+            serviceData = dao.load();
+            console.log(serviceData);
+        },
+
+        refresh : function(){
+            console.log('refresh '  + serviceName);
+            return serviceData.load;
         }
     };
+};;/**
+ * Created by shiba on 14/07/13.
+ */
+
+'use strict';
+
+simpleWebDevTool.util.getAjaxAsync = function(url, callback) {
+    console.log('getAjaxAsync url:' + url);
+    var resData = {};
+    $.ajax({
+        type: 'GET',
+        url: url,
+        async: true
+    }).done(function(data) {
+        console.log('success');
+        console.log(data);
+        simpleWebDevTool.util.dummyWait(1000);
+        resData.data = data;
+        callback();
+    }).fail(function() {
+        console.error('error');
+    });
+    return resData;
+};
+
+simpleWebDevTool.util.putAjaxAsync = function(url, reqData, callback) {
+    console.log('putAjaxAsync url:' + url);
+    var resData = {};
+    $.ajax({
+        type: 'POST',
+        url: url,
+        async: true,
+        data: reqData
+    }).done(function(data) {
+        console.log('success');
+        console.log(data);
+        simpleWebDevTool.util.dummyWait(1000);
+        resData.data = data;
+        callback();
+    }).fail(function() {
+        console.error(reqData);
+    });
+    return resData;
+};
+
+simpleWebDevTool.util.dummyWait = function(time) {
+    var d1 = new Date().getTime();
+    var d2 = new Date().getTime();
+    while (d2 < d1 + time) {
+        d2 = new Date().getTime();
+    }
+    return;
+};;/**
+ * Created by shiba on 14/07/13.
+ */
+
+'use strict';
+
+// this function is cache, you don't need to change
+simpleWebDevTool.util.render = function(tmplName) {
+    var tmplCache = [];
+    if ( ! tmplCache[tmplName] ) {
+        var tmplUrl = 'views/' + tmplName + '.html';
+        var tmplString;
+        $.ajax({
+            url: tmplUrl,
+            method: 'GET',
+            async: false,
+            dataType: 'html',
+            success: function(data) {
+                tmplString = data;
+            }
+        });
+        tmplCache[tmplName] = tmplString;
+    }
+    return tmplCache[tmplName];
 };

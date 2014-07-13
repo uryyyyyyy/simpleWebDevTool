@@ -6,21 +6,34 @@
 
 simpleWebDevTool.service.path2Service = function(){
     var serviceName = 'path2Service';
+    var dao2 = simpleWebDevTool.dao.path2Dao();
+    var serviceData = {};
 
     return {
-        func1 : function(data){
+        func1 : function(){
             console.log('func1 ' + serviceName);
-            return  _.map(data, function(num) { return num + 1; });
+            serviceData.data = _.map(serviceData.data, function(num) { return num + 1; });
+            controller.refresh();
         },
 
-        func2 : function(data){
+        func2 : function(){
             console.log('func2 '  + serviceName);
-            return  _.map(data, function(num) { return num + 2; });
+            serviceData.data = _.filter(serviceData.data, function(num) { return num % 2 === 0; });
+            controller.refresh();
+        },
+        save : function(data){
+            console.log('save '  + serviceName);
+            serviceData = dao2.save(data);
         },
 
         load : function(){
             console.log('load '  + serviceName);
-            return  _.filter([1, 2, 3, 4, 5, 6], function(num) { return num % 2 === 1; });
+            serviceData = dao2.load();
+        },
+
+        refresh : function(){
+            console.log('refresh '  + serviceName);
+            return serviceData.data;
         }
     };
 };

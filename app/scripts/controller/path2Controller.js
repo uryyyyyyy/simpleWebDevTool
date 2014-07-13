@@ -6,28 +6,35 @@
 
 simpleWebDevTool.controller.path2Controller = function(){
     var controllerName = 'path2Controller';
-    var controllerData = {};
     var service = simpleWebDevTool.service.path2Service();
-    var refresh = function() {
-        $('#template').html(_.template(simpleWebDevTool.views._render('template2'), { 'people': controllerData}));
-    };
 
     return {
         func1 : function(){
             console.log('func1 ' + controllerName);
-            controllerData = service.func1(controllerData);
-            refresh();
+            service.func1();
+            console.log('func1 done');
         },
 
         func2 : function(){
             console.log('func2 '  + controllerName);
-            controllerData = service.func2(controllerData);
-            refresh();
+            service.func2();
+            console.log('func2 done');
+        },
+        func3 : function(){
+            var uiData = [1, 3];
+            console.log('func3 '  + controllerName);
+            service.save(uiData);
+            console.log('func3 done');
         },
         init : function(){
             console.log('init '  + controllerName);
-            controllerData = service.load();
-            refresh();
+            service.load();
+            console.log('init done');
+        },
+        refresh : function() {
+            console.log('refresh '  + controllerName);
+            var res = service.refresh();
+            $('#template').html(_.template(simpleWebDevTool.util.render('template2'), { 'people': res}));
         }
     };
 };

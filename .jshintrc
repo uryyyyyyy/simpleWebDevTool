@@ -23,7 +23,8 @@
     "$": false,
     "jQuery": false,
     "simpleWebDevTool": false,
-    "_": false
+    "_": false,
+    "controller": false
   }
 }
 

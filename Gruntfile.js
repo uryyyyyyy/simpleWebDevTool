@@ -107,21 +107,28 @@ uglify: {
         
         connect: {
       server: {
-        options: {
-          port: 9000,  // 適当で可
-          hostname: 'localhost',
-          base: 'app'
-        }   
-      },
-      
-       /* プロキシサーバの設定 */
-            proxies: [{
-                context: '/jsonApi', //http://localhost:3000/jsonApi/api/1
-                host: 'localhost',
-                port: '3000',
-                https: false,
-                changeOrigin: false
-            }]
+          options: {
+              port: 9000,
+              hostname: 'localhost',
+              middleware: function (connect) {
+                  return [
+                      connect.static(require('path').resolve('app')),
+                      require('grunt-connect-proxy/lib/utils').proxyRequest    //スニペット追加・・・1
+                  ];
+              }
+          },
+
+          /* プロキシサーバの設定 */
+          proxies: [
+              {
+                  context: '/jsonApi', // http://localhost:3000/jsonApi/path/1
+                  host: 'localhost',
+                  port: '3000',
+                  https: false,
+                  changeOrigin: false
+              }
+          ]
+      }
     },   
     
     /* easymockの設定 */
@@ -166,8 +173,9 @@ uglify: {
   grunt.loadNpmTasks('grunt-contrib-qunit');
   grunt.loadNpmTasks('grunt-easymock');
   grunt.loadNpmTasks('grunt-usemin');
+  grunt.loadNpmTasks('grunt-connect-proxy');
   
   grunt.registerTask('default', ['clean', 'jshint', 'qunit', 'copy', 'htmlmin','imagemin', 'concat', 'uglify', 'cssmin', 'usemin']);
   
-  grunt.registerTask('server', ['connect', 'easymock', 'watch']);
+  grunt.registerTask('server', ['connect', 'configureProxies:server', 'easymock', 'watch']);
 };
