@@ -5,21 +5,23 @@
 'use strict';
 
 // this function is cache, you don't need to change
-simpleWebDevTool.util.jsonCache = function(key) {
+simpleWebDevTool.util.getAjaxSyncWithCache = function(keyUrl) {
     var cache = [];
-    if ( !cache[key] ) {
-//        var tmplUrl = 'views/' + tmplName + '.html';
-//        var tmplString;
-//        $.ajax({
-//            url: tmplUrl,
-//            method: 'GET',
-//            async: false,
-//            dataType: 'html',
-//            success: function(data) {
-//                tmplString = data;
-//            }
-//        });
-//        cache[key] = tmplString;
+    if ( !cache[keyUrl] ) {
+        $.ajax({
+            type: 'GET',
+            url: keyUrl,
+            async: false
+        }).done(function(data) {
+            console.log('success');
+            console.log(data);
+            //simpleWebDevTool.util.dummyWait(1000);
+            cache[keyUrl] = data;
+        }).fail(function() {
+            console.error('error');
+        });
     }
-    return cache[key];
+    return cache[keyUrl];
 };
+
+//postAjaxSyncWithCache is no-meaning
