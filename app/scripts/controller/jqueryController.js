@@ -4,16 +4,9 @@
 
 'use strict';
 
-simpleWebDevTool.controller.vueController = function(){
-    var controllerName = 'vueController';
+simpleWebDevTool.controller.jqueryController = function(){
+    var controllerName = 'jqueryController';
     var service = simpleWebDevTool.service.mainService();
-    var vue = new Vue({
-        el: '#template',
-        data: {
-            texts: ['# hello'],
-            list: []
-        }
-    });
 
     tinymce.init({
         selector: 'h1.editable',
@@ -52,6 +45,7 @@ simpleWebDevTool.controller.vueController = function(){
             controller.refresh();
             console.log('search done');
         },
+
         addElem : function(){
             console.log('search '  + controllerName);
             var searchStr = $('#sampleForm').val();
@@ -59,6 +53,7 @@ simpleWebDevTool.controller.vueController = function(){
             controller.refresh();
             console.log('search done');
         },
+
 
 
 
@@ -75,8 +70,11 @@ simpleWebDevTool.controller.vueController = function(){
         },
         refresh : function() {
             var data = service.getData();
-            vue.list = data.data;
-            vue.texts = [data.refHtml];
+            $('#list').empty();
+            _.forEach(data.data, function(elem){
+                $('#list').append('<li>'+ elem + '</li>');
+            });
+            $('#text').text(data.refHtml);
         }
     };
 };

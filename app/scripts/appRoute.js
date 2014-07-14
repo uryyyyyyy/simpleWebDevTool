@@ -25,8 +25,15 @@ jQuery(function() {
             controller.init();
         });
         this.get('#/vue', function() {
+            console.log('access to #/vue');
             $('#template').html(_.template(simpleWebDevTool.util.render('vueTemplate')));
             controller = simpleWebDevTool.controller.vueController();
+            controller.init();
+        });
+        this.get('#/jquery', function() {
+            console.log('access to #/jquery');
+            $('#template').html(_.template(simpleWebDevTool.util.render('jqueryTemplate')));
+            controller = simpleWebDevTool.controller.jqueryController();
             controller.init();
         });
         this.get('#/path2/:id', function() {
