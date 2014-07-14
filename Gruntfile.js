@@ -142,7 +142,7 @@ uglify: {
         },
     
     watch: {
-        files: 'app/**/*.*',
+        files: ['app/scripts/**/*.*', 'app/views/**/*.*'],
         livereload: {
             options: {
                 livereload: true
