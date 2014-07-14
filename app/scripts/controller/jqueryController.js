@@ -27,10 +27,25 @@ simpleWebDevTool.controller.jqueryController = function(){
     });
 
     $('div.editable').keyup(function () {
-        controller.refer();
+        bindData.sampleForm = $('#sampleForm').val();
     });
 
+    var bindData = {};
+
+
+
+    watch(bindData, "sampleForm", function (id,oldval,newval) {
+        console.info(
+                "bindData." + id + " は " +
+                oldval + " から " +
+                newval + " に変更されました"
+        );
+    });
+
+
     return {
+        jstree : simpleWebDevTool.util.jstree('#jstree_demo'),
+
         add : function(){
             console.log('func1 ' + controllerName);
             var addStr = $('#sampleForm').val();
