@@ -11,7 +11,7 @@ simpleWebDevTool
 
 ### check
 
-* `grunt server` -> server start and proxy connected
+* `grunt server` -> launch normal-server and jsonAPI-server (via proxy)
 * `grunt` -> test and build
 
 trouble:
@@ -93,3 +93,13 @@ simple Unit test
 
 * -> QUnit
 
+
+
+
+
+## TODO
+
+* cache json-data in dao(and view template)
+* tab sample
+* speed test(view rendering)
+* 

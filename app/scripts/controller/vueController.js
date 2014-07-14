@@ -16,24 +16,24 @@ simpleWebDevTool.controller.vueController = function(){
     });
 
     tinymce.init({
-        selector: "h1.editable",
+        selector: 'h1.editable',
         inline: true,
-        toolbar: "undo redo",
+        toolbar: 'undo redo',
         menubar: false
     });
 
     tinymce.init({
-        selector: "div.editable",
+        selector: 'div.editable',
         inline: true,
         plugins: [
-            "advlist autolink lists link image charmap print preview anchor",
-            "searchreplace visualblocks code fullscreen",
-            "insertdatetime media table contextmenu paste"
+            'advlist autolink lists link image charmap print preview anchor',
+            'searchreplace visualblocks code fullscreen',
+            'insertdatetime media table contextmenu paste'
         ],
-        toolbar: "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image"
+        toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image'
     });
 
-    $("div.editable").keyup(function () {
+    $('div.editable').keyup(function () {
         controller.refer();
     });
 
@@ -59,7 +59,7 @@ simpleWebDevTool.controller.vueController = function(){
             //simpleWebDevTool.util.timeShow();
         },
         refer : function(){
-            var str = $("div.editable").html();
+            var str = $('div.editable').html();
             service.refer(str);
             controller.refresh();
         },

@@ -2,6 +2,8 @@
  * Created by shiba on 14/07/13.
  */
 
+'use strict';
+
 simpleWebDevTool.util.dummyWait = function(time) {
     var d1 = new Date().getTime();
     var d2 = new Date().getTime();
@@ -13,7 +15,7 @@ simpleWebDevTool.util.dummyWait = function(time) {
 
 simpleWebDevTool.util.time = {};
 
-simpleWebDevTool.util.countStart = function(func) {
+simpleWebDevTool.util.countStart = function() {
     simpleWebDevTool.util.startTime = new Date().getTime();
     console.info('count start');
 };

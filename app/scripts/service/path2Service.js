@@ -31,9 +31,9 @@ simpleWebDevTool.service.path2Service = function(){
             dao2.load(serviceData);
         },
 
-        refresh : function(){
+        getData : function(){
             console.log('refresh '  + serviceName);
-            return serviceData.data;
+            return serviceData;
         }
     };
 };

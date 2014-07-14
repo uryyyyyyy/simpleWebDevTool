@@ -17,7 +17,7 @@ simpleWebDevTool.service.pathService = function(){
         search : function(searchStr){
             console.log('func2 '  + serviceName);
             serviceData.str = searchStr;
-            serviceData.data = _.filter(serviceData.data, function(num) { return num == searchStr; });
+            serviceData.data = _.filter(serviceData.data, function(num) { return num === Number(searchStr); });
         },
 
         load : function(){

@@ -33,6 +33,7 @@ simpleWebDevTool.controller.path2Controller = function(){
         },
         refresh : function() {
             console.log('refresh '  + controllerName);
+            var data = service.getData();
             $('#list').empty();
             _.forEach(data.data, function(elem){
                 $('#list').append('<li>'+ elem + '</li>');

@@ -24,7 +24,9 @@
     "jQuery": false,
     "simpleWebDevTool": false,
     "_": false,
-    "controller": false
+    "controller": false,
+    "tinymce": false,
+    "Vue": false
   }
 }
 
