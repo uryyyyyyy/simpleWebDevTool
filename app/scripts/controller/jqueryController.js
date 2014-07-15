@@ -20,7 +20,7 @@ simpleWebDevTool.controller.jqueryController = function(){
     });
 
     var refreshArray = function(oldArray, newArray){
-        if(!simpleWebDevTool.util.arraysEqual(oldArray, newArray)){
+        if(!_.isEqual(oldArray, newArray)){
             var clone = _.cloneDeep(newArray);
             simpleList.empty();
             _.forEach(clone, function(elem){
@@ -28,8 +28,6 @@ simpleWebDevTool.controller.jqueryController = function(){
             });
         }
     };
-
-
 
     var jstree = simpleWebDevTool.util.jstree('#jstree_demo');
     var slickGrid = simpleWebDevTool.util.slickGrid('#myGrid');
@@ -104,7 +102,12 @@ simpleWebDevTool.controller.jqueryController = function(){
 
     returnObj.jstreeSearch = function() {
         var v = jstreeSearchFrom.val();
-        $('#jstree_demo').jstree(true).search(v);
+        jstree.search(v);
+    };
+
+    returnObj.jstreeRefToForm = function() {
+        var node = jstree.getSelectNode();
+        jstreeSearchFrom.val(node);
     };
 
     return returnObj;

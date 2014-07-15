@@ -20,11 +20,7 @@ simpleWebDevTool.service.mainService = function(){
         console.log('func2 '  + serviceName);
         bindData.str = searchStr;
         bindData.data = _.filter(bindData.data, function(num) {
-            if(String(num).indexOf(searchStr) === -1){
-                return false;
-            }else{
-                return true;
-            }
+            return (String(num).indexOf(searchStr) !== -1)
         });
     };
 

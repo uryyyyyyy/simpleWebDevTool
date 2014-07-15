@@ -7,9 +7,19 @@
 simpleWebDevTool.util.jstree = function(selector) {
 
     var returnObj = {};
+    var currentData = {};
+    var treeDom = $(selector)
+
+    returnObj.search = function(str){
+        treeDom.jstree(true).search(str);
+    };
+
+    returnObj.getSelectNode= function () {
+        return treeDom.jstree(true).get_selected();
+    };
 
     returnObj.demo_create= function () {
-        var ref = $(selector).jstree(true),
+        var ref = treeDom.jstree(true),
             sel = ref.get_selected();
         if (!sel.length) {
             return false;
@@ -22,7 +32,7 @@ simpleWebDevTool.util.jstree = function(selector) {
     };
 
     returnObj.demo_rename= function () {
-        var ref = $(selector).jstree(true),
+        var ref = treeDom.jstree(true),
             sel = ref.get_selected();
         if (!sel.length) {
             return false;
@@ -32,7 +42,7 @@ simpleWebDevTool.util.jstree = function(selector) {
     };
 
     returnObj.demo_delete= function () {
-        var ref = $(selector).jstree(true),
+        var ref = treeDom.jstree(true),
             sel = ref.get_selected();
         if (!sel.length) {
             return false;
@@ -40,23 +50,26 @@ simpleWebDevTool.util.jstree = function(selector) {
         ref.delete_node(sel);
     };
 
-    returnObj.refresh= function (jsData) {
-        $(selector)
-            .jstree({
-                "core": {
-                    "animation": 0,
-                    "check_callback": true,
-                    "themes": { "stripes": true },
-                    'data': jsData
-                },
-                "types": {
-                    "#": { "max_children": 1, "max_depth": 4, "valid_children": ["root"] },
-                    "root": { "icon": "/static/3.0.2/assets/images/tree_icon.png", "valid_children": ["default"] },
-                    "default": { "valid_children": ["default", "file"] },
-                    "file": { "icon": "glyphicon glyphicon-file", "valid_children": true }
-                },
-                "plugins": [ "contextmenu", "dnd", "search", "state", "types", "wholerow" ]
-            });
+    returnObj.refresh= function (newData) {
+        if(!_.isEqual(newData, currentData)){
+            console.log('jstree refresh');
+            currentData = _.cloneDeep(newData);
+            treeDom.jstree({
+                    "core": {
+                        "animation": 0,
+                        "check_callback": true,
+                        "themes": { "stripes": true },
+                        'data': newData
+                    },
+                    "types": {
+                        "#": { "max_children": 1, "max_depth": 4, "valid_children": ["root"] },
+                        "root": { "icon": "/static/3.0.2/assets/images/tree_icon.png", "valid_children": ["default"] },
+                        "default": { "valid_children": ["default", "file"] },
+                        "file": { "icon": "glyphicon glyphicon-file", "valid_children": true }
+                    },
+                    "plugins": [ "contextmenu", "dnd", "search", "state", "types", "wholerow" ]
+                });
+        }
     };
 
     return returnObj;
