@@ -8,17 +8,21 @@ simpleWebDevTool.dao.mainDao = function(){
     var daoName = 'mainDao';
 
     return {
-        load : function(serviceData){
+        load : function(){
             console.log('load '  + daoName);
-            return simpleWebDevTool.util.getAjaxAsync('jsonApi/path/2', serviceData, 'data', controller.refresh);
+            return simpleWebDevTool.util.getAjaxAsync('jsonApi/path/2', controller.refresh);
         },
-        loadJsTree : function(serviceData){
+        loadJsTree : function(){
             console.log('loadJsTree '  + daoName);
-            return simpleWebDevTool.util.getAjaxAsync('jsonApi/jstree/1', serviceData, 'jsData', controller.refresh);
+            return simpleWebDevTool.util.getAjaxAsync('jsonApi/jstree/1', controller.refresh);
         },
-        save : function(serviceData, reqData){
+        loadSlickGrid : function(){
+            console.log('loadJsTree '  + daoName);
+            return simpleWebDevTool.util.getAjaxAsync('jsonApi/slickGrid/1', controller.refresh);
+        },
+        save : function(reqData){
             console.log('save '  + daoName);
-            return simpleWebDevTool.util.putAjaxAsync('jsonApi/path/2', serviceData, 'data', reqData, controller.refresh);
+            return simpleWebDevTool.util.putAjaxAsync('jsonApi/path/2', reqData, controller.refresh);
         }
     };
 };

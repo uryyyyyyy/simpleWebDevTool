@@ -65,13 +65,14 @@ simpleWebDevTool.controller.jqueryController = function(){
         console.log('search done');
     };
 
-    returnObj.init = function(){
-        //simpleWebDevTool.util.countStart();
-        console.log('init '  + controllerName);
-        service.load();
-        service.loadJsTree();
-        //simpleWebDevTool.util.timeShow();
-    };
+//    returnObj.init = function(){
+//        //simpleWebDevTool.util.countStart();
+//        console.log('init '  + controllerName);
+//        service.load();
+//        service.loadJsTree();
+//        service.loadSlickGrid();
+//        //simpleWebDevTool.util.timeShow();
+//    };
 
     returnObj.refer = function(){
         var str = tinyMce.getHtml();
@@ -86,6 +87,7 @@ simpleWebDevTool.controller.jqueryController = function(){
         bindData.sampleData = tmp.data;
         $('#text').text(tmp.refHtml);
         jstree.refresh(tmp.jsData);
+        slickGrid.refresh(tmp.slickData);
     };
 
     returnObj.demo_create = function() {

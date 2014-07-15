@@ -59,7 +59,21 @@ simpleWebDevTool.util.jstree = function(selector) {
                         "animation": 0,
                         "check_callback": true,
                         "themes": { "stripes": true },
-                        'data': newData
+                        'data': [
+                            { "id": "node_1", "text": "Root node",
+                                "children" : [
+                                    { "id": "node_1_1", "text" : "Child 1" },
+                                    { "id": "node_1_2", "text" : "Child 2"}
+                                ]
+                            },
+                            { "id": "node_2", "text": "Root node with options",
+                                "state": { "opened": true, "selected": true },
+                                "children": [
+                                    { "id": "node_2_1", "text": "Child A" },
+                                    { "id": "node_2_2", "text": "Child B"}
+                                ]
+                            }
+                        ]
                     },
                     "types": {
                         "#": { "max_children": 1, "max_depth": 4, "valid_children": ["root"] },

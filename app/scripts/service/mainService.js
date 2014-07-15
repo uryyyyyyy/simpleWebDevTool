@@ -7,19 +7,19 @@
 simpleWebDevTool.service.mainService = function(){
     var serviceName = 'mainService';
     var dao = simpleWebDevTool.dao.mainDao();
-    var bindData = {};
+    var dataBox = {};
 
     var returnObj = {};
 
     returnObj.add = function(addStr){
         console.log('func1 ' + serviceName);
-        bindData.data =  _.map(bindData.data, function(num) { return num + Number(addStr); });
+        dataBox.data =  _.map(dataBox.data, function(num) { return num + Number(addStr); });
     };
 
     returnObj.search = function(searchStr){
         console.log('func2 '  + serviceName);
-        bindData.str = searchStr;
-        bindData.data = _.filter(bindData.data, function(num) {
+        dataBox.str = searchStr;
+        dataBox.data = _.filter(dataBox.data, function(num) {
             return (String(num).indexOf(searchStr) !== -1)
         });
     };
@@ -27,28 +27,36 @@ simpleWebDevTool.service.mainService = function(){
     returnObj.addElem = function(searchStr){
         console.log('func2 '  + serviceName);
         for(var i = 0; i < Number(searchStr); ++i) {
-            bindData.data.push(Math.random());
+            dataBox.data.push(Math.random());
         }
     };
 
     returnObj.load = function(){
         console.log('load '  + serviceName);
-        dao.load(bindData);
-        console.log(bindData);
+        dao.load();
     };
 
     returnObj.loadJsTree = function(){
         console.log('load '  + serviceName);
-        dao.loadJsTree(bindData);
+        dao.loadJsTree();
+    };
+
+    returnObj.loadSlickGrid = function(){
+        console.log('loadSlickGrid '  + serviceName);
+        dataBox.slickData = dao.loadSlickGrid();
     };
 
     returnObj.refer = function(str){
-        bindData.refHtml = str + ' refer';
+        dataBox.refHtml = str + ' refer';
     };
 
     returnObj.getData = function(){
         console.log('refresh '  + serviceName);
-        return bindData;
+        var dataBox = {};
+        dataBox.data = dao.load();;
+        dataBox.jsData = dao.loadJsTree();
+        dataBox.slickData = dao.loadSlickGrid();
+        return dataBox;
     };
 
     return returnObj;

@@ -3,26 +3,31 @@
  */
 
 'use strict';
+simpleWebDevTool.cache.ajaxCache = {};
 
-simpleWebDevTool.util.getAjaxAsync = function(url, serviceData, propName, callback) {
+simpleWebDevTool.util.getAjaxAsync = function(url) {
     console.log('getAjaxAsync url:' + url);
-    $.ajax({
-        type: 'GET',
-        url: url,
-        async: true
-    }).done(function(data) {
-        console.log('success');
-        console.log(data);
-        //simpleWebDevTool.util.dummyWait(1000);
-        serviceData[propName] = data;
-        callback();
-    }).fail(function() {
-        console.error('error');
-    });
+    var ajaxCache = simpleWebDevTool.cache.ajaxCache;
+    if (!ajaxCache[url]) {
+        $.ajax({
+            type: 'GET',
+            url: url,
+            async: true
+        }).done(function (data) {
+            console.log('success');
+            console.log(data);
+            //simpleWebDevTool.util.dummyWait(1000);
+            ajaxCache[url] = data;
+        }).fail(function () {
+            console.error('error');
+        });
+    }
+    return ajaxCache[url];
 };
 
-simpleWebDevTool.util.putAjaxAsync = function(url, serviceData, propName, reqData, callback) {
+simpleWebDevTool.util.putAjaxAsync = function(url, reqData, callback) {
     console.log('putAjaxAsync url:' + url);
+    var returnObj = {};
     $.ajax({
         type: 'POST',
         url: url,
@@ -32,9 +37,10 @@ simpleWebDevTool.util.putAjaxAsync = function(url, serviceData, propName, reqDat
         console.log('success');
         console.log(data);
         //simpleWebDevTool.util.dummyWait(1000);
-        serviceData[propName] = data;
+        returnObj = data;
         callback();
     }).fail(function() {
         console.error(reqData);
     });
+    return returnObj;
 };
