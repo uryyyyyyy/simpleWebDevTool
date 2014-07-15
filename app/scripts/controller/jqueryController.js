@@ -8,31 +8,8 @@ simpleWebDevTool.controller.jqueryController = function(){
     var controllerName = 'jqueryController';
     var service = simpleWebDevTool.service.mainService();
 
-    tinymce.init({
-        selector: 'h1.editable',
-        inline: true,
-        toolbar: 'undo redo',
-        menubar: false
-    });
-
-    tinymce.init({
-        selector: 'div.editable',
-        inline: true,
-        plugins: [
-            'advlist autolink lists link image charmap print preview anchor',
-            'searchreplace visualblocks code fullscreen',
-            'insertdatetime media table contextmenu paste'
-        ],
-        toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image'
-    });
-
-    $('div.editable').keyup(function () {
-        bindData.sampleForm = $('#sampleForm').val();
-    });
-
     var bindData = {};
-
-
+    bindData.sampleData = [];
 
     watch(bindData, "sampleForm", function (id,oldval,newval) {
         console.info(
@@ -42,54 +19,93 @@ simpleWebDevTool.controller.jqueryController = function(){
         );
     });
 
-
-    return {
-        jstree : simpleWebDevTool.util.jstree('#jstree_demo'),
-
-        add : function(){
-            console.log('func1 ' + controllerName);
-            var addStr = $('#sampleForm').val();
-            service.add(addStr);
-            controller.refresh();
-            console.log('func1 done');
-        },
-        search : function(){
-            console.log('search '  + controllerName);
-            var searchStr = $('#sampleForm').val();
-            service.search(searchStr);
-            controller.refresh();
-            console.log('search done');
-        },
-
-        addElem : function(){
-            console.log('search '  + controllerName);
-            var searchStr = $('#sampleForm').val();
-            service.addElem(searchStr);
-            controller.refresh();
-            console.log('search done');
-        },
-
-
-
-
-        init : function(){
-            //simpleWebDevTool.util.countStart();
-            console.log('init '  + controllerName);
-            service.load();
-            //simpleWebDevTool.util.timeShow();
-        },
-        refer : function(){
-            var str = $('div.editable').html();
-            service.refer(str);
-            controller.refresh();
-        },
-        refresh : function() {
-            var data = service.getData();
-            $('#list').empty();
-            _.forEach(data.data, function(elem){
-                $('#list').append('<li>'+ elem + '</li>');
+    var refreshArray = function(oldArray, newArray){
+        if(!simpleWebDevTool.util.arraysEqual(oldArray, newArray)){
+            var clone = _.cloneDeep(newArray);
+            simpleList.empty();
+            _.forEach(clone, function(elem){
+                simpleList.append('<li>'+ elem + '</li>');
             });
-            $('#text').text(data.refHtml);
         }
     };
+
+
+
+    var jstree = simpleWebDevTool.util.jstree('#jstree_demo');
+    var slickGrid = simpleWebDevTool.util.slickGrid('#myGrid');
+    var tinyMce = simpleWebDevTool.util.tinyMce('#editable');
+    var tinyMceTitle = simpleWebDevTool.util.tinyMceTitle('#editable_title');
+    var simpleForm = $('#sampleForm');
+    var jstreeSearchFrom = $('#demo_q');
+    var simpleList = $('#list');
+
+    var returnObj = {};
+
+    returnObj.add = function(){
+        console.log('func1 ' + controllerName);
+        var addStr = simpleForm.val();
+        service.add(addStr);
+        controller.refresh();
+        console.log('func1 done');
+    };
+
+    returnObj.search = function(){
+        console.log('search '  + controllerName);
+        var searchStr = simpleForm.val();
+        service.search(searchStr);
+        controller.refresh();
+        console.log('search done');
+
+        slickGrid.filterAndUpdate(Number(searchStr));
+    };
+
+    returnObj.addElem = function(){
+        console.log('search '  + controllerName);
+        var searchStr = simpleForm.val();
+        service.addElem(searchStr);
+        controller.refresh();
+        console.log('search done');
+    };
+
+    returnObj.init = function(){
+        //simpleWebDevTool.util.countStart();
+        console.log('init '  + controllerName);
+        service.load();
+        service.loadJsTree();
+        //simpleWebDevTool.util.timeShow();
+    };
+
+    returnObj.refer = function(){
+        var str = tinyMce.getHtml();
+        bindData.sampleForm = simpleForm.val();
+        service.refer(str);
+        controller.refresh();
+    };
+
+    returnObj.refresh = function() {
+        var tmp = _.cloneDeep(service.getData());
+        refreshArray(bindData.sampleData, tmp.data);
+        bindData.sampleData = tmp.data;
+        $('#text').text(tmp.refHtml);
+        jstree.refresh(tmp.jsData);
+    };
+
+    returnObj.demo_create = function() {
+        jstree.demo_create();
+    };
+
+    returnObj.demo_delete = function() {
+        jstree.demo_delete();
+    };
+
+    returnObj.demo_rename = function() {
+        jstree.demo_rename();
+    };
+
+    returnObj.jstreeSearch = function() {
+        var v = jstreeSearchFrom.val();
+        $('#jstree_demo').jstree(true).search(v);
+    };
+
+    return returnObj;
 };

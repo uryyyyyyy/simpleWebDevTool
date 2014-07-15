@@ -4,7 +4,7 @@
 
 'use strict';
 
-simpleWebDevTool.util.getAjaxAsync = function(url, serviceData, callback) {
+simpleWebDevTool.util.getAjaxAsync = function(url, serviceData, propName, callback) {
     console.log('getAjaxAsync url:' + url);
     $.ajax({
         type: 'GET',
@@ -14,14 +14,14 @@ simpleWebDevTool.util.getAjaxAsync = function(url, serviceData, callback) {
         console.log('success');
         console.log(data);
         //simpleWebDevTool.util.dummyWait(1000);
-        serviceData.data = data;
+        serviceData[propName] = data;
         callback();
     }).fail(function() {
         console.error('error');
     });
 };
 
-simpleWebDevTool.util.putAjaxAsync = function(url, serviceData, reqData, callback) {
+simpleWebDevTool.util.putAjaxAsync = function(url, serviceData, propName, reqData, callback) {
     console.log('putAjaxAsync url:' + url);
     $.ajax({
         type: 'POST',
@@ -32,7 +32,7 @@ simpleWebDevTool.util.putAjaxAsync = function(url, serviceData, reqData, callbac
         console.log('success');
         console.log(data);
         //simpleWebDevTool.util.dummyWait(1000);
-        serviceData.data = data;
+        serviceData[propName] = data;
         callback();
     }).fail(function() {
         console.error(reqData);

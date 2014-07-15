@@ -6,25 +6,30 @@
             <p><a onClick="controller.add()" class="btn btn-primary" role="button">add</a>
                 <a onClick="controller.search()" class="btn btn-default" role="button">search</a>
                 <a onClick="controller.addElem()" class="btn btn-default" role="button">addElem</a></p>
-            <ul id="list">
+            <ul id="list" onClick="controller.add()">
             </ul>
 
+            <input type="text" id="demo_q" onkeyup="controller.jstreeSearch()" placeholder="Search" />
 
-            <a onClick="controller.jstree.demo_create()" class="btn btn-primary" role="button">demo_create</a>
-            <a onClick="controller.jstree.demo_rename()" class="btn btn-default" role="button">demo_rename</a>
-            <a onClick="controller.jstree.demo_delete()" class="btn btn-default" role="button">demo_delete</a>
-            <div id="jstree_demo">
+            <a onClick="controller.demo_create()" class="btn btn-primary" role="button">demo_create</a>
+            <a onClick="controller.demo_rename()" class="btn btn-default" role="button">demo_rename</a>
+            <a onClick="controller.demo_delete()" class="btn btn-default" role="button">demo_delete</a>
+            <div id="jstree_demo"></div>
 
-
-
-        </div>
+            </div>
         <div class="col-md-6 column">
-            <h1 class="editable">Editable header</h1>
+            <h1 id="editable_title">Editable header</h1>
 
-            <div class="editable" style="width:100%; height:250px">
+            <div id="editable" style="width:100%; height:250px" onkeyup="controller.refer();">
                 This is an editable div element element.
             </div>
             <textarea id="text" >sample</textarea>
+
+        <div>
+              <div id="myGrid" style="width:100%;height:800px;"></div>
+            <div id="pager" style="width:100%;height:20px;"></div>
+            </div>
+
         </div>
     </div>
 </div>
