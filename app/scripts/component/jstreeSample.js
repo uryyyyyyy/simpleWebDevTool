@@ -4,11 +4,11 @@
 
 'use strict';
 
-simpleWebDevTool.util.jstree = function(selector) {
+simpleWebDevTool.component.jstree = function(selector) {
 
     var returnObj = {};
     var currentData = {};
-    var treeDom = $(selector)
+    var treeDom = $(selector);
 
     returnObj.search = function(str){
         treeDom.jstree(true).search(str);

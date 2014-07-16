@@ -8,6 +8,7 @@ simpleWebDevTool.service = {};
 simpleWebDevTool.dao = {};
 simpleWebDevTool.util = {};
 simpleWebDevTool.cache = {};
+simpleWebDevTool.component = {};
 
 jQuery(function() {
 // define a new Sammy.Application bound to the #main element selector
@@ -35,7 +36,7 @@ jQuery(function() {
             console.log('access to #/jquery');
             $('#template').html(_.template(simpleWebDevTool.util.render('jqueryTemplate')));
             controller = simpleWebDevTool.controller.jqueryController();
-            controller.refresh();
+            controller.load();
         });
         this.get('#/path2/:id', function() {
             // this context is a Sammy.EventContext

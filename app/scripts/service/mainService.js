@@ -7,28 +7,27 @@
 simpleWebDevTool.service.mainService = function(){
     var serviceName = 'mainService';
     var dao = simpleWebDevTool.dao.mainDao();
-    var dataBox = {};
 
     var returnObj = {};
 
-    returnObj.add = function(addStr){
+    returnObj.add = function(listElems, addStr){
         console.log('func1 ' + serviceName);
-        dataBox.data =  _.map(dataBox.data, function(num) { return num + Number(addStr); });
+        return _.map(listElems, function(num) { return num + Number(addStr); });
     };
 
-    returnObj.search = function(searchStr){
+    returnObj.search = function(listElems, searchStr){
         console.log('func2 '  + serviceName);
-        dataBox.str = searchStr;
-        dataBox.data = _.filter(dataBox.data, function(num) {
+        return _.filter(listElems, function(num) {
             return (String(num).indexOf(searchStr) !== -1)
         });
     };
 
-    returnObj.addElem = function(searchStr){
+    returnObj.addElem = function(listElems, searchStr){
         console.log('func2 '  + serviceName);
         for(var i = 0; i < Number(searchStr); ++i) {
-            dataBox.data.push(Math.random());
+            listElems.push(Math.random());
         }
+        return listElems;
     };
 
     returnObj.load = function(){
@@ -43,19 +42,19 @@ simpleWebDevTool.service.mainService = function(){
 
     returnObj.loadSlickGrid = function(){
         console.log('loadSlickGrid '  + serviceName);
-        dataBox.slickData = dao.loadSlickGrid();
+        dao.loadSlickGrid();
     };
 
     returnObj.refer = function(str){
-        dataBox.refHtml = str + ' refer';
+        return str + ' ほげほげほげ';
     };
 
     returnObj.getData = function(){
         console.log('refresh '  + serviceName);
         var dataBox = {};
-        dataBox.data = dao.load();;
-        dataBox.jsData = dao.loadJsTree();
-        dataBox.slickData = dao.loadSlickGrid();
+        dataBox.listData = dao.getData();
+        dataBox.jsData = dao.getJsTree();
+        dataBox.slickData = dao.getSlickGrid();
         return dataBox;
     };
 

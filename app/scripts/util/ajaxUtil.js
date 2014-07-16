@@ -5,9 +5,9 @@
 'use strict';
 simpleWebDevTool.cache.ajaxCache = {};
 
-simpleWebDevTool.util.getAjaxAsync = function(url) {
+simpleWebDevTool.util.getAjaxAsync = function(url, callback) {
     console.log('getAjaxAsync url:' + url);
-    var ajaxCache = simpleWebDevTool.cache.ajaxCache;
+    var ajaxCache = simpleWebDevTool.cache.ajaxCache; //TODO use localStorage
     if (!ajaxCache[url]) {
         $.ajax({
             type: 'GET',
@@ -18,11 +18,19 @@ simpleWebDevTool.util.getAjaxAsync = function(url) {
             console.log(data);
             //simpleWebDevTool.util.dummyWait(1000);
             ajaxCache[url] = data;
+            if (callback) {
+                callback();
+            }
         }).fail(function () {
             console.error('error');
         });
     }
     return ajaxCache[url];
+};
+
+simpleWebDevTool.util.getAjaxIfExist = function(url) {
+    console.log('getAjaxIfExist url:' + url);
+    return simpleWebDevTool.cache.ajaxCache[url];
 };
 
 simpleWebDevTool.util.putAjaxAsync = function(url, reqData, callback) {
