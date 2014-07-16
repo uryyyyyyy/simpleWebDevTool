@@ -1,9 +1,8 @@
 
 'use strict';
 
-simpleWebDevTool.util.slickGrid = function(selector) {
+simpleWebDevTool.component.slickGrid = function(selector) {
 
-    var grid;
     var columns = [
         {id: 'sel', name: '#', field: 'num', behavior: 'select', cssClass: 'cell-selection', width: 40, resizable: false, selectable: false, sortable: true},
         {id: 'title', name: 'Title', field: 'title', width: 120, minWidth: 120, cssClass: 'cell-title'},
@@ -27,7 +26,7 @@ simpleWebDevTool.util.slickGrid = function(selector) {
     }
 
     var dataView = new Slick.Data.DataView({ inlineFilters: true });
-    grid = new Slick.Grid(selector, dataView, columns, options);
+    var grid = new Slick.Grid(selector, dataView, columns, options);
     var pager = new Slick.Controls.Pager(dataView, grid, $('#pager'));
 
     // wire up model events to drive the grid
@@ -46,10 +45,10 @@ simpleWebDevTool.util.slickGrid = function(selector) {
     var currentData;
     // initialize the model after all the events have been hooked up
     returnObj.refresh = function(data){
-        if(!_.isEqual(currentData, data)){
-            currentData = data;
+        if((!_.isEqual(currentData, data)) && data){
+            currentData = _.cloneDeep(data);
             dataView.beginUpdate();
-            dataView.setItems(data);
+            dataView.setItems(currentData);
             dataView.setFilter(myFilter);
             dataView.setFilterArgs(0);
             dataView.endUpdate();

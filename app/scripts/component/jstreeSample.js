@@ -51,7 +51,7 @@ simpleWebDevTool.component.jstree = function(selector) {
     };
 
     returnObj.refresh= function (newData) {
-        if(!_.isEqual(newData, currentData)){
+        if((!_.isEqual(newData, currentData) && newData)){
             console.log('jstree refresh');
             currentData = _.cloneDeep(newData);
             treeDom.jstree({

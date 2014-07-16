@@ -9,21 +9,21 @@ simpleWebDevTool.controller.jqueryController = function(){
     var service = simpleWebDevTool.service.mainService();
 
     var jstree = simpleWebDevTool.component.jstree('#jstree_demo');
-    var slickGrid = simpleWebDevTool.util.slickGrid('#myGrid');
+    var slickGrid = simpleWebDevTool.component.slickGrid('#myGrid');
     var tinyMce = simpleWebDevTool.util.tinyMce('#editable');
     var tinyMceTitle = simpleWebDevTool.util.tinyMceTitle('#editable_title');
     var simpleForm = $('#sampleForm');
     var jstreeSearchFrom = $('#demo_q');
     var sampleList = simpleWebDevTool.component.sampleList('#list');
     var sampleList2 = simpleWebDevTool.component.sampleList('#list2');
+    var select2 = simpleWebDevTool.component.basicSelector('#basicselect');
+    var select2Multi = simpleWebDevTool.component.multiSelector('#e9');
     var returnObj = {};
 
     returnObj.load = function(){
         //simpleWebDevTool.util.countStart();
         console.logBlack('init '  + controllerName);
         service.load();
-        service.loadJsTree();
-        service.loadSlickGrid();
         //simpleWebDevTool.util.timeShow();
     };
 
@@ -69,13 +69,10 @@ simpleWebDevTool.controller.jqueryController = function(){
 
         sampleList.refresh(refreshData.listData);
         sampleList2.refresh(refreshData.listData);
-
-        if(refreshData.jsData){
-            jstree.refresh(tmp.jsData);
-        }
-        if(refreshData.slickData){
-            slickGrid.refresh(tmp.slickData);
-        }
+        jstree.refresh(tmp.jsData);
+        slickGrid.refresh(tmp.slickData);
+        select2.refresh(tmp.select2Data);
+        select2Multi.refresh(tmp.select2Data);
         if(refreshData.textData){
             $('#text').text(refreshData.textData);
         }
@@ -105,6 +102,16 @@ simpleWebDevTool.controller.jqueryController = function(){
 
     returnObj.listEvent = function(selector, index) {
         console.log(selector + index);
+    };
+
+    returnObj.getSelectedData = function() {
+        var data = select2.getSelectedData();
+        controller.refresh({textData:JSON.stringify(data)});
+    };
+
+    returnObj.getSelectedDataMulti = function() {
+        var data = select2Multi.getSelectedData();
+        controller.refresh({textData:JSON.stringify(data)});
     };
 
     return returnObj;

@@ -33,16 +33,9 @@ simpleWebDevTool.service.mainService = function(){
     returnObj.load = function(){
         console.log('load '  + serviceName);
         dao.load();
-    };
-
-    returnObj.loadJsTree = function(){
-        console.log('load '  + serviceName);
         dao.loadJsTree();
-    };
-
-    returnObj.loadSlickGrid = function(){
-        console.log('loadSlickGrid '  + serviceName);
         dao.loadSlickGrid();
+        dao.loadSelect2();
     };
 
     returnObj.refer = function(str){
@@ -55,6 +48,7 @@ simpleWebDevTool.service.mainService = function(){
         dataBox.listData = dao.getData();
         dataBox.jsData = dao.getJsTree();
         dataBox.slickData = dao.getSlickGrid();
+        dataBox.select2Data = dao.getSelect2();
         return dataBox;
     };
 

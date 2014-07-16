@@ -24,6 +24,11 @@ simpleWebDevTool.dao.mainDao = function(){
         return simpleWebDevTool.util.getAjaxAsync('jsonApi/slickGrid/1', controller.init);
     };
 
+    returnObj.loadSelect2 = function(){
+        console.log('loadJsTree '  + daoName);
+        return simpleWebDevTool.util.getAjaxAsync('jsonApi/select2/1', controller.init);
+    };
+
     returnObj.getData = function(){
         console.log('load '  + daoName);
         return simpleWebDevTool.util.getAjaxIfExist('jsonApi/path/2');
@@ -37,6 +42,11 @@ simpleWebDevTool.dao.mainDao = function(){
     returnObj.getSlickGrid = function(){
         console.log('loadJsTree '  + daoName);
         return simpleWebDevTool.util.getAjaxIfExist('jsonApi/slickGrid/1');
+    };
+
+    returnObj.getSelect2 = function(){
+        console.log('getSelect2 '  + daoName);
+        return simpleWebDevTool.util.getAjaxIfExist('jsonApi/select2/1');
     };
 
     returnObj.save = function(reqData){
