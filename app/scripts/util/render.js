@@ -3,23 +3,22 @@
  */
 
 'use strict';
-
+simpleWebDevTool.cache.tmplCache = {};
 // this function is cache, you don't need to change
 simpleWebDevTool.util.render = function(tmplName) {
-    var tmplCache = [];
+    var tmplCache = simpleWebDevTool.cache.tmplCache;
+
     if ( ! tmplCache[tmplName] ) {
         var tmplUrl = 'views/' + tmplName + '.html';
-        var tmplString;
         $.ajax({
             url: tmplUrl,
             method: 'GET',
             async: false,
             dataType: 'html',
             success: function(data) {
-                tmplString = data;
+                tmplCache[tmplName] = data;
             }
         });
-        tmplCache[tmplName] = tmplString;
     }
     return tmplCache[tmplName];
 };

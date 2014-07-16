@@ -7,6 +7,12 @@ simpleWebDevTool.views = {};
 simpleWebDevTool.service = {};
 simpleWebDevTool.dao = {};
 simpleWebDevTool.util = {};
+simpleWebDevTool.cache = {};
+simpleWebDevTool.component = {};
+
+console.logBlack = function(msg){
+    console.log('%c' + msg, 'color:#fff;background:#000;');
+};
 
 jQuery(function() {
 // define a new Sammy.Application bound to the #main element selector
@@ -25,9 +31,16 @@ jQuery(function() {
             controller.init();
         });
         this.get('#/vue', function() {
+            console.log('access to #/vue');
             $('#template').html(_.template(simpleWebDevTool.util.render('vueTemplate')));
             controller = simpleWebDevTool.controller.vueController();
             controller.init();
+        });
+        this.get('#/jquery', function() {
+            console.log('access to #/jquery');
+            $('#template').html(_.template(simpleWebDevTool.util.render('jqueryTemplate')));
+            controller = simpleWebDevTool.controller.jqueryController();
+            controller.load();
         });
         this.get('#/path2/:id', function() {
             // this context is a Sammy.EventContext

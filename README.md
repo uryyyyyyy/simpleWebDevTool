@@ -102,4 +102,10 @@ simple Unit test
 * cache json-data in dao(and view template)
 * tab sample
 * speed test(view rendering)
-* 
+* Library(Grid, Tree, )
+
+
+
+## Design principle (in Japanese)
+
+データの
