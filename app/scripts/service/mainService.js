@@ -18,7 +18,7 @@ simpleWebDevTool.service.mainService = function(){
     returnObj.search = function(listElems, searchStr){
         console.log('func2 '  + serviceName);
         return _.filter(listElems, function(num) {
-            return (String(num).indexOf(searchStr) !== -1)
+            return (String(num).indexOf(searchStr) !== -1);
         });
     };
 

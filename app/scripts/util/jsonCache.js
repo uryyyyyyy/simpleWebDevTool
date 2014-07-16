@@ -23,5 +23,4 @@ simpleWebDevTool.util.getAjaxSyncWithCache = function(keyUrl) {
     }
     return cache[keyUrl];
 };
-
 //postAjaxSyncWithCache is no-meaning

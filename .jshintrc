@@ -13,9 +13,8 @@
   "nonew": false,
   "noarg": true,
   "quotmark": "single",
-  "regexp": true,
   "undef": true,
-  "unused": true,
+  "unused": false,
   "strict": true,
   "trailing": true,
   "smarttabs": true,
@@ -26,7 +25,8 @@
     "_": false,
     "controller": false,
     "tinymce": false,
-    "Vue": false
+    "Vue": false,
+      "Slick":false
   }
 }
 

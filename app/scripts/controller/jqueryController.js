@@ -20,7 +20,7 @@ simpleWebDevTool.controller.jqueryController = function(){
 
     returnObj.load = function(){
         //simpleWebDevTool.util.countStart();
-        console.log('init '  + controllerName);
+        console.logBlack('init '  + controllerName);
         service.load();
         service.loadJsTree();
         service.loadSlickGrid();
@@ -28,7 +28,7 @@ simpleWebDevTool.controller.jqueryController = function(){
     };
 
     returnObj.add = function(){
-        console.log('func1 ' + controllerName);
+        console.logBlack('func1 ' + controllerName);
         var addStr = simpleForm.val();
         var listElems = sampleList.getList();
 
@@ -38,7 +38,7 @@ simpleWebDevTool.controller.jqueryController = function(){
     };
 
     returnObj.search = function(){
-        console.log('search '  + controllerName);
+        console.logBlack('search '  + controllerName);
         var listElems = service.search(sampleList.getList(), simpleForm.val());
         controller.refresh({ listData: listElems});
         console.log('search done');
@@ -46,7 +46,7 @@ simpleWebDevTool.controller.jqueryController = function(){
     };
 
     returnObj.addElem = function(){
-        console.log('search '  + controllerName);
+        console.logBlack('search '  + controllerName);
         var listElems = service.addElem(sampleList.getList(), simpleForm.val());
         controller.refresh({ listData: listElems});
         console.log('search done');
@@ -64,6 +64,7 @@ simpleWebDevTool.controller.jqueryController = function(){
     };
 
     returnObj.refresh = function(refreshData) {
+        console.logBlack('refresh');
         var tmp = _.cloneDeep(service.getData());
 
         sampleList.refresh(refreshData.listData);
@@ -80,16 +81,16 @@ simpleWebDevTool.controller.jqueryController = function(){
         }
     };
 
-    returnObj.demo_create = function() {
-        jstree.demo_create();
+    returnObj.demoCreate = function() {
+        jstree.demoCreate();
     };
 
-    returnObj.demo_delete = function() {
-        jstree.demo_delete();
+    returnObj.demoDelete = function() {
+        jstree.demoDelete();
     };
 
-    returnObj.demo_rename = function() {
-        jstree.demo_rename();
+    returnObj.demoRename = function() {
+        jstree.demoRename();
     };
 
     returnObj.jstreeSearch = function() {

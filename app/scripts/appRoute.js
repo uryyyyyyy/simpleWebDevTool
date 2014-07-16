@@ -10,6 +10,10 @@ simpleWebDevTool.util = {};
 simpleWebDevTool.cache = {};
 simpleWebDevTool.component = {};
 
+console.logBlack = function(msg){
+    console.log('%c' + msg, 'color:#fff;background:#000;');
+};
+
 jQuery(function() {
 // define a new Sammy.Application bound to the #main element selector
     var app = Sammy('#SimpleWebDevTool', function() {

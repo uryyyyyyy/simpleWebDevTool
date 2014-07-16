@@ -18,7 +18,7 @@ simpleWebDevTool.component.jstree = function(selector) {
         return treeDom.jstree(true).get_selected();
     };
 
-    returnObj.demo_create= function () {
+    returnObj.demoCreate= function () {
         var ref = treeDom.jstree(true),
             sel = ref.get_selected();
         if (!sel.length) {
@@ -31,7 +31,7 @@ simpleWebDevTool.component.jstree = function(selector) {
         }
     };
 
-    returnObj.demo_rename= function () {
+    returnObj.demoRename= function () {
         var ref = treeDom.jstree(true),
             sel = ref.get_selected();
         if (!sel.length) {
@@ -41,7 +41,7 @@ simpleWebDevTool.component.jstree = function(selector) {
         ref.edit(sel);
     };
 
-    returnObj.demo_delete= function () {
+    returnObj.demoDelete= function () {
         var ref = treeDom.jstree(true),
             sel = ref.get_selected();
         if (!sel.length) {
