@@ -56,6 +56,29 @@ jQuery(function() {
 
 'use strict';
 
+simpleWebDevTool.component.basicSelector = function(selector) {
+
+    var returnObj = {};
+    var currentData = {};
+
+    returnObj.refresh = function(newData){
+        if((!_.isEqual(currentData, newData)) && newData){
+            currentData = _.cloneDeep(newData);
+            $(selector).select2({ data: newData });
+        }
+    };
+
+    returnObj.getSelectedData = function(){
+        return $(selector).select2('data');
+    };
+
+    return returnObj;
+};;/**
+ * Created by shiba on 14/07/14.
+ */
+
+'use strict';
+
 simpleWebDevTool.component.jstree = function(selector) {
 
     var returnObj = {};
@@ -103,7 +126,7 @@ simpleWebDevTool.component.jstree = function(selector) {
     };
 
     returnObj.refresh= function (newData) {
-        if(!_.isEqual(newData, currentData)){
+        if((!_.isEqual(newData, currentData) && newData)){
             console.log('jstree refresh');
             currentData = _.cloneDeep(newData);
             treeDom.jstree({
@@ -136,6 +159,32 @@ simpleWebDevTool.component.jstree = function(selector) {
                     "plugins": [ "contextmenu", "dnd", "search", "state", "types", "wholerow" ]
                 });
         }
+    };
+
+    return returnObj;
+};;/**
+ * Created by shiba on 14/07/14.
+ */
+
+'use strict';
+
+simpleWebDevTool.component.multiSelector = function(selector) {
+
+    var returnObj = {};
+    var currentData = {};
+
+    returnObj.refresh = function(newData){
+        if((!_.isEqual(currentData, newData)) && newData){
+            currentData = _.cloneDeep(newData);
+            $(selector).select2({
+                data: newData,
+                multiple: true
+            });
+        }
+    };
+
+    returnObj.getSelectedData = function(){
+        return $(selector).select2('data');
     };
 
     return returnObj;
@@ -175,6 +224,81 @@ simpleWebDevTool.component.sampleList = function(selector) {
         }).get();
     };
     return returnObj;
+};;
+'use strict';
+
+simpleWebDevTool.component.slickGrid = function(selector) {
+
+    var columns = [
+        {id: 'sel', name: '#', field: 'num', behavior: 'select', cssClass: 'cell-selection', width: 40, resizable: false, selectable: false, sortable: true},
+        {id: 'title', name: 'Title', field: 'title', width: 120, minWidth: 120, cssClass: 'cell-title'},
+        {id: 'duration', name: 'Duration', field: 'duration'},
+        {id: '%', name: '% Complete', field: 'percentComplete', width: 80, resizable: false, formatter: Slick.Formatters.PercentCompleteBar},
+        {id: 'start', name: 'Start', field: 'start', minWidth: 60},
+        {id: 'finish', name: 'Finish', field: 'finish', minWidth: 60},
+        {id: 'effort-driven', name: 'Effort Driven', width: 80, minWidth: 20, maxWidth: 80, cssClass: 'cell-effort-driven', field: 'effortDriven', formatter: Slick.Formatters.Checkmark}
+    ];
+
+    var options = {
+        editable: false,
+        enableAddRow: false,
+        enableCellNavigation: true
+    };
+
+    var prevPercentCompleteThreshold = 0;
+
+    function myFilter(item, args) {
+        return item.percentComplete >= args;
+    }
+
+    var dataView = new Slick.Data.DataView({ inlineFilters: true });
+    var grid = new Slick.Grid(selector, dataView, columns, options);
+    var pager = new Slick.Controls.Pager(dataView, grid, $('#pager'));
+
+    // wire up model events to drive the grid
+    dataView.onRowCountChanged.subscribe(function (e, args) {
+        grid.updateRowCount();
+        grid.render();
+    });
+
+    dataView.onRowsChanged.subscribe(function (e, args) {
+        grid.invalidateRows(args.rows);
+        grid.render();
+    });
+
+
+    var returnObj = {};
+    var currentData;
+    // initialize the model after all the events have been hooked up
+    returnObj.refresh = function(data){
+        if((!_.isEqual(currentData, data)) && data){
+            currentData = _.cloneDeep(data);
+            dataView.beginUpdate();
+            dataView.setItems(currentData);
+            dataView.setFilter(myFilter);
+            dataView.setFilterArgs(0);
+            dataView.endUpdate();
+        }
+    };
+
+    returnObj.filterAndUpdate= function (percentCompleteThreshold) {
+        var isNarrowing = percentCompleteThreshold > prevPercentCompleteThreshold;
+        var isExpanding = percentCompleteThreshold < prevPercentCompleteThreshold;
+        var renderedRange = grid.getRenderedRange();
+
+        dataView.setFilterArgs(percentCompleteThreshold);
+        dataView.setRefreshHints({
+            ignoreDiffsBefore: renderedRange.top,
+            ignoreDiffsAfter: renderedRange.bottom + 1,
+            isFilterNarrowing: isNarrowing,
+            isFilterExpanding: isExpanding
+        });
+        dataView.refresh();
+
+        prevPercentCompleteThreshold = percentCompleteThreshold;
+    };
+
+    return returnObj;
 };;/**
  * Created by shiba on 14/07/13.
  */
@@ -186,21 +310,21 @@ simpleWebDevTool.controller.jqueryController = function(){
     var service = simpleWebDevTool.service.mainService();
 
     var jstree = simpleWebDevTool.component.jstree('#jstree_demo');
-    var slickGrid = simpleWebDevTool.util.slickGrid('#myGrid');
+    var slickGrid = simpleWebDevTool.component.slickGrid('#myGrid');
     var tinyMce = simpleWebDevTool.util.tinyMce('#editable');
     var tinyMceTitle = simpleWebDevTool.util.tinyMceTitle('#editable_title');
     var simpleForm = $('#sampleForm');
     var jstreeSearchFrom = $('#demo_q');
     var sampleList = simpleWebDevTool.component.sampleList('#list');
     var sampleList2 = simpleWebDevTool.component.sampleList('#list2');
+    var select2 = simpleWebDevTool.component.basicSelector('#basicselect');
+    var select2Multi = simpleWebDevTool.component.multiSelector('#e9');
     var returnObj = {};
 
     returnObj.load = function(){
         //simpleWebDevTool.util.countStart();
         console.logBlack('init '  + controllerName);
         service.load();
-        service.loadJsTree();
-        service.loadSlickGrid();
         //simpleWebDevTool.util.timeShow();
     };
 
@@ -246,13 +370,10 @@ simpleWebDevTool.controller.jqueryController = function(){
 
         sampleList.refresh(refreshData.listData);
         sampleList2.refresh(refreshData.listData);
-
-        if(refreshData.jsData){
-            jstree.refresh(tmp.jsData);
-        }
-        if(refreshData.slickData){
-            slickGrid.refresh(tmp.slickData);
-        }
+        jstree.refresh(tmp.jsData);
+        slickGrid.refresh(tmp.slickData);
+        select2.refresh(tmp.select2Data);
+        select2Multi.refresh(tmp.select2Data);
         if(refreshData.textData){
             $('#text').text(refreshData.textData);
         }
@@ -282,6 +403,16 @@ simpleWebDevTool.controller.jqueryController = function(){
 
     returnObj.listEvent = function(selector, index) {
         console.log(selector + index);
+    };
+
+    returnObj.getSelectedData = function() {
+        var data = select2.getSelectedData();
+        controller.refresh({textData:JSON.stringify(data)});
+    };
+
+    returnObj.getSelectedDataMulti = function() {
+        var data = select2Multi.getSelectedData();
+        controller.refresh({textData:JSON.stringify(data)});
     };
 
     return returnObj;
@@ -505,6 +636,11 @@ simpleWebDevTool.dao.mainDao = function(){
         return simpleWebDevTool.util.getAjaxAsync('jsonApi/slickGrid/1', controller.init);
     };
 
+    returnObj.loadSelect2 = function(){
+        console.log('loadJsTree '  + daoName);
+        return simpleWebDevTool.util.getAjaxAsync('jsonApi/select2/1', controller.init);
+    };
+
     returnObj.getData = function(){
         console.log('load '  + daoName);
         return simpleWebDevTool.util.getAjaxIfExist('jsonApi/path/2');
@@ -518,6 +654,11 @@ simpleWebDevTool.dao.mainDao = function(){
     returnObj.getSlickGrid = function(){
         console.log('loadJsTree '  + daoName);
         return simpleWebDevTool.util.getAjaxIfExist('jsonApi/slickGrid/1');
+    };
+
+    returnObj.getSelect2 = function(){
+        console.log('getSelect2 '  + daoName);
+        return simpleWebDevTool.util.getAjaxIfExist('jsonApi/select2/1');
     };
 
     returnObj.save = function(reqData){
@@ -644,16 +785,9 @@ simpleWebDevTool.service.mainService = function(){
     returnObj.load = function(){
         console.log('load '  + serviceName);
         dao.load();
-    };
-
-    returnObj.loadJsTree = function(){
-        console.log('load '  + serviceName);
         dao.loadJsTree();
-    };
-
-    returnObj.loadSlickGrid = function(){
-        console.log('loadSlickGrid '  + serviceName);
         dao.loadSlickGrid();
+        dao.loadSelect2();
     };
 
     returnObj.refer = function(str){
@@ -666,6 +800,7 @@ simpleWebDevTool.service.mainService = function(){
         dataBox.listData = dao.getData();
         dataBox.jsData = dao.getJsTree();
         dataBox.slickData = dao.getSlickGrid();
+        dataBox.select2Data = dao.getSelect2();
         return dataBox;
     };
 
@@ -887,82 +1022,6 @@ simpleWebDevTool.util.render = function(tmplName) {
         });
     }
     return tmplCache[tmplName];
-};;
-'use strict';
-
-simpleWebDevTool.util.slickGrid = function(selector) {
-
-    var grid;
-    var columns = [
-        {id: 'sel', name: '#', field: 'num', behavior: 'select', cssClass: 'cell-selection', width: 40, resizable: false, selectable: false, sortable: true},
-        {id: 'title', name: 'Title', field: 'title', width: 120, minWidth: 120, cssClass: 'cell-title'},
-        {id: 'duration', name: 'Duration', field: 'duration'},
-        {id: '%', name: '% Complete', field: 'percentComplete', width: 80, resizable: false, formatter: Slick.Formatters.PercentCompleteBar},
-        {id: 'start', name: 'Start', field: 'start', minWidth: 60},
-        {id: 'finish', name: 'Finish', field: 'finish', minWidth: 60},
-        {id: 'effort-driven', name: 'Effort Driven', width: 80, minWidth: 20, maxWidth: 80, cssClass: 'cell-effort-driven', field: 'effortDriven', formatter: Slick.Formatters.Checkmark}
-    ];
-
-    var options = {
-        editable: false,
-        enableAddRow: false,
-        enableCellNavigation: true
-    };
-
-    var prevPercentCompleteThreshold = 0;
-
-    function myFilter(item, args) {
-        return item.percentComplete >= args;
-    }
-
-    var dataView = new Slick.Data.DataView({ inlineFilters: true });
-    grid = new Slick.Grid(selector, dataView, columns, options);
-    var pager = new Slick.Controls.Pager(dataView, grid, $('#pager'));
-
-    // wire up model events to drive the grid
-    dataView.onRowCountChanged.subscribe(function (e, args) {
-        grid.updateRowCount();
-        grid.render();
-    });
-
-    dataView.onRowsChanged.subscribe(function (e, args) {
-        grid.invalidateRows(args.rows);
-        grid.render();
-    });
-
-
-    var returnObj = {};
-    var currentData;
-    // initialize the model after all the events have been hooked up
-    returnObj.refresh = function(data){
-        if(!_.isEqual(currentData, data)){
-            currentData = data;
-            dataView.beginUpdate();
-            dataView.setItems(data);
-            dataView.setFilter(myFilter);
-            dataView.setFilterArgs(0);
-            dataView.endUpdate();
-        }
-    };
-
-    returnObj.filterAndUpdate= function (percentCompleteThreshold) {
-        var isNarrowing = percentCompleteThreshold > prevPercentCompleteThreshold;
-        var isExpanding = percentCompleteThreshold < prevPercentCompleteThreshold;
-        var renderedRange = grid.getRenderedRange();
-
-        dataView.setFilterArgs(percentCompleteThreshold);
-        dataView.setRefreshHints({
-            ignoreDiffsBefore: renderedRange.top,
-            ignoreDiffsAfter: renderedRange.bottom + 1,
-            isFilterNarrowing: isNarrowing,
-            isFilterExpanding: isExpanding
-        });
-        dataView.refresh();
-
-        prevPercentCompleteThreshold = percentCompleteThreshold;
-    };
-
-    return returnObj;
 };;/**
  * Created by shiba on 14/07/13.
  */

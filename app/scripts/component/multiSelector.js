@@ -20,7 +20,7 @@ simpleWebDevTool.component.multiSelector = function(selector) {
     };
 
     returnObj.getSelectedData = function(){
-        return $(selector).select2("data");
+        return $(selector).select2('data');
     };
 
     return returnObj;
