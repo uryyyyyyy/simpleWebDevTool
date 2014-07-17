@@ -13,8 +13,6 @@ simpleWebDevTool.util.dummyWait = function(time) {
     return;
 };
 
-simpleWebDevTool.util.time = {};
-
 simpleWebDevTool.util.countStart = function() {
     simpleWebDevTool.util.startTime = new Date().getTime();
     console.info('count start');

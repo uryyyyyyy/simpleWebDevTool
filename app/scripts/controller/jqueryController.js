@@ -25,6 +25,7 @@ simpleWebDevTool.controller.jqueryController = function(){
         //simpleWebDevTool.util.countStart();
         console.logBlack('init '  + controllerName);
         service.load();
+        controller.init();
         //simpleWebDevTool.util.timeShow();
     };
 

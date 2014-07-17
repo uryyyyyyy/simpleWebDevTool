@@ -1,1 +1,15 @@
-[{"id":0,"text":"enhancement"},{"id":1,"text":"bug"},{"id":2,"text":"duplicate"},{"id":3,"text":"invalid"},{"id":4,"text":"wontfix"}]
+[
+    { "text": "Eastern", "children":
+        [
+            { "id" : 1, "text" : "Alabama" },
+            { "id" : 2, "text" : "Alaska" }
+        ]
+    },
+    { "text": "Western", "children":
+        [
+            { "id" : 115, "text" : "California" },
+            { "id" : 116, "text" : "Colorado" },
+            { "id" : 117, "text" : "Connecticut" }
+        ]
+    }
+]
