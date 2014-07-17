@@ -16,35 +16,35 @@ console.logBlack = function(msg){
 
 jQuery(function() {
 // define a new Sammy.Application bound to the #main element selector
-    var app = Sammy('#SimpleWebDevTool', function() {
+    var app = Sammy('#SimpleWebDevTool', function(app) {
 
         // define a 'get' route that will be triggered at '#/path'
-        this.get('#/path', function() {
+        app.get('#/path', function() {
             $('#template').html(_.template(simpleWebDevTool.util.render('template1')));
             controller = simpleWebDevTool.controller.pathController();
             controller.init();
         });
 
-        this.get('#/path2', function() {
+        app.get('#/path2', function() {
             $('#template').html(_.template(simpleWebDevTool.util.render('template2')));
             controller = simpleWebDevTool.controller.path2Controller();
             controller.init();
         });
-        this.get('#/vue', function() {
+        app.get('#/vue', function() {
             console.log('access to #/vue');
             $('#template').html(_.template(simpleWebDevTool.util.render('vueTemplate')));
             controller = simpleWebDevTool.controller.vueController();
             controller.init();
         });
-        this.get('#/jquery', function() {
+        app.get('#/jquery', function() {
             console.log('access to #/jquery');
             $('#template').html(_.template(simpleWebDevTool.util.render('jqueryTemplate')));
             controller = simpleWebDevTool.controller.jqueryController();
             controller.load();
         });
-        this.get('#/path2/:id', function() {
+        app.get('#/path2/:id', function(context) {
             // this context is a Sammy.EventContext
-            console.log(this.params.id);
+            console.log(context.params.id);
         });
 
     });

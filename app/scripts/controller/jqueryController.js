@@ -10,8 +10,8 @@ simpleWebDevTool.controller.jqueryController = function(){
 
     var jstree = simpleWebDevTool.component.jstree('#jstree_demo');
     var slickGrid = simpleWebDevTool.component.slickGrid('#myGrid');
-    var tinyMce = simpleWebDevTool.util.tinyMce('#editable');
-    var tinyMceTitle = simpleWebDevTool.util.tinyMceTitle('#editable_title');
+    var tinyMce = simpleWebDevTool.component.tinyMce('#editable');
+    var tinyMceTitle = simpleWebDevTool.component.tinyMceTitle('#editable_title');
     var simpleForm = simpleWebDevTool.component.sampleForm('#sampleForm');
     var jstreeSearchFrom = simpleWebDevTool.component.sampleForm('#demo_q');
     var textArea = $('#text');
@@ -19,6 +19,8 @@ simpleWebDevTool.controller.jqueryController = function(){
     var sampleList2 = simpleWebDevTool.component.sampleList('#list2');
     var select2 = simpleWebDevTool.component.basicSelector('#basicselect');
     var select2Multi = simpleWebDevTool.component.multiSelector('#e9');
+    var sampleBox = simpleWebDevTool.component.sampleBox('#box');
+    var hoge = simpleWebDevTool.component.sampleFloat('#float_');
     var returnObj = {};
 
     returnObj.load = function(){
@@ -75,6 +77,7 @@ simpleWebDevTool.controller.jqueryController = function(){
         slickGrid.refresh(tmp.slickData);
         select2.refresh(tmp.select2Data);
         select2Multi.refresh(tmp.select2Data);
+        sampleBox.refresh(refreshData.listData);
         if(refreshData.textData){
             textArea.text(refreshData.textData);
         }

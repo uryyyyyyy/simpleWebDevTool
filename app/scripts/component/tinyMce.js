@@ -4,7 +4,7 @@
 
 'use strict';
 
-simpleWebDevTool.util.tinyMce = function(selector) {
+simpleWebDevTool.component.tinyMce = function(selector) {
 
     tinymce.init({
         selector: selector,
@@ -23,7 +23,7 @@ simpleWebDevTool.util.tinyMce = function(selector) {
     };
 };
 
-simpleWebDevTool.util.tinyMceTitle = function(selector) {
+simpleWebDevTool.component.tinyMceTitle = function(selector) {
 
     tinymce.init({
         selector: selector,
