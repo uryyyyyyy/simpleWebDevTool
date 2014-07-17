@@ -91,8 +91,7 @@ simpleWebDevTool.controller.jqueryController = function(){
     };
 
     returnObj.jstreeSearch = function() {
-        var v = jstreeSearchFrom.val();
-        jstree.search(v);
+        jstree.search(jstreeSearchFrom.val());
     };
 
     returnObj.jstreeRefToForm = function() {
