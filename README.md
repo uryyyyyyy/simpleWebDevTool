@@ -2,6 +2,12 @@ simpleWebDevTool
 ================
 
 
+## pre-setup(if you need)
+
+* install node.js (via nvm)
+* install npm
+* install grunt-cli, bower `npm install -g grunt-cli bower`
+
 ## setup
 
 1. `npm install`
