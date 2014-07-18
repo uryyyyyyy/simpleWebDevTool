@@ -42,8 +42,8 @@ simpleWebDevTool.controller.vueController = function(){
     returnObj.add = function(){
         console.log('func1 ' + controllerName);
         var addStr = $('#sampleForm').val();
-        service.add(addStr);
-        controller.refresh();
+        var list = service.add(vue.list, addStr);
+        controller.refresh({listData : list});
         console.log('func1 done');
     };
 
@@ -84,7 +84,7 @@ simpleWebDevTool.controller.vueController = function(){
 
     returnObj.refresh = function(refreshData) {
         console.logBlack('refresh');
-        var tmp = _.cloneDeep(service.getData());
+        var tmp = _.cloneDeep(refreshData);
 
         vue.list = tmp.listData;
         vue.texts = tmp.textData;
