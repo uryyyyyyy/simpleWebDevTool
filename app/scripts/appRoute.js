@@ -36,7 +36,7 @@ jQuery(function() {
             console.log('access to #/vue');
             $('#template').html(_.template(simpleWebDevTool.util.render('vueTemplate')));
             controller = simpleWebDevTool.controller.vueController();
-            controller.init();
+            controller.load();
         });
         app.get('#/jquery', function() {
             console.log('access to #/jquery');

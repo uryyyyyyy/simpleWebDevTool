@@ -6,7 +6,7 @@
 
 simpleWebDevTool.controller.vueController = function(){
     var controllerName = 'vueController';
-    var service = simpleWebDevTool.service.mainService();
+    var service = simpleWebDevTool.service.mainService;
     var vue = new Vue({
         el: '#template',
         data: {
@@ -63,10 +63,16 @@ simpleWebDevTool.controller.vueController = function(){
         console.log('search done');
     };
 
-    returnObj.init = function(){
+    returnObj.init = function() {
+        var tmp = _.cloneDeep(service.getData());
+        controller.refresh(tmp);
+    };
+
+    returnObj.load = function(){
         //simpleWebDevTool.util.countStart();
-        console.log('init '  + controllerName);
+        console.logBlack('init '  + controllerName);
         service.load();
+        controller.init();
         //simpleWebDevTool.util.timeShow();
     };
 
@@ -76,10 +82,13 @@ simpleWebDevTool.controller.vueController = function(){
         controller.refresh();
     };
 
-    returnObj.refresh = function() {
-        var data = service.getData();
-        vue.list = data.data;
-        vue.texts = [data.refHtml];
+    returnObj.refresh = function(refreshData) {
+        console.logBlack('refresh');
+        var tmp = _.cloneDeep(service.getData());
+
+        vue.list = tmp.listData;
+        vue.texts = tmp.textData;
     };
+
     return returnObj;
 };

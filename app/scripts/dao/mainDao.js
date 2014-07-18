@@ -50,7 +50,7 @@ simpleWebDevTool.dao.mainDao = {};
         return util.getAjaxIfExist('jsonApi/select2/1');
     };
 
-    simpleWebDevTool.dao.mainDao.save = function(reqData){
+    mainDao.save = function(reqData){
         console.log('dao.mainDao.save');
         return util.putAjaxAsync('jsonApi/path/2', reqData, controller.refresh);
     };
