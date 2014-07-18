@@ -27,7 +27,7 @@ simpleWebDevTool.component.sampleBox = function(selector) {
     };
 
     returnObj.getValue = function(){
-        return form.val();
+        return list.val();
     };
 
     return returnObj;

@@ -6,7 +6,7 @@
 
 simpleWebDevTool.controller.jqueryController = function(){
     var controllerName = 'jqueryController';
-    var service = simpleWebDevTool.service.mainService();
+    var service = simpleWebDevTool.service.mainService;
 
     var jstree = simpleWebDevTool.component.jstree('#jstree_demo');
     var slickGrid = simpleWebDevTool.component.slickGrid('#myGrid');

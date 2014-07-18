@@ -10,6 +10,8 @@ simpleWebDevTool.util = {};
 simpleWebDevTool.cache = {};
 simpleWebDevTool.component = {};
 
+// prefix
+
 console.logBlack = function(msg){
     console.log('%c' + msg, 'color:#fff;background:#000;');
 };

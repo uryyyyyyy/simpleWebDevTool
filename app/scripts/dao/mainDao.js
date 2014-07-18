@@ -4,55 +4,54 @@
 
 'use strict';
 
-simpleWebDevTool.dao.mainDao = function(){
-    var daoName = 'mainDao';
+simpleWebDevTool.dao.mainDao = {};
 
-    var returnObj = {};
+(function() {
+    var mainDao = simpleWebDevTool.dao.mainDao;
+    var util = simpleWebDevTool.util;
 
-    returnObj.load = function(){
-        console.log('load '  + daoName);
-        return simpleWebDevTool.util.getAjaxAsync('jsonApi/path/2', controller.init);
+    mainDao.load = function(){
+        console.log('dao.mainDao.load');
+        return util.getAjaxAsync('jsonApi/path/2', controller.init);
     };
 
-    returnObj.loadJsTree = function(){
-        console.log('loadJsTree '  + daoName);
-        return simpleWebDevTool.util.getAjaxAsync('jsonApi/jstree/1', controller.init);
+    mainDao.loadJsTree = function(){
+        console.log('dao.mainDao.loadJsTree');
+        return util.getAjaxAsync('jsonApi/jstree/1', controller.init);
     };
 
-    returnObj.loadSlickGrid = function(){
-        console.log('loadJsTree '  + daoName);
-        return simpleWebDevTool.util.getAjaxAsync('jsonApi/slickGrid/1', controller.init);
+    mainDao.loadSlickGrid = function(){
+        console.log('dao.mainDao.loadSlickGrid');
+        return util.getAjaxAsync('jsonApi/slickGrid/1', controller.init);
     };
 
-    returnObj.loadSelect2 = function(){
-        console.log('loadJsTree '  + daoName);
-        return simpleWebDevTool.util.getAjaxAsync('jsonApi/select2/1', controller.init);
+    mainDao.loadSelect2 = function(){
+        console.log('dao.mainDao.loadSelect2');
+        return util.getAjaxAsync('jsonApi/select2/1', controller.init);
     };
 
-    returnObj.getData = function(){
-        console.log('load '  + daoName);
-        return simpleWebDevTool.util.getAjaxIfExist('jsonApi/path/2');
+    mainDao.getData = function(){
+        console.log('dao.mainDao.getData');
+        return util.getAjaxIfExist('jsonApi/path/2');
     };
 
-    returnObj.getJsTree = function(){
-        console.log('loadJsTree '  + daoName);
-        return simpleWebDevTool.util.getAjaxIfExist('jsonApi/jstree/1');
+    mainDao.getJsTree = function(){
+        console.log('dao.mainDao.getJsTree');
+        return util.getAjaxIfExist('jsonApi/jstree/1');
     };
 
-    returnObj.getSlickGrid = function(){
-        console.log('loadJsTree '  + daoName);
-        return simpleWebDevTool.util.getAjaxIfExist('jsonApi/slickGrid/1');
+    mainDao.getSlickGrid = function(){
+        console.log('dao.mainDao.getSlickGrid');
+        return util.getAjaxIfExist('jsonApi/slickGrid/1');
     };
 
-    returnObj.getSelect2 = function(){
-        console.log('getSelect2 '  + daoName);
-        return simpleWebDevTool.util.getAjaxIfExist('jsonApi/select2/1');
+    mainDao.getSelect2 = function(){
+        console.log('dao.mainDao.getSelect2');
+        return util.getAjaxIfExist('jsonApi/select2/1');
     };
 
-    returnObj.save = function(reqData){
-        console.log('save '  + daoName);
-        return simpleWebDevTool.util.putAjaxAsync('jsonApi/path/2', reqData, controller.refresh);
+    simpleWebDevTool.dao.mainDao.save = function(reqData){
+        console.log('dao.mainDao.save');
+        return util.putAjaxAsync('jsonApi/path/2', reqData, controller.refresh);
     };
-
-    return returnObj;
-};
+})(jQuery);

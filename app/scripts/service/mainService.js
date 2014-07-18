@@ -4,53 +4,54 @@
 
 'use strict';
 
-simpleWebDevTool.service.mainService = function(){
-    var serviceName = 'mainService';
-    var dao = simpleWebDevTool.dao.mainDao();
+simpleWebDevTool.service.mainService = {};
 
-    var returnObj = {};
+(function() {
+    var mainService = simpleWebDevTool.service.mainService;
+    var dao = simpleWebDevTool.dao;
 
-    returnObj.add = function(listElems, addStr){
-        console.log('func1 ' + serviceName);
-        return _.map(listElems, function(num) { return num + Number(addStr); });
+    mainService.add = function (listElems, addStr) {
+        console.log('service.mainService.add');
+        return _.map(listElems, function (num) {
+            return num + Number(addStr);
+        });
     };
 
-    returnObj.search = function(listElems, searchStr){
-        console.log('func2 '  + serviceName);
-        return _.filter(listElems, function(num) {
+    mainService.search = function (listElems, searchStr) {
+        console.log('service.mainService.search');
+        return _.filter(listElems, function (num) {
             return (String(num).indexOf(searchStr) !== -1);
         });
     };
 
-    returnObj.addElem = function(listElems, searchStr){
-        console.log('func2 '  + serviceName);
-        for(var i = 0; i < Number(searchStr); ++i) {
+    mainService.addElem = function (listElems, searchStr) {
+        console.log('service.mainService.addElem');
+        for (var i = 0; i < Number(searchStr); ++i) {
             listElems.push(Math.random());
         }
         return listElems;
     };
 
-    returnObj.load = function(){
-        console.log('load '  + serviceName);
-        dao.load();
-        dao.loadJsTree();
-        dao.loadSlickGrid();
-        dao.loadSelect2();
+    mainService.load = function () {
+        console.log('service.mainService.load');
+        dao.mainDao.load();
+        dao.mainDao.loadJsTree();
+        dao.mainDao.loadSlickGrid();
+        dao.mainDao.loadSelect2();
     };
 
-    returnObj.refer = function(str){
+    mainService.refer = function (str) {
+        console.log('service.mainService.refer');
         return str + ' ほげほげほげ';
     };
 
-    returnObj.getData = function(){
-        console.log('refresh '  + serviceName);
+    mainService.getData = function () {
+        console.log('service.mainService.getData');
         var dataBox = {};
-        dataBox.listData = dao.getData();
-        dataBox.jsData = dao.getJsTree();
-        dataBox.slickData = dao.getSlickGrid();
-        dataBox.select2Data = dao.getSelect2();
+        dataBox.listData = dao.mainDao.getData();
+        dataBox.jsData = dao.mainDao.getJsTree();
+        dataBox.slickData = dao.mainDao.getSlickGrid();
+        dataBox.select2Data = dao.mainDao.getSelect2();
         return dataBox;
     };
-
-    return returnObj;
-};
+})(jQuery);
