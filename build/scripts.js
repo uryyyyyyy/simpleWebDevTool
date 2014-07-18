@@ -36,7 +36,7 @@ jQuery(function() {
             console.log('access to #/vue');
             $('#template').html(_.template(simpleWebDevTool.util.render('vueTemplate')));
             controller = simpleWebDevTool.controller.vueController();
-            controller.init();
+            controller.load();
         });
         app.get('#/jquery', function() {
             console.log('access to #/jquery');
@@ -643,7 +643,7 @@ simpleWebDevTool.controller.pathController = function(){
 
 simpleWebDevTool.controller.vueController = function(){
     var controllerName = 'vueController';
-    var service = simpleWebDevTool.service.mainService();
+    var service = simpleWebDevTool.service.mainService;
     var vue = new Vue({
         el: '#template',
         data: {
@@ -679,8 +679,8 @@ simpleWebDevTool.controller.vueController = function(){
     returnObj.add = function(){
         console.log('func1 ' + controllerName);
         var addStr = $('#sampleForm').val();
-        service.add(addStr);
-        controller.refresh();
+        var list = service.add(vue.list, addStr);
+        controller.refresh({listData : list});
         console.log('func1 done');
     };
 
@@ -700,10 +700,16 @@ simpleWebDevTool.controller.vueController = function(){
         console.log('search done');
     };
 
-    returnObj.init = function(){
+    returnObj.init = function() {
+        var tmp = _.cloneDeep(service.getData());
+        controller.refresh(tmp);
+    };
+
+    returnObj.load = function(){
         //simpleWebDevTool.util.countStart();
-        console.log('init '  + controllerName);
+        console.logBlack('init '  + controllerName);
         service.load();
+        controller.init();
         //simpleWebDevTool.util.timeShow();
     };
 
@@ -713,11 +719,14 @@ simpleWebDevTool.controller.vueController = function(){
         controller.refresh();
     };
 
-    returnObj.refresh = function() {
-        var data = service.getData();
-        vue.list = data.data;
-        vue.texts = [data.refHtml];
+    returnObj.refresh = function(refreshData) {
+        console.logBlack('refresh');
+        var tmp = _.cloneDeep(refreshData);
+
+        vue.list = tmp.listData;
+        vue.texts = tmp.textData;
     };
+
     return returnObj;
 };;/**
  * Created by shiba on 14/07/13.
@@ -727,88 +736,55 @@ simpleWebDevTool.controller.vueController = function(){
 
 simpleWebDevTool.dao.mainDao = {};
 
-simpleWebDevTool.dao.mainDao.load = function(){
-    console.log('simpleWebDevTool.dao.mainDao.load');
-    return simpleWebDevTool.util.getAjaxAsync('jsonApi/path/2', controller.init);
-};
+(function() {
+    var mainDao = simpleWebDevTool.dao.mainDao;
+    var util = simpleWebDevTool.util;
 
-simpleWebDevTool.dao.mainDao.loadJsTree = function(){
-    console.log('simpleWebDevTool.dao.mainDao.loadJsTree');
-    return simpleWebDevTool.util.getAjaxAsync('jsonApi/jstree/1', controller.init);
-};
-
-simpleWebDevTool.dao.mainDao.loadSlickGrid = function(){
-    console.log('simpleWebDevTool.dao.mainDao.loadSlickGrid');
-    return simpleWebDevTool.util.getAjaxAsync('jsonApi/slickGrid/1', controller.init);
-};
-
-simpleWebDevTool.dao.mainDao.loadSelect2 = function(){
-    console.log('simpleWebDevTool.dao.mainDao.loadSelect2');
-    return simpleWebDevTool.util.getAjaxAsync('jsonApi/select2/1', controller.init);
-};
-
-simpleWebDevTool.dao.mainDao.getData = function(){
-    console.log('simpleWebDevTool.dao.mainDao.getData');
-    return simpleWebDevTool.util.getAjaxIfExist('jsonApi/path/2');
-};
-
-simpleWebDevTool.dao.mainDao.getJsTree = function(){
-    console.log('simpleWebDevTool.dao.mainDao.getJsTree');
-    return simpleWebDevTool.util.getAjaxIfExist('jsonApi/jstree/1');
-};
-
-simpleWebDevTool.dao.mainDao.getSlickGrid = function(){
-    console.log('simpleWebDevTool.dao.mainDao.getSlickGrid');
-    return simpleWebDevTool.util.getAjaxIfExist('jsonApi/slickGrid/1');
-};
-
-simpleWebDevTool.dao.mainDao.getSelect2 = function(){
-    console.log('simpleWebDevTool.dao.mainDao.getSelect2');
-    return simpleWebDevTool.util.getAjaxIfExist('jsonApi/select2/1');
-};
-
-simpleWebDevTool.dao.mainDao.save = function(reqData){
-    console.log('simpleWebDevTool.dao.mainDao.save');
-    return simpleWebDevTool.util.putAjaxAsync('jsonApi/path/2', reqData, controller.refresh);
-};;/**
- * Created by shiba on 14/07/13.
- */
-
-'use strict';
-
-simpleWebDevTool.dao.path2Dao = function(){
-    var daoName = 'path2Dao';
-
-    return {
-        load : function(serviceData){
-            console.log('load '  + daoName);
-            return simpleWebDevTool.util.getAjaxAsync('jsonApi/path/2', serviceData, controller.refresh);
-        },
-        save : function(serviceData, reqData){
-            console.log('save '  + daoName);
-            return simpleWebDevTool.util.putAjaxAsync('jsonApi/path/2', serviceData, reqData, controller.refresh);
-        }
+    mainDao.load = function(){
+        console.log('dao.mainDao.load');
+        return util.getAjaxAsync('jsonApi/path/2', controller.init);
     };
-};;/**
- * Created by shiba on 14/07/13.
- */
 
-'use strict';
-
-simpleWebDevTool.dao.pathDao = function(){
-    var daoName = 'pathDao';
-
-    return {
-        load : function(serviceData){
-            console.log('load '  + daoName);
-            return simpleWebDevTool.util.getAjaxAsync('jsonApi/path/2', serviceData, controller.refresh);
-        },
-        save : function(serviceData, reqData){
-            console.log('save '  + daoName);
-            return simpleWebDevTool.util.putAjaxAsync('jsonApi/path/2', serviceData, reqData, controller.refresh);
-        }
+    mainDao.loadJsTree = function(){
+        console.log('dao.mainDao.loadJsTree');
+        return util.getAjaxAsync('jsonApi/jstree/1', controller.init);
     };
-};;'use strict';
+
+    mainDao.loadSlickGrid = function(){
+        console.log('dao.mainDao.loadSlickGrid');
+        return util.getAjaxAsync('jsonApi/slickGrid/1', controller.init);
+    };
+
+    mainDao.loadSelect2 = function(){
+        console.log('dao.mainDao.loadSelect2');
+        return util.getAjaxAsync('jsonApi/select2/1', controller.init);
+    };
+
+    mainDao.getData = function(){
+        console.log('dao.mainDao.getData');
+        return util.getAjaxIfExist('jsonApi/path/2');
+    };
+
+    mainDao.getJsTree = function(){
+        console.log('dao.mainDao.getJsTree');
+        return util.getAjaxIfExist('jsonApi/jstree/1');
+    };
+
+    mainDao.getSlickGrid = function(){
+        console.log('dao.mainDao.getSlickGrid');
+        return util.getAjaxIfExist('jsonApi/slickGrid/1');
+    };
+
+    mainDao.getSelect2 = function(){
+        console.log('dao.mainDao.getSelect2');
+        return util.getAjaxIfExist('jsonApi/select2/1');
+    };
+
+    mainDao.save = function(reqData){
+        console.log('dao.mainDao.save');
+        return util.putAjaxAsync('jsonApi/path/2', reqData, controller.refresh);
+    };
+})(jQuery);;'use strict';
 
 /**
  * InfoWinow オブジェクトをストックするクラス。
@@ -861,160 +837,55 @@ InfoWindowStock.prototype = {
 
 simpleWebDevTool.service.mainService = {};
 
-simpleWebDevTool.service.mainService.add = function(listElems, addStr){
-    console.log('simpleWebDevTool.service.mainService.add');
-    return _.map(listElems, function(num) { return num + Number(addStr); });
-};
+(function() {
+    var mainService = simpleWebDevTool.service.mainService;
+    var dao = simpleWebDevTool.dao;
 
-simpleWebDevTool.service.mainService.search = function(listElems, searchStr){
-    console.log('simpleWebDevTool.service.mainService.search');
-    return _.filter(listElems, function(num) {
-        return (String(num).indexOf(searchStr) !== -1);
-    });
-};
-
-simpleWebDevTool.service.mainService.addElem = function(listElems, searchStr){
-    console.log('simpleWebDevTool.service.mainService.addElem');
-    for(var i = 0; i < Number(searchStr); ++i) {
-        listElems.push(Math.random());
-    }
-    return listElems;
-};
-
-simpleWebDevTool.service.mainService.load = function(){
-    console.log('simpleWebDevTool.service.mainService.load');
-    simpleWebDevTool.dao.mainDao.load();
-    simpleWebDevTool.dao.mainDao.loadJsTree();
-    simpleWebDevTool.dao.mainDao.loadSlickGrid();
-    simpleWebDevTool.dao.mainDao.loadSelect2();
-};
-
-simpleWebDevTool.service.mainService.refer = function(str){
-    console.log('simpleWebDevTool.service.mainService.refer');
-    return str + ' ほげほげほげ';
-};
-
-simpleWebDevTool.service.mainService.getData = function(){
-    console.log('simpleWebDevTool.service.mainService.getData');
-    var dataBox = {};
-    dataBox.listData = simpleWebDevTool.dao.mainDao.getData();
-    dataBox.jsData = simpleWebDevTool.dao.mainDao.getJsTree();
-    dataBox.slickData = simpleWebDevTool.dao.mainDao.getSlickGrid();
-    dataBox.select2Data = simpleWebDevTool.dao.mainDao.getSelect2();
-    return dataBox;
-};;/**
- * Created by shiba on 14/07/13.
- */
-
-'use strict';
-
-simpleWebDevTool.service.path2Service = function(){
-    var serviceName = 'path2Service';
-    var dao2 = simpleWebDevTool.dao.path2Dao();
-    var serviceData = {};
-
-    return {
-        func1 : function(){
-            console.log('func1 ' + serviceName);
-            serviceData.data = _.map(serviceData.data, function(num) { return num + 1; });
-            controller.refresh();
-        },
-
-        func2 : function(){
-            console.log('func2 '  + serviceName);
-            serviceData.data = _.filter(serviceData.data, function(num) { return num % 2 === 0; });
-            controller.refresh();
-        },
-        save : function(data){
-            console.log('save '  + serviceName);
-            dao2.save(serviceData, data);
-        },
-
-        load : function(){
-            console.log('load '  + serviceName);
-            dao2.load(serviceData);
-        },
-
-        getData : function(){
-            console.log('refresh '  + serviceName);
-            return serviceData;
-        }
+    mainService.add = function (listElems, addStr) {
+        console.log('service.mainService.add');
+        return _.map(listElems, function (num) {
+            return num + Number(addStr);
+        });
     };
-};;/**
- * Created by shiba on 14/07/13.
- */
 
-'use strict';
-
-simpleWebDevTool.service.pathService = function(){
-    var serviceName = 'pathService';
-    var dao = simpleWebDevTool.dao.pathDao();
-    var serviceData = {};
-
-    return {
-        add : function(addStr){
-            console.log('func1 ' + serviceName);
-            serviceData.data =  _.map(serviceData.data, function(num) { return num + Number(addStr); });
-        },
-        search : function(searchStr){
-            console.log('func2 '  + serviceName);
-            serviceData.str = searchStr;
-            serviceData.data = _.filter(serviceData.data, function(num) { return num === Number(searchStr); });
-        },
-
-        load : function(){
-            console.log('load '  + serviceName);
-            dao.load(serviceData);
-            console.log(serviceData);
-        },
-
-        refer : function(str){
-            serviceData.refHtml = str + ' refer';
-        },
-
-        getData : function(){
-            console.log('refresh '  + serviceName);
-            return serviceData;
-        }
+    mainService.search = function (listElems, searchStr) {
+        console.log('service.mainService.search');
+        return _.filter(listElems, function (num) {
+            return (String(num).indexOf(searchStr) !== -1);
+        });
     };
-};;/**
- * Created by shiba on 14/07/13.
- */
 
-'use strict';
-
-simpleWebDevTool.service.vueService = function(){
-    var serviceName = 'vueService';
-    var dao = simpleWebDevTool.dao.pathDao();
-    var serviceData = {};
-
-    return {
-        add : function(addStr){
-            console.log('func1 ' + serviceName);
-            serviceData.data =  _.map(serviceData.data, function(num) { return num + Number(addStr); });
-        },
-        search : function(searchStr){
-            console.log('func2 '  + serviceName);
-            serviceData.str = searchStr;
-            serviceData.data = _.filter(serviceData.data, function(num) { return num === Number(searchStr); });
-        },
-
-        load : function(){
-            console.log('load '  + serviceName);
-            dao.load(serviceData);
-            console.log(serviceData);
-        },
-
-        refer : function(str){
-            serviceData.refHtml = str + ' refer';
-        },
-
-        getData : function(){
-            console.log('refresh '  + serviceName);
-            return serviceData;
+    mainService.addElem = function (listElems, searchStr) {
+        console.log('service.mainService.addElem');
+        for (var i = 0; i < Number(searchStr); ++i) {
+            listElems.push(Math.random());
         }
+        return listElems;
     };
-};;/**
+
+    mainService.load = function () {
+        console.log('service.mainService.load');
+        dao.mainDao.load();
+        dao.mainDao.loadJsTree();
+        dao.mainDao.loadSlickGrid();
+        dao.mainDao.loadSelect2();
+    };
+
+    mainService.refer = function (str) {
+        console.log('service.mainService.refer');
+        return str + ' ほげほげほげ';
+    };
+
+    mainService.getData = function () {
+        console.log('service.mainService.getData');
+        var dataBox = {};
+        dataBox.listData = dao.mainDao.getData();
+        dataBox.jsData = dao.mainDao.getJsTree();
+        dataBox.slickData = dao.mainDao.getSlickGrid();
+        dataBox.select2Data = dao.mainDao.getSelect2();
+        return dataBox;
+    };
+})(jQuery);;/**
  * Created by shiba on 14/07/13.
  */
 
