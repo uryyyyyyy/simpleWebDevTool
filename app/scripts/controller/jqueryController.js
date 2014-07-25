@@ -7,8 +7,7 @@
 simpleWebDevTool.controller.jqueryController = function(){
     var controllerName = 'jqueryController';
     var service = simpleWebDevTool.service.mainService;
-
-    var jstree = simpleWebDevTool.component.jstree('#jstree_demo');
+    var jsTree = simpleWebDevTool.component.jstree('#jstree_demo');
     var slickGrid = simpleWebDevTool.component.slickGrid('#myGrid');
     var tinyMce = simpleWebDevTool.component.tinyMce('#editable');
     var tinyMceTitle = simpleWebDevTool.component.tinyMceTitle('#editable_title');
@@ -21,53 +20,40 @@ simpleWebDevTool.controller.jqueryController = function(){
     var select2Multi = simpleWebDevTool.component.multiSelector('#e9');
     var sampleBox = simpleWebDevTool.component.sampleBox('#box');
     var hoge = simpleWebDevTool.component.sampleFloat('#float_');
-    var returnObj = {};
 
-    returnObj.load = function(){
-        //simpleWebDevTool.util.countStart();
-        console.logBlack('init '  + controllerName);
-        service.load();
-        //simpleWebDevTool.util.timeShow();
-    };
+    tinyMce.keyUpEStream.assign(function() {
+        var txt = service.refer(tinyMce.getHtml());
+        _refresh({ textData: txt});
+    });
 
-    returnObj.add = function(){
+    $('#addButon').asEventStream("click").onValue(function() {
         console.logBlack('func1 ' + controllerName);
         var addStr = simpleForm.getValue();
         var listElems = sampleList.getList();
-
         listElems = service.add(listElems, addStr);
-        controller.refresh({ listData: listElems});
-        console.log('func1 done');
-    };
+        _refresh({ listData: listElems});
+    });
 
-    returnObj.search = function(){
+    $('#searchButon').asEventStream("click").onValue(function() {
         console.logBlack('search '  + controllerName);
         var listElems = service.search(sampleList.getList(), simpleForm.getValue());
-        controller.refresh({ listData: listElems});
-        console.log('search done');
+        _refresh({ listData: listElems});
         slickGrid.filterAndUpdate(Number(simpleForm.getValue()));
-    };
+    });
 
-    returnObj.addElem = function(){
+    $('#addElemButon').asEventStream("click").onValue(function() {
         console.logBlack('search '  + controllerName);
         var listElems = service.addElem(sampleList.getList(), simpleForm.getValue());
-        controller.refresh({ listData: listElems});
-        console.log('search done');
-    };
+        _refresh({ listData: listElems});
+    });
 
-    returnObj.refer = function(){
-        var str = tinyMce.getHtml();
-        var resultObj = service.refer(str);
-        controller.refresh({ textData: resultObj});
-    };
-
-    returnObj.refresh = function(refreshData) {
+    var _refresh = function(refreshData){
         console.logBlack('refresh');
         var tmp = _.cloneDeep(refreshData);
 
         sampleList.refresh(tmp.listData);
         sampleList2.refresh(tmp.listData);
-        jstree.refresh(tmp.jsData);
+        jsTree.refresh(tmp.jsData);
         slickGrid.refresh(tmp.slickData);
         select2.refresh(tmp.select2Data);
         select2Multi.refresh(tmp.select2Data);
@@ -79,24 +65,37 @@ simpleWebDevTool.controller.jqueryController = function(){
         }
     };
 
+    var returnObj = {};
+
+    returnObj.load = function(){
+        //simpleWebDevTool.util.countStart();
+        console.logBlack('init '  + controllerName);
+        service.load().onValue(_refresh);
+        //simpleWebDevTool.util.timeShow();
+    };
+
+    returnObj.refresh = function(refreshData) {
+        _refresh(refreshData);
+    };
+
     returnObj.demoCreate = function() {
-        jstree.demoCreate();
+        jsTree.demoCreate();
     };
 
     returnObj.demoDelete = function() {
-        jstree.demoDelete();
+        jsTree.demoDelete();
     };
 
     returnObj.demoRename = function() {
-        jstree.demoRename();
+        jsTree.demoRename();
     };
 
     returnObj.jstreeSearch = function() {
-        jstree.search(jstreeSearchFrom.getValue());
+        jsTree.search(jstreeSearchFrom.getValue());
     };
 
     returnObj.jstreeRefToForm = function() {
-        var node = jstree.getSelectNode();
+        var node = jsTree.getSelectNode();
         jstreeSearchFrom.refresh(node);
     };
 
@@ -106,12 +105,12 @@ simpleWebDevTool.controller.jqueryController = function(){
 
     returnObj.getSelectedData = function() {
         var data = select2.getSelectedData();
-        controller.refresh({textData:JSON.stringify(data)});
+        _refresh({textData:JSON.stringify(data)});
     };
 
     returnObj.getSelectedDataMulti = function() {
         var data = select2Multi.getSelectedData();
-        controller.refresh({textData:JSON.stringify(data)});
+        _refresh({textData:JSON.stringify(data)});
     };
 
     return returnObj;

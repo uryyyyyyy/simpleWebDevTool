@@ -2,12 +2,13 @@
  * Created by shiba on 14/07/13.
  */
 
-simpleWebDevTool.service.mainService = {};
+//simpleWebDevTool.service.mainService = {};
 
 (function() {
     'use strict';
-    var mainService = simpleWebDevTool.service.mainService;
+//    var mainService = simpleWebDevTool.service.mainService;
     var dao = simpleWebDevTool.dao;
+    var mainService={};
 
     mainService.add = function (listElems, addStr) {
         console.log('service.mainService.add');
@@ -33,12 +34,12 @@ simpleWebDevTool.service.mainService = {};
 
     mainService.load = function () {
         console.log('service.mainService.load');
-        dao.mainDao.load();
+        return dao.mainDao.load();
     };
 
     mainService.refer = function (str) {
         console.log('service.mainService.refer');
         return str + ' ほげほげほげ';
     };
-
+    window.simpleWebDevTool.service.mainService=mainService;
 })(jQuery);

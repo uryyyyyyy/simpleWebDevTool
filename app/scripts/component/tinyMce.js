@@ -15,7 +15,7 @@ simpleWebDevTool.component.tinyMce = function(selector) {
         },
 
         refresh : function(data) {
-            if((!_.isEqual(currentData, data)) && data) {
+            if((data && !_.isEqual(currentData, data))) {
 
                 tinymce.init({
                     selector: selector,
@@ -29,8 +29,11 @@ simpleWebDevTool.component.tinyMce = function(selector) {
                     image_list: data.image_list
                 });
                 $select.html(data.main_text);
+                currentData = data;
             }
-        }
+        },
+
+        keyUpEStream : $select.asEventStream("keyup")
     };
 };
 

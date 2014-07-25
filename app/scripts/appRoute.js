@@ -1,6 +1,5 @@
 'use strict';
 
-var controller ={};
 var simpleWebDevTool = {};
 simpleWebDevTool.controller = {};
 simpleWebDevTool.views = {};
@@ -18,7 +17,7 @@ console.logBlack = function(msg){
 jQuery(function() {
 // define a new Sammy.Application bound to the #main element selector
     var app = Sammy('#SimpleWebDevTool', function(app) {
-
+        var controller;
         // define a 'get' route that will be triggered at '#/path'
         app.get('#/path', function() {
             $('#template').html(_.template(simpleWebDevTool.util.render('template1')));
@@ -41,7 +40,7 @@ jQuery(function() {
             console.log('access to #/jquery');
             $('#template').html(_.template(simpleWebDevTool.util.render('jqueryTemplate')));
             controller = simpleWebDevTool.controller.jqueryController();
-            controller.load();
+//            controller.load();
         });
         app.get('#/path2/:id', function(context) {
             // this context is a Sammy.EventContext

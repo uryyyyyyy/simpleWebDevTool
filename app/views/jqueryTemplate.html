@@ -5,9 +5,9 @@
             <div id="float_">めっちゃ浮かぶよ</div>
             
             <input id="sampleForm" type="text" required/>
-            <p><a onClick="controller.add()" class="btn btn-primary" role="button">add</a>
-                <a onClick="controller.search()" class="btn btn-default" role="button">search</a>
-                <a onClick="controller.addElem()" class="btn btn-default" role="button">addElem</a></p>
+            <p><a id="addButon" class="btn btn-primary" role="button">add</a>
+                <a id="searhButon" class="btn btn-default" role="button">search</a>
+                <a id="addElemButon" class="btn btn-default" role="button">addElem</a></p>
 
             <ul id="list">
             </ul>
@@ -33,7 +33,7 @@
         <div class="col-md-6 column">
             <h1 id="editable_title"></h1>
 
-            <div id="editable" style="width:100%; height:250px" onkeyup="controller.refer();"></div>
+            <div id="editable" style="width:100%; height:250px"></div>
             <textarea id="text" >sample</textarea>
 
             <h2>SlickGrid</h2>

@@ -11,13 +11,13 @@ simpleWebDevTool.dao.mainDao = {};
 
     mainDao.load = function(){
         console.log('dao.mainDao.load');
-        Bacon.combineTemplate({
+        return Bacon.combineTemplate({
             listData: Bacon.fromPromise(util.getAjaxAsync('jsonApi/path/2')),
             jsData: Bacon.fromPromise(util.getAjaxAsync('jsonApi/jstree/1')),
             slickData: Bacon.fromPromise(util.getAjaxAsync('jsonApi/slickGrid/1')),
             select2Data: Bacon.fromPromise(util.getAjaxAsync('jsonApi/select2/1')),
             tinyMceData: Bacon.fromPromise(util.getAjaxAsync('jsonApi/tinyMce/1'))
-        }).onValue(controller.refresh);
+        });
     };
 
     mainDao.save = function(reqData){
