@@ -27,7 +27,6 @@ simpleWebDevTool.controller.jqueryController = function(){
         //simpleWebDevTool.util.countStart();
         console.logBlack('init '  + controllerName);
         service.load();
-        controller.init();
         //simpleWebDevTool.util.timeShow();
     };
 
@@ -62,14 +61,9 @@ simpleWebDevTool.controller.jqueryController = function(){
         controller.refresh({ textData: resultObj});
     };
 
-    returnObj.init = function() {
-        var tmp = _.cloneDeep(service.getData());
-        controller.refresh(tmp);
-    };
-
     returnObj.refresh = function(refreshData) {
         console.logBlack('refresh');
-        var tmp = _.cloneDeep(service.getData());
+        var tmp = _.cloneDeep(refreshData);
 
         sampleList.refresh(tmp.listData);
         sampleList2.refresh(tmp.listData);
@@ -83,6 +77,18 @@ simpleWebDevTool.controller.jqueryController = function(){
         if(tmp.textData){
             textArea.text(tmp.textData);
         }
+    };
+
+    returnObj.refreshBacon = function(ajaxData) {
+        console.logBlack('refresh');
+        sampleList.refresh(ajaxData.list);
+        sampleList2.refresh(ajaxData.list);
+        jstree.refresh(ajaxData.jsTree);
+        slickGrid.refresh(ajaxData.slickGrid);
+        select2.refresh(ajaxData.select2);
+        select2Multi.refresh(ajaxData.select2);
+        tinyMce.refresh(ajaxData.tinyMce);
+        tinyMceTitle.refresh(ajaxData.tinyMce);
     };
 
     returnObj.demoCreate = function() {

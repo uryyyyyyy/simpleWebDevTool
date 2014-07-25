@@ -35,10 +35,6 @@ simpleWebDevTool.service.mainService = {};
     mainService.load = function () {
         console.log('service.mainService.load');
         dao.mainDao.load();
-        dao.mainDao.loadJsTree();
-        dao.mainDao.loadSlickGrid();
-        dao.mainDao.loadSelect2();
-        dao.mainDao.loadTinyMce();
     };
 
     mainService.refer = function (str) {
@@ -46,14 +42,4 @@ simpleWebDevTool.service.mainService = {};
         return str + ' ほげほげほげ';
     };
 
-    mainService.getData = function () {
-        console.log('service.mainService.getData');
-        var dataBox = {};
-        dataBox.listData = dao.mainDao.getData();
-        dataBox.jsData = dao.mainDao.getJsTree();
-        dataBox.slickData = dao.mainDao.getSlickGrid();
-        dataBox.select2Data = dao.mainDao.getSelect2();
-        dataBox.tinyMceData = dao.mainDao.getTinyMce();
-        return dataBox;
-    };
 })(jQuery);
