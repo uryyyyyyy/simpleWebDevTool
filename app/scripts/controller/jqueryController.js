@@ -79,18 +79,6 @@ simpleWebDevTool.controller.jqueryController = function(){
         }
     };
 
-    returnObj.refreshBacon = function(ajaxData) {
-        console.logBlack('refresh');
-        sampleList.refresh(ajaxData.list);
-        sampleList2.refresh(ajaxData.list);
-        jstree.refresh(ajaxData.jsTree);
-        slickGrid.refresh(ajaxData.slickGrid);
-        select2.refresh(ajaxData.select2);
-        select2Multi.refresh(ajaxData.select2);
-        tinyMce.refresh(ajaxData.tinyMce);
-        tinyMceTitle.refresh(ajaxData.tinyMce);
-    };
-
     returnObj.demoCreate = function() {
         jstree.demoCreate();
     };
@@ -125,13 +113,6 @@ simpleWebDevTool.controller.jqueryController = function(){
         var data = select2Multi.getSelectedData();
         controller.refresh({textData:JSON.stringify(data)});
     };
-
-//    var allKeyUps = $(document).asEventStream("keyup");
-//
-//    var spaceBarKeyUps = allKeyUps
-//        .filter(function(event) { return event.keyCode == 32 });
-//
-//    spaceBarKeyUps.onValue(function(event) { alert("you pressed space" + event) });
 
     return returnObj;
 };
