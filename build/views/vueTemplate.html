@@ -2,7 +2,7 @@
 <div class="container">
     <div class="row">
         <div class="col-md-6 column">
-            <input id="sampleForm" type="text" class="form-control" placeholder="Search" />
+            <input id="sampleForm" type="text" v-model="form_" class="form-control" placeholder="Search" />
             <p><a onClick="controller.add()" class="btn btn-primary" role="button">add</a>
                 <a onClick="controller.search()" class="btn btn-default" role="button">search</a>
                 <a onClick="controller.addElem()" class="btn btn-default" role="button">addElem</a></p>

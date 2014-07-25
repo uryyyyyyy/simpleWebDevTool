@@ -10,7 +10,6 @@ simpleWebDevTool.util = {};
 simpleWebDevTool.cache = {};
 simpleWebDevTool.component = {};
 
-// prefix
 
 console.logBlack = function(msg){
     console.log('%c' + msg, 'color:#fff;background:#000;');
@@ -375,34 +374,53 @@ simpleWebDevTool.component.slickGrid = function(selector) {
 
 simpleWebDevTool.component.tinyMce = function(selector) {
 
-    tinymce.init({
-        selector: selector,
-        inline: true,
-        plugins: [
-            'advlist autolink lists link image charmap print preview anchor',
-            'searchreplace visualblocks code fullscreen',
-            'insertdatetime media table contextmenu paste'
-        ],
-        toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image'
-    });
+    var currentData;
+    var $select = $(selector);
+
     return{
         getHtml : function() {
-            return $(selector).html();
+            return $select.html();
+        },
+
+        refresh : function(data) {
+            if((!_.isEqual(currentData, data)) && data) {
+
+                tinymce.init({
+                    selector: selector,
+                    inline: true,
+                    plugins: [
+                        'advlist autolink lists link image charmap print preview anchor',
+                        'searchreplace visualblocks code fullscreen',
+                        'insertdatetime media table contextmenu paste'
+                    ],
+                    toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+                    image_list: data.image_list
+                });
+                $select.html(data.main_text);
+            }
         }
     };
 };
 
 simpleWebDevTool.component.tinyMceTitle = function(selector) {
 
-    tinymce.init({
-        selector: selector,
-        inline: true,
-        toolbar: 'undo redo',
-        menubar: false
-    });
-
+    var currentData;
     return{
-        value : $(selector).val()
+        getValue : function() {
+            return $(selector).val();
+        },
+
+        refresh : function(data) {
+            if ((!_.isEqual(currentData, data)) && data) {
+                tinymce.init({
+                    selector: selector,
+                    inline: true,
+                    toolbar: 'undo redo',
+                    menubar: false
+                });
+                $(selector).val(data.main_text);
+            }
+        }
     };
 };;/**
  * Created by shiba on 14/07/13.
@@ -433,7 +451,6 @@ simpleWebDevTool.controller.jqueryController = function(){
         //simpleWebDevTool.util.countStart();
         console.logBlack('init '  + controllerName);
         service.load();
-        controller.init();
         //simpleWebDevTool.util.timeShow();
     };
 
@@ -468,25 +485,34 @@ simpleWebDevTool.controller.jqueryController = function(){
         controller.refresh({ textData: resultObj});
     };
 
-    returnObj.init = function() {
-        var tmp = _.cloneDeep(service.getData());
-        controller.refresh(tmp);
-    };
-
     returnObj.refresh = function(refreshData) {
         console.logBlack('refresh');
-        var tmp = _.cloneDeep(service.getData());
+        var tmp = _.cloneDeep(refreshData);
 
-        sampleList.refresh(refreshData.listData);
-        sampleList2.refresh(refreshData.listData);
+        sampleList.refresh(tmp.listData);
+        sampleList2.refresh(tmp.listData);
         jstree.refresh(tmp.jsData);
         slickGrid.refresh(tmp.slickData);
         select2.refresh(tmp.select2Data);
         select2Multi.refresh(tmp.select2Data);
-        sampleBox.refresh(refreshData.listData);
-        if(refreshData.textData){
-            textArea.text(refreshData.textData);
+        sampleBox.refresh(tmp.listData);
+        tinyMce.refresh(tmp.tinyMceData);
+        tinyMceTitle.refresh(tmp.tinyMceData);
+        if(tmp.textData){
+            textArea.text(tmp.textData);
         }
+    };
+
+    returnObj.refreshBacon = function(ajaxData) {
+        console.logBlack('refresh');
+        sampleList.refresh(ajaxData.list);
+        sampleList2.refresh(ajaxData.list);
+        jstree.refresh(ajaxData.jsTree);
+        slickGrid.refresh(ajaxData.slickGrid);
+        select2.refresh(ajaxData.select2);
+        select2Multi.refresh(ajaxData.select2);
+        tinyMce.refresh(ajaxData.tinyMce);
+        tinyMceTitle.refresh(ajaxData.tinyMce);
     };
 
     returnObj.demoCreate = function() {
@@ -523,6 +549,13 @@ simpleWebDevTool.controller.jqueryController = function(){
         var data = select2Multi.getSelectedData();
         controller.refresh({textData:JSON.stringify(data)});
     };
+
+//    var allKeyUps = $(document).asEventStream("keyup");
+//
+//    var spaceBarKeyUps = allKeyUps
+//        .filter(function(event) { return event.keyCode == 32 });
+//
+//    spaceBarKeyUps.onValue(function(event) { alert("you pressed space" + event) });
 
     return returnObj;
 };;/**
@@ -648,7 +681,8 @@ simpleWebDevTool.controller.vueController = function(){
         el: '#template',
         data: {
             texts: ['# hello'],
-            list: []
+            list: [],
+            form_:''
         }
     });
 
@@ -687,16 +721,16 @@ simpleWebDevTool.controller.vueController = function(){
     returnObj.search = function(){
         console.log('search '  + controllerName);
         var searchStr = $('#sampleForm').val();
-        service.search(searchStr);
-        controller.refresh();
+        var list = service.search(vue.list, searchStr);
+        controller.refresh({listData:list});
         console.log('search done');
     };
 
     returnObj.addElem = function(){
         console.log('search '  + controllerName);
         var searchStr = $('#sampleForm').val();
-        service.addElem(searchStr);
-        controller.refresh();
+        var list = service.addElem(vue.list, searchStr);
+        controller.refresh({listData:list});
         console.log('search done');
     };
 
@@ -742,42 +776,13 @@ simpleWebDevTool.dao.mainDao = {};
 
     mainDao.load = function(){
         console.log('dao.mainDao.load');
-        return util.getAjaxAsync('jsonApi/path/2', controller.init);
-    };
-
-    mainDao.loadJsTree = function(){
-        console.log('dao.mainDao.loadJsTree');
-        return util.getAjaxAsync('jsonApi/jstree/1', controller.init);
-    };
-
-    mainDao.loadSlickGrid = function(){
-        console.log('dao.mainDao.loadSlickGrid');
-        return util.getAjaxAsync('jsonApi/slickGrid/1', controller.init);
-    };
-
-    mainDao.loadSelect2 = function(){
-        console.log('dao.mainDao.loadSelect2');
-        return util.getAjaxAsync('jsonApi/select2/1', controller.init);
-    };
-
-    mainDao.getData = function(){
-        console.log('dao.mainDao.getData');
-        return util.getAjaxIfExist('jsonApi/path/2');
-    };
-
-    mainDao.getJsTree = function(){
-        console.log('dao.mainDao.getJsTree');
-        return util.getAjaxIfExist('jsonApi/jstree/1');
-    };
-
-    mainDao.getSlickGrid = function(){
-        console.log('dao.mainDao.getSlickGrid');
-        return util.getAjaxIfExist('jsonApi/slickGrid/1');
-    };
-
-    mainDao.getSelect2 = function(){
-        console.log('dao.mainDao.getSelect2');
-        return util.getAjaxIfExist('jsonApi/select2/1');
+        Bacon.combineTemplate({
+            list: Bacon.fromPromise($.ajax('jsonApi/path/2')),
+            jsTree: Bacon.fromPromise($.ajax('jsonApi/jstree/1')),
+            slickGrid: Bacon.fromPromise($.ajax('jsonApi/slickGrid/1')),
+            select2: Bacon.fromPromise($.ajax('jsonApi/select2/1')),
+            tinyMce: Bacon.fromPromise($.ajax('jsonApi/tinyMce/1'))
+        }).onValue(controller.refreshBacon);
     };
 
     mainDao.save = function(reqData){
@@ -866,9 +871,6 @@ simpleWebDevTool.service.mainService = {};
     mainService.load = function () {
         console.log('service.mainService.load');
         dao.mainDao.load();
-        dao.mainDao.loadJsTree();
-        dao.mainDao.loadSlickGrid();
-        dao.mainDao.loadSelect2();
     };
 
     mainService.refer = function (str) {
@@ -876,15 +878,6 @@ simpleWebDevTool.service.mainService = {};
         return str + ' ほげほげほげ';
     };
 
-    mainService.getData = function () {
-        console.log('service.mainService.getData');
-        var dataBox = {};
-        dataBox.listData = dao.mainDao.getData();
-        dataBox.jsData = dao.mainDao.getJsTree();
-        dataBox.slickData = dao.mainDao.getSlickGrid();
-        dataBox.select2Data = dao.mainDao.getSelect2();
-        return dataBox;
-    };
 })(jQuery);;/**
  * Created by shiba on 14/07/13.
  */

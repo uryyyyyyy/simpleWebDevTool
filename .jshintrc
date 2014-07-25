@@ -26,7 +26,8 @@
     "controller": false,
     "tinymce": false,
     "Vue": false,
-      "Slick":false
+    "Slick":false,
+    "Bacon":false
   }
 }
 
