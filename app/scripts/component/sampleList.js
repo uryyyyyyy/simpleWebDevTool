@@ -2,14 +2,12 @@
  * Created by shiba on 14/07/16.
  */
 
-'use strict';
-
 simpleWebDevTool.component.sampleList = function(selector) {
-
+    'use strict';
     var list = $(selector);
     var currentData = {};
     list.append('<li></li>');
-    var stream = $(selector).asEventStream("click").map($(selector + ' li').index(this) + 1);
+    var stream = $(selector + ' li').asEventStream("click");
 
     return {
         refresh: function (newArray) {
@@ -17,15 +15,18 @@ simpleWebDevTool.component.sampleList = function(selector) {
                 currentData = _.cloneDeep(newArray);
                 //recreate DOM
                 list.empty();
-                _.forEach(newArray, function (elem) {
-                    list.append('<li>' + elem + '</li>');
+                _.forEach(newArray, function (elem, index) {
+                    list.append('<li id=' + index +  '>' + elem + '</li>');
                 });
                 //attach event on li
 //                $(selector + ' li').on('click', function () {
 //                    var index = $(selector + ' li').index(this) + 1;
 //                    controller.listEvent(selector, index);
 //                });
-                stream = $(selector + ' li').asEventStream("click").map($(selector + ' li').index(this) + 1)
+                stream = $(selector + ' li').asEventStream("click").map(
+                        function(event){
+                            return Number(event.target.id) + 1;
+                        });
             }
         },
 

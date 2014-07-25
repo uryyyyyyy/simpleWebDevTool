@@ -26,11 +26,6 @@ simpleWebDevTool.controller.jqueryController = function(){
         _refresh({ textData: txt});
     });
 
-    sampleList.childClickStream().assign(function(val) {
-        var txt = service.refer(tinyMce.getHtml());
-        _refresh({ textData: txt});
-    });
-
     $('#addButton').asEventStream("click").onValue(function() {
         console.logBlack('func1 ' + controllerName);
         var addStr = simpleForm.getValue();
@@ -80,6 +75,16 @@ simpleWebDevTool.controller.jqueryController = function(){
         if(tmp.textData){
             textArea.text(tmp.textData);
         }
+        _attachEventStream();
+    };
+
+    var _attachEventStream = function(){
+        sampleList.childClickStream().assign(function(val) {
+            console.log('click the ' + val + 'th');
+        });
+        sampleList2.childClickStream().assign(function(val) {
+            console.log('click the ' + val + 'th');
+        });
     };
 
     var returnObj = {};

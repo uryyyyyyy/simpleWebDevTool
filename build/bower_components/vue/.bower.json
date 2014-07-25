@@ -25,5 +25,6 @@
   },
   "_source": "git://github.com/yyx990803/vue.git",
   "_target": "~0.10.5",
-  "_originalSource": "vue"
+  "_originalSource": "vue",
+  "_direct": true
 }
