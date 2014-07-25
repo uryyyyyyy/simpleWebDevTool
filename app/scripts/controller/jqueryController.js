@@ -71,15 +71,17 @@ simpleWebDevTool.controller.jqueryController = function(){
         console.logBlack('refresh');
         var tmp = _.cloneDeep(service.getData());
 
-        sampleList.refresh(refreshData.listData);
-        sampleList2.refresh(refreshData.listData);
+        sampleList.refresh(tmp.listData);
+        sampleList2.refresh(tmp.listData);
         jstree.refresh(tmp.jsData);
         slickGrid.refresh(tmp.slickData);
         select2.refresh(tmp.select2Data);
         select2Multi.refresh(tmp.select2Data);
-        sampleBox.refresh(refreshData.listData);
-        if(refreshData.textData){
-            textArea.text(refreshData.textData);
+        sampleBox.refresh(tmp.listData);
+        tinyMce.refresh(tmp.tinyMceData);
+        tinyMceTitle.refresh(tmp.tinyMceData);
+        if(tmp.textData){
+            textArea.text(tmp.textData);
         }
     };
 
@@ -117,6 +119,13 @@ simpleWebDevTool.controller.jqueryController = function(){
         var data = select2Multi.getSelectedData();
         controller.refresh({textData:JSON.stringify(data)});
     };
+
+//    var allKeyUps = $(document).asEventStream("keyup");
+//
+//    var spaceBarKeyUps = allKeyUps
+//        .filter(function(event) { return event.keyCode == 32 });
+//
+//    spaceBarKeyUps.onValue(function(event) { alert("you pressed space" + event) });
 
     return returnObj;
 };

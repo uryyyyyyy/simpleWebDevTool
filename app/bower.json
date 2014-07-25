@@ -17,6 +17,7 @@
     "jquery-ui": "~1.11.0",
     "jquery.event.drag-drop": "~2.2.1",
     "select2": "~3.5.0",
-    "portamento": "*"
+    "portamento": "*",
+    "bacon": "~0.7.18"
   }
 }

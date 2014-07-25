@@ -6,33 +6,52 @@
 
 simpleWebDevTool.component.tinyMce = function(selector) {
 
-    tinymce.init({
-        selector: selector,
-        inline: true,
-        plugins: [
-            'advlist autolink lists link image charmap print preview anchor',
-            'searchreplace visualblocks code fullscreen',
-            'insertdatetime media table contextmenu paste'
-        ],
-        toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image'
-    });
+    var currentData;
+    var $select = $(selector);
+
     return{
         getHtml : function() {
-            return $(selector).html();
+            return $select.html();
+        },
+
+        refresh : function(data) {
+            if((!_.isEqual(currentData, data)) && data) {
+
+                tinymce.init({
+                    selector: selector,
+                    inline: true,
+                    plugins: [
+                        'advlist autolink lists link image charmap print preview anchor',
+                        'searchreplace visualblocks code fullscreen',
+                        'insertdatetime media table contextmenu paste'
+                    ],
+                    toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
+                    image_list: data.image_list
+                });
+                $select.html(data.main_text);
+            }
         }
     };
 };
 
 simpleWebDevTool.component.tinyMceTitle = function(selector) {
 
-    tinymce.init({
-        selector: selector,
-        inline: true,
-        toolbar: 'undo redo',
-        menubar: false
-    });
-
+    var currentData;
     return{
-        value : $(selector).val()
+        getValue : function() {
+            return $(selector).val();
+        },
+
+        refresh : function(data) {
+            if ((!_.isEqual(currentData, data)) && data) {
+                tinymce.init({
+                    selector: selector,
+                    inline: true,
+                    toolbar: 'undo redo',
+                    menubar: false
+                });
+                $(selector).val(data.main_text);
+            }
+        }
     };
 };

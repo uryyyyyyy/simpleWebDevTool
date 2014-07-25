@@ -30,6 +30,11 @@ simpleWebDevTool.dao.mainDao = {};
         return util.getAjaxAsync('jsonApi/select2/1', controller.init);
     };
 
+    mainDao.loadTinyMce = function(){
+        console.log('dao.mainDao.loadTinyMce');
+        return util.getAjaxAsync('jsonApi/tinyMce/1', controller.init);
+    };
+
     mainDao.getData = function(){
         console.log('dao.mainDao.getData');
         return util.getAjaxIfExist('jsonApi/path/2');
@@ -48,6 +53,11 @@ simpleWebDevTool.dao.mainDao = {};
     mainDao.getSelect2 = function(){
         console.log('dao.mainDao.getSelect2');
         return util.getAjaxIfExist('jsonApi/select2/1');
+    };
+
+    mainDao.getTinyMce = function(){
+        console.log('dao.mainDao.getTinyMce');
+        return util.getAjaxIfExist('jsonApi/tinyMce/1');
     };
 
     mainDao.save = function(reqData){

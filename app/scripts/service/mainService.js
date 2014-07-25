@@ -38,6 +38,7 @@ simpleWebDevTool.service.mainService = {};
         dao.mainDao.loadJsTree();
         dao.mainDao.loadSlickGrid();
         dao.mainDao.loadSelect2();
+        dao.mainDao.loadTinyMce();
     };
 
     mainService.refer = function (str) {
@@ -52,6 +53,7 @@ simpleWebDevTool.service.mainService = {};
         dataBox.jsData = dao.mainDao.getJsTree();
         dataBox.slickData = dao.mainDao.getSlickGrid();
         dataBox.select2Data = dao.mainDao.getSelect2();
+        dataBox.tinyMceData = dao.mainDao.getTinyMce();
         return dataBox;
     };
 })(jQuery);

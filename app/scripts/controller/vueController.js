@@ -11,7 +11,8 @@ simpleWebDevTool.controller.vueController = function(){
         el: '#template',
         data: {
             texts: ['# hello'],
-            list: []
+            list: [],
+            form_:''
         }
     });
 
@@ -50,16 +51,16 @@ simpleWebDevTool.controller.vueController = function(){
     returnObj.search = function(){
         console.log('search '  + controllerName);
         var searchStr = $('#sampleForm').val();
-        service.search(searchStr);
-        controller.refresh();
+        var list = service.search(vue.list, searchStr);
+        controller.refresh({listData:list});
         console.log('search done');
     };
 
     returnObj.addElem = function(){
         console.log('search '  + controllerName);
         var searchStr = $('#sampleForm').val();
-        service.addElem(searchStr);
-        controller.refresh();
+        var list = service.addElem(vue.list, searchStr);
+        controller.refresh({listData:list});
         console.log('search done');
     };
 
