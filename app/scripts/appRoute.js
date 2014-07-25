@@ -40,7 +40,7 @@ jQuery(function() {
             console.log('access to #/jquery');
             $('#template').html(_.template(simpleWebDevTool.util.render('jqueryTemplate')));
             controller = simpleWebDevTool.controller.jqueryController();
-//            controller.load();
+            controller.load();
         });
         app.get('#/path2/:id', function(context) {
             // this context is a Sammy.EventContext

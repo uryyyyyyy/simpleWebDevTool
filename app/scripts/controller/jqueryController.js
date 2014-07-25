@@ -26,7 +26,12 @@ simpleWebDevTool.controller.jqueryController = function(){
         _refresh({ textData: txt});
     });
 
-    $('#addButon').asEventStream("click").onValue(function() {
+    sampleList.childClickStream().assign(function(val) {
+        var txt = service.refer(tinyMce.getHtml());
+        _refresh({ textData: txt});
+    });
+
+    $('#addButton').asEventStream("click").onValue(function() {
         console.logBlack('func1 ' + controllerName);
         var addStr = simpleForm.getValue();
         var listElems = sampleList.getList();
@@ -34,17 +39,29 @@ simpleWebDevTool.controller.jqueryController = function(){
         _refresh({ listData: listElems});
     });
 
-    $('#searchButon').asEventStream("click").onValue(function() {
+    $('#searchButton').asEventStream("click").onValue(function() {
         console.logBlack('search '  + controllerName);
         var listElems = service.search(sampleList.getList(), simpleForm.getValue());
         _refresh({ listData: listElems});
         slickGrid.filterAndUpdate(Number(simpleForm.getValue()));
     });
 
-    $('#addElemButon').asEventStream("click").onValue(function() {
+    $('#addElemButton').asEventStream("click").onValue(function() {
         console.logBlack('search '  + controllerName);
         var listElems = service.addElem(sampleList.getList(), simpleForm.getValue());
         _refresh({ listData: listElems});
+    });
+
+    $('#demoCreateButton').asEventStream("click").onValue(function() {
+        jsTree.demoCreate();
+    });
+
+    $('#demoRenameButton').asEventStream("click").onValue(function() {
+        jsTree.demoRename();
+    });
+
+    $('#demoDeleteButton').asEventStream("click").onValue(function() {
+        jsTree.demoDelete();
     });
 
     var _refresh = function(refreshData){
@@ -70,24 +87,12 @@ simpleWebDevTool.controller.jqueryController = function(){
     returnObj.load = function(){
         //simpleWebDevTool.util.countStart();
         console.logBlack('init '  + controllerName);
-        service.load().onValue(_refresh);
+        service.load().assign(_refresh);
         //simpleWebDevTool.util.timeShow();
     };
 
     returnObj.refresh = function(refreshData) {
         _refresh(refreshData);
-    };
-
-    returnObj.demoCreate = function() {
-        jsTree.demoCreate();
-    };
-
-    returnObj.demoDelete = function() {
-        jsTree.demoDelete();
-    };
-
-    returnObj.demoRename = function() {
-        jsTree.demoRename();
     };
 
     returnObj.jstreeSearch = function() {
