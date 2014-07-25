@@ -14,7 +14,7 @@ simpleWebDevTool.component.sampleList = function(selector) {
             if ((!_.isEqual(currentData, newArray) && newArray)) {
                 currentData = _.cloneDeep(newArray);
                 //recreate DOM
-//                list.empty();
+                list.empty();
                 _.forEach(newArray, function (elem, index) {
                     list.append('<li id=' + index +  '>' + elem + '</li>');
                 });
@@ -23,7 +23,10 @@ simpleWebDevTool.component.sampleList = function(selector) {
 //                    var index = $(selector + ' li').index(this) + 1;
 //                    controller.listEvent(selector, index);
 //                });
-                stream.merge($(selector).asEventStream("click"));
+                stream = $(selector + ' li').asEventStream("click").map(
+                        function(event){
+                            return Number(event.target.id) + 1;
+                        });
             }
         },
 
@@ -35,7 +38,7 @@ simpleWebDevTool.component.sampleList = function(selector) {
             }).get();
         },
         childClickStream : function(){
-            return stream.map($(selector + ' li').index(this) + 1);
+            return stream;
         }
 
 //        sample: function () {
