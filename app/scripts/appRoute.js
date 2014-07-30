@@ -1,4 +1,3 @@
-'use strict';
 
 var simpleWebDevTool = {};
 simpleWebDevTool.controller = {};
@@ -15,7 +14,7 @@ console.logBlack = function(msg){
 };
 
 jQuery(function() {
-// define a new Sammy.Application bound to the #main element selector
+    'use strict';
     var app = Sammy('#SimpleWebDevTool', function(app) {
         var controller;
         // define a 'get' route that will be triggered at '#/path'
