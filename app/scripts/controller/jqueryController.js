@@ -106,22 +106,12 @@ simpleWebDevTool.controller.jqueryController = function(){
         });
     };
 
-    var returnObj = {};
-
-    returnObj.load = function(){
-        //simpleWebDevTool.util.countStart();
-        console.logBlack('init '  + controllerName);
-        service.load().assign(_refresh);
-        //simpleWebDevTool.util.timeShow();
+    return {
+        load : function(){
+            //simpleWebDevTool.util.countStart();
+            console.logBlack('init '  + controllerName);
+            service.load().assign(_refresh);
+            //simpleWebDevTool.util.timeShow();
+        }
     };
-
-    returnObj.refresh = function(refreshData) {
-        _refresh(refreshData);
-    };
-
-    returnObj.listEvent = function(selector, index) {
-        console.log(selector + index);
-    };
-
-    return returnObj;
 };
