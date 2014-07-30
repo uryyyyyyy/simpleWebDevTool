@@ -20,6 +20,7 @@ simpleWebDevTool.controller.jqueryController = function(optionId){
     var select2Multi = component.multiSelector('#multiSelect');
     var sampleBox = component.sampleBox('#box');
     var floating = component.sampleFloat('#float_');
+    var mergely = component.mergely('#compare');
     var addButton = component.sampleButton('#addButton');
     var searchButton = component.sampleButton('#searchButton');
     var addElemButton = component.sampleButton('#addElemButton');
@@ -108,6 +109,7 @@ simpleWebDevTool.controller.jqueryController = function(optionId){
         sampleBox.refresh(tmp.listData);
         tinyMce.refresh(tmp.tinyMceData);
         tinyMceTitle.refresh(tmp.tinyMceData);
+        mergely.refresh(tmp.tinyMceData);
         if(tmp.textData){
             textArea.text(tmp.textData);
         }

@@ -11,30 +11,25 @@ simpleWebDevTool.component = {};
 jQuery(function() {
     'use strict';
     var app = Sammy('#SimpleWebDevTool', function(app) {
-        var controller;
         // define a 'get' route that will be triggered at '#/path'
         app.get('#/path', function() {
             $('#template').html(_.template(simpleWebDevTool.util.render('template1')));
-            controller = simpleWebDevTool.controller.pathController();
-            controller.init();
+            simpleWebDevTool.controller.pathController().init();
         });
 
         app.get('#/path2', function() {
             $('#template').html(_.template(simpleWebDevTool.util.render('template2')));
-            controller = simpleWebDevTool.controller.path2Controller();
-            controller.init();
+            simpleWebDevTool.controller.path2Controller().init();
         });
         app.get('#/vue', function() {
             console.log('access to #/vue');
             $('#template').html(_.template(simpleWebDevTool.util.render('vueTemplate')));
-            controller = simpleWebDevTool.controller.vueController();
-            controller.load();
+            simpleWebDevTool.controller.vueController().load();
         });
-        app.get('#/jquery', function() {
+        app.get('#/jquery/:id', function(context) {
             console.log('access to #/jquery');
             $('#template').html(_.template(simpleWebDevTool.util.render('jqueryTemplate')));
-            controller = simpleWebDevTool.controller.jqueryController();
-            controller.load();
+            simpleWebDevTool.controller.jqueryController(context.params.id).load();
         });
         app.get('#/path2/:id', function(context) {
             // this context is a Sammy.EventContext
@@ -159,6 +154,37 @@ simpleWebDevTool.component.jstree = function(selector) {
  * Created by shiba on 14/07/14.
  */
 
+simpleWebDevTool.component.mergely = function(selector) {
+    'use strict';
+    var $select = $(selector);
+    var currentData = {};
+
+    return {
+        refresh : function(newData){
+            if((!_.isEqual(currentData, newData)) && newData){
+                currentData = _.cloneDeep(newData);
+                $(selector).mergely({
+                    cmsettings: { readOnly: false, lineNumbers: true },
+                    lhs: function(setValue) {
+                        setValue('the quick red fox\njumped over the hairy dog');
+                    },
+                    rhs: function(setValue) {
+                        setValue('the quick brown fox\njumped over the lazy dog');
+                    }
+                });
+            }
+        },
+
+        getSelectedData : function(){
+            return $(selector).select2('data');
+        },
+
+        clickEStream : $select.asEventStream('click')
+    };
+};;/**
+ * Created by shiba on 14/07/14.
+ */
+
 simpleWebDevTool.component.multiSelector = function(selector) {
     'use strict';
     var $select = $(selector);
@@ -209,6 +235,28 @@ simpleWebDevTool.component.sampleBox = function(selector) {
         getValue : function(){
             return $select.val();
         }
+    };
+};;/**
+ * Created by shiba on 14/07/16.
+ */
+
+simpleWebDevTool.component.sampleButton = function(selector) {
+    'use strict';
+    var $select = $(selector);
+    var currentData = {};
+
+    return {
+        refresh: function (text) {
+            if ((!_.isEqual(currentData, text) && text)) {
+                currentData = _.cloneDeep(text);
+                $select.val(text);
+            }
+        },
+
+        getText: function () {
+            return $select.val();
+        },
+        clickEStream : $(selector).asEventStream('click')
     };
 };;/**
  * Created by shiba on 14/07/17.
@@ -358,10 +406,9 @@ simpleWebDevTool.component.slickGrid = function(selector) {
  * Created by shiba on 14/07/15.
  */
 
-'use strict';
-
 simpleWebDevTool.component.tinyMce = function(selector) {
 
+    'use strict';
     var currentData;
     var $select = $(selector);
 
@@ -394,11 +441,12 @@ simpleWebDevTool.component.tinyMce = function(selector) {
 };
 
 simpleWebDevTool.component.tinyMceTitle = function(selector) {
-
+    'use strict';
     var currentData;
+    var $select = $(selector);
     return{
         getValue : function() {
-            return $(selector).val();
+            return $select.val();
         },
 
         refresh : function(data) {
@@ -409,7 +457,7 @@ simpleWebDevTool.component.tinyMceTitle = function(selector) {
                     toolbar: 'undo redo',
                     menubar: false
                 });
-                $(selector).val(data.main_text);
+                $select.val(data.main_text);
             }
         }
     };
@@ -417,22 +465,31 @@ simpleWebDevTool.component.tinyMceTitle = function(selector) {
  * Created by shiba on 14/07/13.
  */
 
-simpleWebDevTool.controller.jqueryController = function(){
+simpleWebDevTool.controller.jqueryController = function(optionId){
     'use strict';
+    var id = Number(optionId);
+    var component = simpleWebDevTool.component;
     var service = simpleWebDevTool.service.mainService;
-    var jsTree = simpleWebDevTool.component.jstree('#jstree_demo');
-    var slickGrid = simpleWebDevTool.component.slickGrid('#myGrid');
-    var tinyMce = simpleWebDevTool.component.tinyMce('#editable');
-    var tinyMceTitle = simpleWebDevTool.component.tinyMceTitle('#editable_title');
-    var simpleForm = simpleWebDevTool.component.sampleForm('#sampleForm');
-    var jsTreeSearchFrom = simpleWebDevTool.component.sampleForm('#jstree_text');
+    var jsTree = component.jstree('#jstree_demo');
+    var slickGrid = component.slickGrid('#myGrid');
+    var tinyMce = component.tinyMce('#editable');
+    var tinyMceTitle = component.tinyMceTitle('#editable_title');
+    var simpleForm = component.sampleForm('#sampleForm');
+    var jsTreeSearchFrom = component.sampleForm('#jstree_text');
     var textArea = $('#text');
-    var sampleList = simpleWebDevTool.component.sampleList('#list');
-    var sampleList2 = simpleWebDevTool.component.sampleList('#list2');
-    var select2 = simpleWebDevTool.component.basicSelector('#basicSelect');
-    var select2Multi = simpleWebDevTool.component.multiSelector('#multiSelect');
-    var sampleBox = simpleWebDevTool.component.sampleBox('#box');
-    var floating = simpleWebDevTool.component.sampleFloat('#float_');
+    var sampleList = component.sampleList('#list');
+    var sampleList2 = component.sampleList('#list2');
+    var select2 = component.basicSelector('#basicSelect');
+    var select2Multi = component.multiSelector('#multiSelect');
+    var sampleBox = component.sampleBox('#box');
+    var floating = component.sampleFloat('#float_');
+    var mergely = component.mergely('#compare');
+    var addButton = component.sampleButton('#addButton');
+    var searchButton = component.sampleButton('#searchButton');
+    var addElemButton = component.sampleButton('#addElemButton');
+    var demoCreateButton = component.sampleButton('#demoCreateButton');
+    var demoRenameButton = component.sampleButton('#demoRenameButton');
+    var demoDeleteButton = component.sampleButton('#demoDeleteButton');
 
     tinyMce.keyUpEStream.assign(function() {
         console.log('tinyMce.keyUpEStream');
@@ -465,7 +522,7 @@ simpleWebDevTool.controller.jqueryController = function(){
         _refresh({textData:JSON.stringify(data)});
     });
 
-    $('#addButton').asEventStream('click').assign(function() {
+    addButton.clickEStream.assign(function() {
         console.log('addButton');
         var addStr = simpleForm.getValue();
         var listElems = sampleList.getList();
@@ -473,28 +530,28 @@ simpleWebDevTool.controller.jqueryController = function(){
         _refresh({ listData: listElems});
     });
 
-    $('#searchButton').asEventStream('click').assign(function() {
+    searchButton.clickEStream.assign(function() {
         console.log('searchButton');
         var listElems = service.search(sampleList.getList(), simpleForm.getValue());
         _refresh({ listData: listElems});
         slickGrid.filterAndUpdate(Number(simpleForm.getValue()));
     });
 
-    $('#addElemButton').asEventStream('click').assign(function() {
+    addElemButton.clickEStream.assign(function() {
         console.log('addElemButton');
         var listElems = service.addElem(sampleList.getList(), simpleForm.getValue());
         _refresh({ listData: listElems});
     });
 
-    $('#demoCreateButton').asEventStream('click').assign(function() {
+    demoCreateButton.clickEStream.assign(function() {
         jsTree.demoCreate();
     });
 
-    $('#demoRenameButton').asEventStream('click').assign(function() {
+    demoRenameButton.clickEStream.assign(function() {
         jsTree.demoRename();
     });
 
-    $('#demoDeleteButton').asEventStream('click').assign(function() {
+    demoDeleteButton.clickEStream.assign(function() {
         jsTree.demoDelete();
     });
 
@@ -515,6 +572,7 @@ simpleWebDevTool.controller.jqueryController = function(){
         sampleBox.refresh(tmp.listData);
         tinyMce.refresh(tmp.tinyMceData);
         tinyMceTitle.refresh(tmp.tinyMceData);
+        mergely.refresh(tmp.tinyMceData);
         if(tmp.textData){
             textArea.text(tmp.textData);
         }
@@ -524,7 +582,7 @@ simpleWebDevTool.controller.jqueryController = function(){
         load : function(){
             //simpleWebDevTool.util.countStart();
             console.log('load');
-            service.load().assign(_refresh);
+            service.load(id).assign(_refresh);
             //simpleWebDevTool.util.timeShow();
         }
     };
@@ -851,14 +909,14 @@ InfoWindowStock.prototype = {
             return listElems;
         },
 
-        load : function () {
+        load : function (id) {
             console.log('service.mainService.load');
             return Bacon.combineTemplate({
-                listData: dao.mainDao.getSampleList(2),
-                jsData: dao.mainDao.getJsTree(1),
-                slickData: dao.mainDao.getSlickGrid(1),
-                select2Data: dao.mainDao.getSelect2(1),
-                tinyMceData: dao.mainDao.getTinyMce(1)
+                listData: dao.mainDao.getSampleList(id),
+                jsData: dao.mainDao.getJsTree(id),
+                slickData: dao.mainDao.getSlickGrid(id),
+                select2Data: dao.mainDao.getSelect2(id),
+                tinyMceData: dao.mainDao.getTinyMce(id)
             });
         },
 
