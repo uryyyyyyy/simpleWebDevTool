@@ -6,21 +6,21 @@
 'use strict';
 
 simpleWebDevTool.component.sampleForm = function(selector) {
-
-    var returnObj = {};
     var currentData = {};
 
-    var form = $(selector);
+    var $select = $(selector);
 
 //    form.validate();
 
-    returnObj.refresh = function(newData){
-        form.val(newData);
-    };
+    return {
+        refresh : function(newData){
+            $select.val(newData);
+        },
 
-    returnObj.getValue = function(){
-        return form.val();
-    };
+        getValue : function(){
+            return $select.val();
+        },
 
-    return returnObj;
+        keyUpEStream : $select.asEventStream("keyup")
+    };
 };
