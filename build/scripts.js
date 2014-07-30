@@ -1,4 +1,3 @@
-'use strict';
 
 var simpleWebDevTool = {};
 simpleWebDevTool.controller = {};
@@ -15,7 +14,7 @@ console.logBlack = function(msg){
 };
 
 jQuery(function() {
-// define a new Sammy.Application bound to the #main element selector
+    'use strict';
     var app = Sammy('#SimpleWebDevTool', function(app) {
         var controller;
         // define a 'get' route that will be triggered at '#/path'
@@ -54,231 +53,223 @@ jQuery(function() {
  * Created by shiba on 14/07/14.
  */
 
-'use strict';
-
 simpleWebDevTool.component.basicSelector = function(selector) {
-
-    var returnObj = {};
+    'use strict';
+    var $select = $(selector);
     var currentData = {};
 
-    returnObj.refresh = function(newData){
-        if((!_.isEqual(currentData, newData)) && newData){
-            currentData = _.cloneDeep(newData);
-            $(selector).select2({ data: newData });
-        }
-    };
+    return {
+        refresh : function(newData){
+            if((!_.isEqual(currentData, newData)) && newData){
+                currentData = _.cloneDeep(newData);
+                $(selector).select2({ data: newData });
+            }
+        },
 
-    returnObj.getSelectedData = function(){
-        return $(selector).select2('data');
-    };
+        getSelectedData : function(){
+            return $(selector).select2('data');
+        },
 
-    return returnObj;
+        clickEStream : $select.asEventStream('click')
+    };
 };;/**
  * Created by shiba on 14/07/14.
  */
-
-'use strict';
 
 simpleWebDevTool.component.jstree = function(selector) {
-
-    var returnObj = {};
+    'use strict';
     var currentData = {};
-    var treeDom = $(selector);
+    var $select = $(selector);
 
-    returnObj.search = function(str){
-        treeDom.jstree(true).search(str);
-    };
+    return {
+        search : function(str){
+            $select.jstree(true).search(str);
+        },
 
-    returnObj.getSelectNode= function () {
-        return treeDom.jstree(true).get_selected();
-    };
+        getSelectNode : function () {
+            return $select.jstree(true).get_selected();
+        },
 
-    returnObj.demoCreate= function () {
-        var ref = treeDom.jstree(true),
-            sel = ref.get_selected();
-        if (!sel.length) {
-            return false;
-        }
-        sel = sel[0];
-        sel = ref.create_node(sel, {"type": "file"});
-        if (sel) {
+        demoCreate : function () {
+            var ref = $select.jstree(true),
+                sel = ref.get_selected();
+            if (!sel.length) {
+                return false;
+            }
+            sel = sel[0];
+            sel = ref.create_node(sel, {"type": "file"});
+            if (sel) {
+                ref.edit(sel);
+            }
+        },
+
+        demoRename : function () {
+            var ref = $select.jstree(true),
+                sel = ref.get_selected();
+            if (!sel.length) {
+                return false;
+            }
+            sel = sel[0];
             ref.edit(sel);
-        }
-    };
+        },
 
-    returnObj.demoRename= function () {
-        var ref = treeDom.jstree(true),
-            sel = ref.get_selected();
-        if (!sel.length) {
-            return false;
-        }
-        sel = sel[0];
-        ref.edit(sel);
-    };
+        demoDelete : function () {
+            var ref = $select.jstree(true),
+                sel = ref.get_selected();
+            if (!sel.length) {
+                return false;
+            }
+            ref.delete_node(sel);
+        },
 
-    returnObj.demoDelete= function () {
-        var ref = treeDom.jstree(true),
-            sel = ref.get_selected();
-        if (!sel.length) {
-            return false;
-        }
-        ref.delete_node(sel);
-    };
+        refresh : function (newData) {
+            if((!_.isEqual(newData, currentData) && newData)){
+                console.log('jstree refresh');
+                currentData = _.cloneDeep(newData);
+                $select.jstree({
+                        "core": {
+                            "animation": 0,
+                            "check_callback": true,
+                            "themes": { "stripes": true },
+                            'data': [
+                                { "id": "node_1", "text": "Root node",
+                                    "children" : [
+                                        { "id": "node_1_1", "text" : "Child 1" },
+                                        { "id": "node_1_2", "text" : "Child 2"}
+                                    ]
+                                },
+                                { "id": "node_2", "text": "Root node with options",
+                                    "state": { "opened": true, "selected": true },
+                                    "children": [
+                                        { "id": "node_2_1", "text": "Child A" },
+                                        { "id": "node_2_2", "text": "Child B"}
+                                    ]
+                                }
+                            ]
+                        },
+                        "types": {
+                            "#": { "max_children": 1, "max_depth": 4, "valid_children": ["root"] },
+                            "root": { "icon": "/static/3.0.2/assets/images/tree_icon.png", "valid_children": ["default"] },
+                            "default": { "valid_children": ["default", "file"] },
+                            "file": { "icon": "glyphicon glyphicon-file", "valid_children": true }
+                        },
+                        "plugins": [ "contextmenu", "dnd", "search", "state", "types", "wholerow" ]
+                    });
+            }
+        },
 
-    returnObj.refresh= function (newData) {
-        if((!_.isEqual(newData, currentData) && newData)){
-            console.log('jstree refresh');
-            currentData = _.cloneDeep(newData);
-            treeDom.jstree({
-                    "core": {
-                        "animation": 0,
-                        "check_callback": true,
-                        "themes": { "stripes": true },
-                        'data': [
-                            { "id": "node_1", "text": "Root node",
-                                "children" : [
-                                    { "id": "node_1_1", "text" : "Child 1" },
-                                    { "id": "node_1_2", "text" : "Child 2"}
-                                ]
-                            },
-                            { "id": "node_2", "text": "Root node with options",
-                                "state": { "opened": true, "selected": true },
-                                "children": [
-                                    { "id": "node_2_1", "text": "Child A" },
-                                    { "id": "node_2_2", "text": "Child B"}
-                                ]
-                            }
-                        ]
-                    },
-                    "types": {
-                        "#": { "max_children": 1, "max_depth": 4, "valid_children": ["root"] },
-                        "root": { "icon": "/static/3.0.2/assets/images/tree_icon.png", "valid_children": ["default"] },
-                        "default": { "valid_children": ["default", "file"] },
-                        "file": { "icon": "glyphicon glyphicon-file", "valid_children": true }
-                    },
-                    "plugins": [ "contextmenu", "dnd", "search", "state", "types", "wholerow" ]
-                });
-        }
-    };
-
-    return returnObj;
+        clickEStream : $select.asEventStream("click")
+    }
 };;/**
  * Created by shiba on 14/07/14.
  */
 
-'use strict';
-
 simpleWebDevTool.component.multiSelector = function(selector) {
-
-    var returnObj = {};
+    'use strict';
+    var $select = $(selector);
     var currentData = {};
 
-    returnObj.refresh = function(newData){
-        if((!_.isEqual(currentData, newData)) && newData){
-            currentData = _.cloneDeep(newData);
-            $(selector).select2({
-                data: newData,
-                multiple: true
-            });
-        }
-    };
+    return {
 
-    returnObj.getSelectedData = function(){
-        return $(selector).select2('data');
-    };
+        refresh : function(newData){
+            if((!_.isEqual(currentData, newData)) && newData){
+                currentData = _.cloneDeep(newData);
+                $(selector).select2({
+                    data: newData,
+                    multiple: true
+                });
+            }
+        },
 
-    return returnObj;
+        getSelectedData : function(){
+            return $(selector).select2('data');
+        },
+
+        clickEStream : $select.asEventStream('click')
+    };
 };;/**
  * Created by shiba on 14/07/17.
  */
 
 simpleWebDevTool.component.sampleBox = function(selector) {
     'use strict';
-    var $list = $(selector);
-    var returnObj = {};
+    var $select = $(selector);
     var currentData = {};
 
-    returnObj.refresh = function(newArray){
-        if((!_.isEqual(currentData, newArray) && newArray)){
-            currentData = _.cloneDeep(newArray);
-            //recreate DOM
-            $list.empty();
-            _.forEach(newArray, function(elem){
-                var _id = elem+'_box';
-                $list.append(_.template(simpleWebDevTool.util.render('template_partial'), {_id: _id}));
-                var tiny = simpleWebDevTool.component.tinyMce('#' + _id);
-                tiny.refresh({main_text:elem});
-            });
+    return {
+        refresh : function(newArray){
+            if((!_.isEqual(currentData, newArray) && newArray)){
+                currentData = _.cloneDeep(newArray);
+                //recreate DOM
+                $select.empty();
+                _.forEach(newArray, function(elem){
+                    var _id = elem+'_box';
+                    $select.append(_.template(simpleWebDevTool.util.render('template_partial'), {_id: _id}));
+                    var tiny = simpleWebDevTool.component.tinyMce('#' + _id);
+                    tiny.refresh({main_text:elem});
+                });
+            }
+        },
+
+        getValue : function(){
+            return $select.val();
         }
     };
-
-    returnObj.getValue = function(){
-        return $list.val();
-    };
-
-    return returnObj;
 };;/**
  * Created by shiba on 14/07/17.
  */
 
-'use strict';
-
 simpleWebDevTool.component.sampleFloat = function(selector) {
+    'use strict';
     $(selector).portamento();
 };;/**
  * Created by shiba on 14/07/17.
  */
 
-
-'use strict';
-
 simpleWebDevTool.component.sampleForm = function(selector) {
-
-    var returnObj = {};
+    'use strict';
     var currentData = {};
-
-    var form = $(selector);
+    var $select = $(selector);
 
 //    form.validate();
 
-    returnObj.refresh = function(newData){
-        form.val(newData);
-    };
+    return {
+        refresh : function(newData){
+            $select.val(newData);
+        },
 
-    returnObj.getValue = function(){
-        return form.val();
-    };
+        getValue : function(){
+            return $select.val();
+        },
 
-    return returnObj;
+        keyUpEStream : $select.asEventStream('keyup')
+    };
 };;/**
  * Created by shiba on 14/07/16.
  */
 
 simpleWebDevTool.component.sampleList = function(selector) {
     'use strict';
-    var list = $(selector);
+    var $select = $(selector);
     var currentData = {};
-    list.append('<li></li>');
-    var stream = $(selector + ' li').asEventStream('click');
+
+    var _getChildNumber = function(event){
+        var target = event.target;
+        var index = _.findIndex(target.parentElement.children, function(elem) {
+            return _.isEqual(elem, target);
+        });
+        return index + 1;
+    };
 
     return {
         refresh: function (newArray) {
             if ((!_.isEqual(currentData, newArray) && newArray)) {
                 currentData = _.cloneDeep(newArray);
                 //recreate DOM
-                list.empty();
-                _.forEach(newArray, function (elem, index) {
-                    list.append('<li id=' + index +  '>' + elem + '</li>');
+                $select.empty();
+                _.forEach(newArray, function (elem) {
+                    $select.append('<li>' + elem + '</li>');
                 });
-                //attach event on li
-//                $(selector + ' li').on('click', function () {
-//                    var index = $(selector + ' li').index(this) + 1;
-//                    controller.listEvent(selector, index);
-//                });
-                stream = $(selector + ' li').asEventStream('click').map(
-                        function(event){
-                            return Number(event.target.id) + 1;
-                        });
             }
         },
 
@@ -289,14 +280,9 @@ simpleWebDevTool.component.sampleList = function(selector) {
                 return Number(this.innerHTML);
             }).get();
         },
-        childClickStream : function(){
-            return stream;
-        }
-
-//        sample: function () {
-//            list.append('<li>' + 'moke' + '</li>');
-//            return $(selector + ' li').asEventStream('click').map($(selector + ' li').index(this) + 1);
-//        }
+        clickEStream : $(selector)
+            .asEventStream('click', 'li')
+            .map(function(event){ return _getChildNumber(event); })
     };
 };;
 'use strict';
@@ -446,18 +432,41 @@ simpleWebDevTool.controller.jqueryController = function(){
     var tinyMce = simpleWebDevTool.component.tinyMce('#editable');
     var tinyMceTitle = simpleWebDevTool.component.tinyMceTitle('#editable_title');
     var simpleForm = simpleWebDevTool.component.sampleForm('#sampleForm');
-    var jstreeSearchFrom = simpleWebDevTool.component.sampleForm('#demo_q');
+    var jstreeSearchFrom = simpleWebDevTool.component.sampleForm('#jstree_text');
     var textArea = $('#text');
     var sampleList = simpleWebDevTool.component.sampleList('#list');
     var sampleList2 = simpleWebDevTool.component.sampleList('#list2');
-    var select2 = simpleWebDevTool.component.basicSelector('#basicselect');
-    var select2Multi = simpleWebDevTool.component.multiSelector('#e9');
+    var select2 = simpleWebDevTool.component.basicSelector('#basicSelect');
+    var select2Multi = simpleWebDevTool.component.multiSelector('#multiSelect');
     var sampleBox = simpleWebDevTool.component.sampleBox('#box');
-    var hoge = simpleWebDevTool.component.sampleFloat('#float_');
+    var floating = simpleWebDevTool.component.sampleFloat('#float_');
 
     tinyMce.keyUpEStream.assign(function() {
         var txt = service.refer(tinyMce.getHtml());
         _refresh({ textData: txt});
+    });
+
+    sampleList.clickEStream.assign(function(val) {
+        simpleForm.refresh('click the 1st list ' + val + 'th');
+    });
+
+    sampleList2.clickEStream.assign(function(val) {
+        simpleForm.refresh('click the 2nd list ' + val + 'th');
+    });
+
+    jsTree.clickEStream.assign(function() {
+        var node = jsTree.getSelectNode();
+        jstreeSearchFrom.refresh(node);
+    });
+
+    select2.clickEStream.assign(function() {
+        var data = select2.getSelectedData();
+        _refresh({textData:JSON.stringify(data)});
+    });
+
+    select2Multi.clickEStream.assign(function() {
+        var data = select2Multi.getSelectedData();
+        _refresh({textData:JSON.stringify(data)});
     });
 
     $('#addButton').asEventStream('click').onValue(function() {
@@ -493,6 +502,10 @@ simpleWebDevTool.controller.jqueryController = function(){
         jsTree.demoDelete();
     });
 
+    jstreeSearchFrom.keyUpEStream.assign(function() {
+        jsTree.search(jstreeSearchFrom.getValue());
+    });
+
     var _refresh = function(refreshData){
         console.logBlack('refresh');
         var tmp = _.cloneDeep(refreshData);
@@ -509,55 +522,16 @@ simpleWebDevTool.controller.jqueryController = function(){
         if(tmp.textData){
             textArea.text(tmp.textData);
         }
-        _attachEventStream();
     };
 
-    var _attachEventStream = function(){
-        sampleList.childClickStream().assign(function(val) {
-            console.log('click the ' + val + 'th');
-        });
-        sampleList2.childClickStream().assign(function(val) {
-            console.log('click the ' + val + 'th');
-        });
+    return {
+        load : function(){
+            //simpleWebDevTool.util.countStart();
+            console.logBlack('init '  + controllerName);
+            service.load().assign(_refresh);
+            //simpleWebDevTool.util.timeShow();
+        }
     };
-
-    var returnObj = {};
-
-    returnObj.load = function(){
-        //simpleWebDevTool.util.countStart();
-        console.logBlack('init '  + controllerName);
-        service.load().assign(_refresh);
-        //simpleWebDevTool.util.timeShow();
-    };
-
-    returnObj.refresh = function(refreshData) {
-        _refresh(refreshData);
-    };
-
-    returnObj.jstreeSearch = function() {
-        jsTree.search(jstreeSearchFrom.getValue());
-    };
-
-    returnObj.jstreeRefToForm = function() {
-        var node = jsTree.getSelectNode();
-        jstreeSearchFrom.refresh(node);
-    };
-
-    returnObj.listEvent = function(selector, index) {
-        console.log(selector + index);
-    };
-
-    returnObj.getSelectedData = function() {
-        var data = select2.getSelectedData();
-        _refresh({textData:JSON.stringify(data)});
-    };
-
-    returnObj.getSelectedDataMulti = function() {
-        var data = select2Multi.getSelectedData();
-        _refresh({textData:JSON.stringify(data)});
-    };
-
-    return returnObj;
 };;/**
  * Created by shiba on 14/07/13.
  */

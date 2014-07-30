@@ -2,12 +2,9 @@
  * Created by shiba on 14/07/17.
  */
 
-
-'use strict';
-
 simpleWebDevTool.component.sampleForm = function(selector) {
+    'use strict';
     var currentData = {};
-
     var $select = $(selector);
 
 //    form.validate();
@@ -21,6 +18,6 @@ simpleWebDevTool.component.sampleForm = function(selector) {
             return $select.val();
         },
 
-        keyUpEStream : $select.asEventStream("keyup")
+        keyUpEStream : $select.asEventStream('keyup')
     };
 };

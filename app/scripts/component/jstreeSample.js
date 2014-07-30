@@ -2,10 +2,8 @@
  * Created by shiba on 14/07/14.
  */
 
-'use strict';
-
 simpleWebDevTool.component.jstree = function(selector) {
-
+    'use strict';
     var currentData = {};
     var $select = $(selector);
 

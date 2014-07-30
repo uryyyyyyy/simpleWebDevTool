@@ -4,17 +4,25 @@
 
 simpleWebDevTool.component.sampleList = function(selector) {
     'use strict';
-    var list = $(selector);
+    var $select = $(selector);
     var currentData = {};
+
+    var _getChildNumber = function(event){
+        var target = event.target;
+        var index = _.findIndex(target.parentElement.children, function(elem) {
+            return _.isEqual(elem, target);
+        });
+        return index + 1;
+    };
 
     return {
         refresh: function (newArray) {
             if ((!_.isEqual(currentData, newArray) && newArray)) {
                 currentData = _.cloneDeep(newArray);
                 //recreate DOM
-                list.empty();
-                _.forEach(newArray, function (elem, index) {
-                    list.append('<li id=' + index +  '>' + elem + '</li>');
+                $select.empty();
+                _.forEach(newArray, function (elem) {
+                    $select.append('<li>' + elem + '</li>');
                 });
             }
         },
@@ -28,8 +36,6 @@ simpleWebDevTool.component.sampleList = function(selector) {
         },
         clickEStream : $(selector)
             .asEventStream('click', 'li')
-            .map(function(event){
-                return Number(event.target.id) + 1;
-            })
+            .map(function(event){ return _getChildNumber(event); })
     };
 };

@@ -23,6 +23,6 @@ simpleWebDevTool.component.multiSelector = function(selector) {
             return $(selector).select2('data');
         },
 
-        clickEStream : $select.asEventStream("click")
+        clickEStream : $select.asEventStream('click')
     };
 };
