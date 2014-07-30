@@ -1,3 +1,38 @@
+Version 4.1.3 (2014-07-29)
+	Added event binding logic to tinymce.util.XHR making it possible to override headers and settings before any request is made.
+	Fixed bug where drag events wasn't fireing properly on older IE versions since the event handlers where bound to document.
+	Fixed bug where drag/dropping contents within the editor on IE would force the contents into plain text mode even if it was internal content.
+	Fixed bug where IE 7 wouldn't open menus properly due to a resize bug in the browser auto closing them immediately.
+	Fixed bug where the DOMUtils getPos logic wouldn't produce a valid coordinate inside the body if the body was positioned non static.
+	Fixed bug where the element path and format state wasn't properly updated if you had the wordcount plugin enabled.
+	Fixed bug where a comment at the beginning of source would produce an exception in the formatter logic.
+	Fixed bug where setAttrib/getAttrib on null would throw exception together with any hooked attributes like style.
+	Fixed bug where table sizes wasn't properly retained when copy/pasting on WebKit/Blink.
+	Fixed bug where WebKit/Blink would produce colors in RGB format instead of the forced HEX format when deleting contents.
+	Fixed bug where the width attribute wasn't updated on tables if you changed the size inside the table dialog.
+	Fixed bug where control selection wasn't properly handled when the caret was placed directly after an image.
+	Fixed bug where selecting the contents of table cells using the selection.select method wouldn't place the caret properly.
+	Fixed bug where the selection state for images wasn't removed when placing the caret right after an image on WebKit/Blink.
+	Fixed bug where all events wasn't properly unbound when and editor instance was removed or destroyed by some external innerHTML call.
+	Fixed bug where it wasn't possible or very hard to select images on iOS when the onscreen keyboard was visible.
+	Fixed so auto_focus can take a boolean argument this will auto focus the last initialized editor might be useful for single inits.
+	Fixed so word auto detect lists logic works better for faked lists that doesn't have specific markup.
+	Fixed so nodeChange gets fired on mouseup as it used to before 4.1.1 we optimized that event to fire less often.
+	Removed the finish menu item from spellchecker menu since it's redundant you can stop spellchecking by toggling menu item or button.
+Version 4.1.2 (2014-07-15)
+	Added offset/grep to DomQuery class works basically the same as it's jQuery equivalent.
+	Fixed bug where backspace/delete or setContent with an empty string would remove header data when using the fullpage plugin.
+	Fixed bug where tinymce.remove with a selector not matching any editors would remove all editors.
+	Fixed bug where resizing of the editor didn't work since the theme was calling setStyles instead of setStyle.
+	Fixed bug where IE 7 would fail to append html fragments to iframe document when using DomQuery.
+	Fixed bug where the getStyle DOMUtils method would produce an exception if it was called with null as it's element.
+	Fixed bug where the paste plugin would remove the element if the none of the paste_webkit_styles rules matched the current style.
+	Fixed bug where contextmenu table items wouldn't work properly on IE since it would some times fire an incorrect selection change.
+	Fixed bug where the padding/border values wasn't used in the size calculation for the body size when using autoresize. Patch contributed by Matt Whelan.
+	Fixed bug where conditional word comments wouldn't be properly removed when pasting plain text.
+	Fixed bug where resizing would sometime fail on IE 11 when the mouseup occurred inside the resizable element.
+	Fixed so the iframe gets initialized without any inline event handlers for better CSP support. Patch contributed by Matt Whelan.
+	Fixed so the tinymce.dom.Sizzle is the latest version of sizzle this resolves the document context bug.
 Version 4.1.1 (2014-07-08)
 	Fixed bug where pasting plain text on some WebKit versions would result in an empty line.
 	Fixed bug where resizing images inside tables on IE 11 wouldn't work properly.
