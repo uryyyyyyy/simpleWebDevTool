@@ -8,11 +8,6 @@ simpleWebDevTool.util = {};
 simpleWebDevTool.cache = {};
 simpleWebDevTool.component = {};
 
-
-console.logBlack = function(msg){
-    console.log('%c' + msg, 'color:#fff;background:#000;');
-};
-
 jQuery(function() {
     'use strict';
     var app = Sammy('#SimpleWebDevTool', function(app) {

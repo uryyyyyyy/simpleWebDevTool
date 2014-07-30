@@ -6,40 +6,45 @@
 
 (function() {
     'use strict';
-//    var mainService = simpleWebDevTool.service.mainService;
     var dao = simpleWebDevTool.dao;
-    var mainService={};
+    simpleWebDevTool.service.mainService = {
 
-    mainService.add = function (listElems, addStr) {
-        console.log('service.mainService.add');
-        return _.map(listElems, function (num) {
-            return num + Number(addStr);
-        });
-    };
+        add : function (listElems, addStr) {
+            console.log('service.mainService.add');
+            return _.map(listElems, function (num) {
+                return num + Number(addStr);
+            });
+        },
 
-    mainService.search = function (listElems, searchStr) {
-        console.log('service.mainService.search');
-        return _.filter(listElems, function (num) {
-            return (String(num).indexOf(searchStr) !== -1);
-        });
-    };
+        search : function (listElems, searchStr) {
+            console.log('service.mainService.search');
+            return _.filter(listElems, function (num) {
+                return (String(num).indexOf(searchStr) !== -1);
+            });
+        },
 
-    mainService.addElem = function (listElems, searchStr) {
-        console.log('service.mainService.addElem');
-        for (var i = 0; i < Number(searchStr); ++i) {
-            listElems.push(Math.random());
+        addElem : function (listElems, searchStr) {
+            console.log('service.mainService.addElem');
+            for (var i = 0; i < Number(searchStr); ++i) {
+                listElems.push(Math.random());
+            }
+            return listElems;
+        },
+
+        load : function () {
+            console.log('service.mainService.load');
+            return Bacon.combineTemplate({
+                listData: dao.mainDao.getSampleList(2),
+                jsData: dao.mainDao.getJsTree(1),
+                slickData: dao.mainDao.getSlickGrid(1),
+                select2Data: dao.mainDao.getSelect2(1),
+                tinyMceData: dao.mainDao.getTinyMce(1)
+            });
+        },
+
+        refer : function (str) {
+            console.log('service.mainService.refer');
+            return str + ' ほげほげほげ';
         }
-        return listElems;
     };
-
-    mainService.load = function () {
-        console.log('service.mainService.load');
-        return dao.mainDao.load();
-    };
-
-    mainService.refer = function (str) {
-        console.log('service.mainService.refer');
-        return str + ' ほげほげほげ';
-    };
-    window.simpleWebDevTool.service.mainService=mainService;
 })(jQuery);

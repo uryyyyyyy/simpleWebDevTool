@@ -10,5 +10,6 @@
   },
   "_source": "git://github.com/quirkey/sammy.git",
   "_target": "~0.7.5",
-  "_originalSource": "sammy"
+  "_originalSource": "sammy",
+  "_direct": true
 }

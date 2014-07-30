@@ -5,7 +5,6 @@ simpleWebDevTool.views = {};
 simpleWebDevTool.service = {};
 simpleWebDevTool.dao = {};
 simpleWebDevTool.util = {};
-simpleWebDevTool.cache = {};
 simpleWebDevTool.component = {};
 
 
@@ -422,9 +421,8 @@ simpleWebDevTool.component.tinyMceTitle = function(selector) {
  * Created by shiba on 14/07/13.
  */
 
-'use strict';
-
 simpleWebDevTool.controller.jqueryController = function(){
+    'use strict';
     var service = simpleWebDevTool.service.mainService;
     var jsTree = simpleWebDevTool.component.jstree('#jstree_demo');
     var slickGrid = simpleWebDevTool.component.slickGrid('#myGrid');
@@ -742,11 +740,9 @@ simpleWebDevTool.controller.vueController = function(){
  * Created by shiba on 14/07/13.
  */
 
-simpleWebDevTool.dao.mainDao = {};
-
 (function() {
     'use strict';
-    var mainDao = simpleWebDevTool.dao.mainDao;
+    var mainDao = {};
     var util = simpleWebDevTool.util;
 
     mainDao.load = function(){
@@ -762,8 +758,12 @@ simpleWebDevTool.dao.mainDao = {};
 
     mainDao.save = function(reqData){
         console.log('dao.mainDao.save');
-        return util.putAjaxAsync('jsonApi/path/2', reqData, controller.refresh);
+        return Bacon.combineTemplate({
+            response: util.postAjaxAsync('jsonApi/path/2', reqData)
+        });
     };
+
+    window.simpleWebDevTool.dao.mainDao = mainDao;
 })(jQuery);;'use strict';
 
 /**
@@ -817,7 +817,6 @@ InfoWindowStock.prototype = {
 
 (function() {
     'use strict';
-//    var mainService = simpleWebDevTool.service.mainService;
     var dao = simpleWebDevTool.dao;
     var mainService={};
 
@@ -852,7 +851,7 @@ InfoWindowStock.prototype = {
         console.log('service.mainService.refer');
         return str + ' ほげほげほげ';
     };
-    window.simpleWebDevTool.service.mainService=mainService;
+    window.simpleWebDevTool.service.mainService = mainService;
 })(jQuery);;/**
  * Created by shiba on 14/07/13.
  */
@@ -860,39 +859,22 @@ InfoWindowStock.prototype = {
 simpleWebDevTool.util.getAjaxAsync = function(url) {
     'use strict';
     console.log('getAjaxAsync url:' + url);
-    var res = $.ajax({
+    return $.ajax({
         type: 'GET',
         url: url,
         async: true
     });
-    return res;
 };
 
-simpleWebDevTool.util.getAjaxIfExist = function(url) {
-    'use strict';
-    console.log('getAjaxIfExist url:' + url);
-    return simpleWebDevTool.cache.ajaxCache[url];
-};
-
-simpleWebDevTool.util.putAjaxAsync = function(url, reqData, callback) {
+simpleWebDevTool.util.postAjaxAsync = function(url, reqData) {
     'use strict';
     console.log('putAjaxAsync url:' + url);
-    var returnObj = {};
-    $.ajax({
+    return $.ajax({
         type: 'POST',
         url: url,
         async: true,
         data: reqData
-    }).done(function(data) {
-        console.log('success');
-        console.log(data);
-        //simpleWebDevTool.util.dummyWait(1000);
-        returnObj = data;
-        callback();
-    }).fail(function() {
-        console.error(reqData);
     });
-    return returnObj;
 };;/**
  * Created by shiba on 14/07/13.
  */
