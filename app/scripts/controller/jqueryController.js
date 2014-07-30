@@ -19,11 +19,19 @@ simpleWebDevTool.controller.jqueryController = function(){
     var select2 = simpleWebDevTool.component.basicSelector('#basicSelect');
     var select2Multi = simpleWebDevTool.component.multiSelector('#multiSelect');
     var sampleBox = simpleWebDevTool.component.sampleBox('#box');
-    var hoge = simpleWebDevTool.component.sampleFloat('#float_');
+    var floating = simpleWebDevTool.component.sampleFloat('#float_');
 
     tinyMce.keyUpEStream.assign(function() {
         var txt = service.refer(tinyMce.getHtml());
         _refresh({ textData: txt});
+    });
+
+    sampleList.clickEStream.assign(function(val) {
+        simpleForm.refresh('click the 1st list ' + val + 'th');
+    });
+
+    sampleList2.clickEStream.assign(function(val) {
+        simpleForm.refresh('click the 2nd list ' + val + 'th');
     });
 
     jsTree.clickEStream.assign(function() {
@@ -94,16 +102,6 @@ simpleWebDevTool.controller.jqueryController = function(){
         if(tmp.textData){
             textArea.text(tmp.textData);
         }
-        _attachEventStream();
-    };
-
-    var _attachEventStream = function(){
-        sampleList.childClickStream().assign(function(val) {
-            console.log('click the ' + val + 'th');
-        });
-        sampleList2.childClickStream().assign(function(val) {
-            console.log('click the ' + val + 'th');
-        });
     };
 
     return {
