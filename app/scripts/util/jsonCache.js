@@ -2,10 +2,9 @@
  * Created by shiba on 14/07/13.
  */
 
-'use strict';
-
 // this function is cache, you don't need to change
 simpleWebDevTool.util.getAjaxSyncWithCache = function(keyUrl) {
+    'use strict';
     var cache = [];
     if ( !cache[keyUrl] ) {
         $.ajax({

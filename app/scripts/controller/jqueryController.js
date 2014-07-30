@@ -26,7 +26,7 @@ simpleWebDevTool.controller.jqueryController = function(){
         _refresh({ textData: txt});
     });
 
-    $('#addButton').asEventStream("click").onValue(function() {
+    $('#addButton').asEventStream('click').onValue(function() {
         console.logBlack('func1 ' + controllerName);
         var addStr = simpleForm.getValue();
         var listElems = sampleList.getList();
@@ -34,28 +34,28 @@ simpleWebDevTool.controller.jqueryController = function(){
         _refresh({ listData: listElems});
     });
 
-    $('#searchButton').asEventStream("click").onValue(function() {
+    $('#searchButton').asEventStream('click').onValue(function() {
         console.logBlack('search '  + controllerName);
         var listElems = service.search(sampleList.getList(), simpleForm.getValue());
         _refresh({ listData: listElems});
         slickGrid.filterAndUpdate(Number(simpleForm.getValue()));
     });
 
-    $('#addElemButton').asEventStream("click").onValue(function() {
+    $('#addElemButton').asEventStream('click').onValue(function() {
         console.logBlack('search '  + controllerName);
         var listElems = service.addElem(sampleList.getList(), simpleForm.getValue());
         _refresh({ listData: listElems});
     });
 
-    $('#demoCreateButton').asEventStream("click").onValue(function() {
+    $('#demoCreateButton').asEventStream('click').onValue(function() {
         jsTree.demoCreate();
     });
 
-    $('#demoRenameButton').asEventStream("click").onValue(function() {
+    $('#demoRenameButton').asEventStream('click').onValue(function() {
         jsTree.demoRename();
     });
 
-    $('#demoDeleteButton').asEventStream("click").onValue(function() {
+    $('#demoDeleteButton').asEventStream('click').onValue(function() {
         jsTree.demoDelete();
     });
 

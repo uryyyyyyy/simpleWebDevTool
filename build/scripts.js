@@ -1,6 +1,5 @@
 'use strict';
 
-var controller ={};
 var simpleWebDevTool = {};
 simpleWebDevTool.controller = {};
 simpleWebDevTool.views = {};
@@ -18,7 +17,7 @@ console.logBlack = function(msg){
 jQuery(function() {
 // define a new Sammy.Application bound to the #main element selector
     var app = Sammy('#SimpleWebDevTool', function(app) {
-
+        var controller;
         // define a 'get' route that will be triggered at '#/path'
         app.get('#/path', function() {
             $('#template').html(_.template(simpleWebDevTool.util.render('template1')));
@@ -193,32 +192,28 @@ simpleWebDevTool.component.multiSelector = function(selector) {
  * Created by shiba on 14/07/17.
  */
 
-'use strict';
-
 simpleWebDevTool.component.sampleBox = function(selector) {
-
-    var list = $(selector);
+    'use strict';
+    var $list = $(selector);
     var returnObj = {};
     var currentData = {};
-
-//    form.validate();
 
     returnObj.refresh = function(newArray){
         if((!_.isEqual(currentData, newArray) && newArray)){
             currentData = _.cloneDeep(newArray);
             //recreate DOM
-            list.empty();
+            $list.empty();
             _.forEach(newArray, function(elem){
                 var _id = elem+'_box';
-                list.append(_.template(simpleWebDevTool.util.render('template_partial'), {_id: _id}));
-                simpleWebDevTool.component.tinyMce('#' + _id);
+                $list.append(_.template(simpleWebDevTool.util.render('template_partial'), {_id: _id}));
+                var tiny = simpleWebDevTool.component.tinyMce('#' + _id);
+                tiny.refresh({main_text:elem});
             });
-            //attach event on li
         }
     };
 
     returnObj.getValue = function(){
-        return list.val();
+        return $list.val();
     };
 
     return returnObj;
@@ -259,38 +254,50 @@ simpleWebDevTool.component.sampleForm = function(selector) {
  * Created by shiba on 14/07/16.
  */
 
-'use strict';
-
 simpleWebDevTool.component.sampleList = function(selector) {
-
+    'use strict';
     var list = $(selector);
-    var returnObj = {};
     var currentData = {};
+    list.append('<li></li>');
+    var stream = $(selector + ' li').asEventStream('click');
 
-    returnObj.refresh = function(newArray){
-        if((!_.isEqual(currentData, newArray) && newArray)){
-            currentData = _.cloneDeep(newArray);
-            //recreate DOM
-            list.empty();
-            _.forEach(newArray, function(elem){
-                list.append('<li>'+ elem + '</li>');
-            });
-            //attach event on li
-            $(selector + ' li').on('click', function(){
-                var index = $(selector + ' li').index(this) + 1;
-                controller.listEvent(selector, index);
-            });
+    return {
+        refresh: function (newArray) {
+            if ((!_.isEqual(currentData, newArray) && newArray)) {
+                currentData = _.cloneDeep(newArray);
+                //recreate DOM
+                list.empty();
+                _.forEach(newArray, function (elem, index) {
+                    list.append('<li id=' + index +  '>' + elem + '</li>');
+                });
+                //attach event on li
+//                $(selector + ' li').on('click', function () {
+//                    var index = $(selector + ' li').index(this) + 1;
+//                    controller.listEvent(selector, index);
+//                });
+                stream = $(selector + ' li').asEventStream('click').map(
+                        function(event){
+                            return Number(event.target.id) + 1;
+                        });
+            }
+        },
+
+        getList: function () {
+            //get Data from DOM
+            //TODO get from currentData is fast but sometimes not correct
+            return $(selector + ' li').map(function () {
+                return Number(this.innerHTML);
+            }).get();
+        },
+        childClickStream : function(){
+            return stream;
         }
-    };
 
-    returnObj.getList = function(){
-        //get Data from DOM
-        //TODO get from currentData is fast but sometimes not correct
-        return $(selector + ' li').map(function() {
-            return Number(this.innerHTML);
-        }).get();
+//        sample: function () {
+//            list.append('<li>' + 'moke' + '</li>');
+//            return $(selector + ' li').asEventStream('click').map($(selector + ' li').index(this) + 1);
+//        }
     };
-    return returnObj;
 };;
 'use strict';
 
@@ -383,7 +390,7 @@ simpleWebDevTool.component.tinyMce = function(selector) {
         },
 
         refresh : function(data) {
-            if((!_.isEqual(currentData, data)) && data) {
+            if((data && !_.isEqual(currentData, data))) {
 
                 tinymce.init({
                     selector: selector,
@@ -397,8 +404,11 @@ simpleWebDevTool.component.tinyMce = function(selector) {
                     image_list: data.image_list
                 });
                 $select.html(data.main_text);
+                currentData = data;
             }
-        }
+        },
+
+        keyUpEStream : $select.asEventStream("keyup")
     };
 };
 
@@ -431,8 +441,7 @@ simpleWebDevTool.component.tinyMceTitle = function(selector) {
 simpleWebDevTool.controller.jqueryController = function(){
     var controllerName = 'jqueryController';
     var service = simpleWebDevTool.service.mainService;
-
-    var jstree = simpleWebDevTool.component.jstree('#jstree_demo');
+    var jsTree = simpleWebDevTool.component.jstree('#jstree_demo');
     var slickGrid = simpleWebDevTool.component.slickGrid('#myGrid');
     var tinyMce = simpleWebDevTool.component.tinyMce('#editable');
     var tinyMceTitle = simpleWebDevTool.component.tinyMceTitle('#editable_title');
@@ -445,53 +454,52 @@ simpleWebDevTool.controller.jqueryController = function(){
     var select2Multi = simpleWebDevTool.component.multiSelector('#e9');
     var sampleBox = simpleWebDevTool.component.sampleBox('#box');
     var hoge = simpleWebDevTool.component.sampleFloat('#float_');
-    var returnObj = {};
 
-    returnObj.load = function(){
-        //simpleWebDevTool.util.countStart();
-        console.logBlack('init '  + controllerName);
-        service.load();
-        //simpleWebDevTool.util.timeShow();
-    };
+    tinyMce.keyUpEStream.assign(function() {
+        var txt = service.refer(tinyMce.getHtml());
+        _refresh({ textData: txt});
+    });
 
-    returnObj.add = function(){
+    $('#addButton').asEventStream('click').onValue(function() {
         console.logBlack('func1 ' + controllerName);
         var addStr = simpleForm.getValue();
         var listElems = sampleList.getList();
-
         listElems = service.add(listElems, addStr);
-        controller.refresh({ listData: listElems});
-        console.log('func1 done');
-    };
+        _refresh({ listData: listElems});
+    });
 
-    returnObj.search = function(){
+    $('#searchButton').asEventStream('click').onValue(function() {
         console.logBlack('search '  + controllerName);
         var listElems = service.search(sampleList.getList(), simpleForm.getValue());
-        controller.refresh({ listData: listElems});
-        console.log('search done');
+        _refresh({ listData: listElems});
         slickGrid.filterAndUpdate(Number(simpleForm.getValue()));
-    };
+    });
 
-    returnObj.addElem = function(){
+    $('#addElemButton').asEventStream('click').onValue(function() {
         console.logBlack('search '  + controllerName);
         var listElems = service.addElem(sampleList.getList(), simpleForm.getValue());
-        controller.refresh({ listData: listElems});
-        console.log('search done');
-    };
+        _refresh({ listData: listElems});
+    });
 
-    returnObj.refer = function(){
-        var str = tinyMce.getHtml();
-        var resultObj = service.refer(str);
-        controller.refresh({ textData: resultObj});
-    };
+    $('#demoCreateButton').asEventStream('click').onValue(function() {
+        jsTree.demoCreate();
+    });
 
-    returnObj.refresh = function(refreshData) {
+    $('#demoRenameButton').asEventStream('click').onValue(function() {
+        jsTree.demoRename();
+    });
+
+    $('#demoDeleteButton').asEventStream('click').onValue(function() {
+        jsTree.demoDelete();
+    });
+
+    var _refresh = function(refreshData){
         console.logBlack('refresh');
         var tmp = _.cloneDeep(refreshData);
 
         sampleList.refresh(tmp.listData);
         sampleList2.refresh(tmp.listData);
-        jstree.refresh(tmp.jsData);
+        jsTree.refresh(tmp.jsData);
         slickGrid.refresh(tmp.slickData);
         select2.refresh(tmp.select2Data);
         select2Multi.refresh(tmp.select2Data);
@@ -501,38 +509,37 @@ simpleWebDevTool.controller.jqueryController = function(){
         if(tmp.textData){
             textArea.text(tmp.textData);
         }
+        _attachEventStream();
     };
 
-    returnObj.refreshBacon = function(ajaxData) {
-        console.logBlack('refresh');
-        sampleList.refresh(ajaxData.list);
-        sampleList2.refresh(ajaxData.list);
-        jstree.refresh(ajaxData.jsTree);
-        slickGrid.refresh(ajaxData.slickGrid);
-        select2.refresh(ajaxData.select2);
-        select2Multi.refresh(ajaxData.select2);
-        tinyMce.refresh(ajaxData.tinyMce);
-        tinyMceTitle.refresh(ajaxData.tinyMce);
+    var _attachEventStream = function(){
+        sampleList.childClickStream().assign(function(val) {
+            console.log('click the ' + val + 'th');
+        });
+        sampleList2.childClickStream().assign(function(val) {
+            console.log('click the ' + val + 'th');
+        });
     };
 
-    returnObj.demoCreate = function() {
-        jstree.demoCreate();
+    var returnObj = {};
+
+    returnObj.load = function(){
+        //simpleWebDevTool.util.countStart();
+        console.logBlack('init '  + controllerName);
+        service.load().assign(_refresh);
+        //simpleWebDevTool.util.timeShow();
     };
 
-    returnObj.demoDelete = function() {
-        jstree.demoDelete();
-    };
-
-    returnObj.demoRename = function() {
-        jstree.demoRename();
+    returnObj.refresh = function(refreshData) {
+        _refresh(refreshData);
     };
 
     returnObj.jstreeSearch = function() {
-        jstree.search(jstreeSearchFrom.getValue());
+        jsTree.search(jstreeSearchFrom.getValue());
     };
 
     returnObj.jstreeRefToForm = function() {
-        var node = jstree.getSelectNode();
+        var node = jsTree.getSelectNode();
         jstreeSearchFrom.refresh(node);
     };
 
@@ -542,20 +549,13 @@ simpleWebDevTool.controller.jqueryController = function(){
 
     returnObj.getSelectedData = function() {
         var data = select2.getSelectedData();
-        controller.refresh({textData:JSON.stringify(data)});
+        _refresh({textData:JSON.stringify(data)});
     };
 
     returnObj.getSelectedDataMulti = function() {
         var data = select2Multi.getSelectedData();
-        controller.refresh({textData:JSON.stringify(data)});
+        _refresh({textData:JSON.stringify(data)});
     };
-
-//    var allKeyUps = $(document).asEventStream("keyup");
-//
-//    var spaceBarKeyUps = allKeyUps
-//        .filter(function(event) { return event.keyCode == 32 });
-//
-//    spaceBarKeyUps.onValue(function(event) { alert("you pressed space" + event) });
 
     return returnObj;
 };;/**
@@ -766,23 +766,22 @@ simpleWebDevTool.controller.vueController = function(){
  * Created by shiba on 14/07/13.
  */
 
-'use strict';
-
 simpleWebDevTool.dao.mainDao = {};
 
 (function() {
+    'use strict';
     var mainDao = simpleWebDevTool.dao.mainDao;
     var util = simpleWebDevTool.util;
 
     mainDao.load = function(){
         console.log('dao.mainDao.load');
-        Bacon.combineTemplate({
-            list: Bacon.fromPromise($.ajax('jsonApi/path/2')),
-            jsTree: Bacon.fromPromise($.ajax('jsonApi/jstree/1')),
-            slickGrid: Bacon.fromPromise($.ajax('jsonApi/slickGrid/1')),
-            select2: Bacon.fromPromise($.ajax('jsonApi/select2/1')),
-            tinyMce: Bacon.fromPromise($.ajax('jsonApi/tinyMce/1'))
-        }).onValue(controller.refreshBacon);
+        return Bacon.combineTemplate({
+            listData: Bacon.fromPromise(util.getAjaxAsync('jsonApi/path/2')),
+            jsData: Bacon.fromPromise(util.getAjaxAsync('jsonApi/jstree/1')),
+            slickData: Bacon.fromPromise(util.getAjaxAsync('jsonApi/slickGrid/1')),
+            select2Data: Bacon.fromPromise(util.getAjaxAsync('jsonApi/select2/1')),
+            tinyMceData: Bacon.fromPromise(util.getAjaxAsync('jsonApi/tinyMce/1'))
+        });
     };
 
     mainDao.save = function(reqData){
@@ -838,13 +837,13 @@ InfoWindowStock.prototype = {
  * Created by shiba on 14/07/13.
  */
 
-'use strict';
-
-simpleWebDevTool.service.mainService = {};
+//simpleWebDevTool.service.mainService = {};
 
 (function() {
-    var mainService = simpleWebDevTool.service.mainService;
+    'use strict';
+//    var mainService = simpleWebDevTool.service.mainService;
     var dao = simpleWebDevTool.dao;
+    var mainService={};
 
     mainService.add = function (listElems, addStr) {
         console.log('service.mainService.add');
@@ -870,50 +869,37 @@ simpleWebDevTool.service.mainService = {};
 
     mainService.load = function () {
         console.log('service.mainService.load');
-        dao.mainDao.load();
+        return dao.mainDao.load();
     };
 
     mainService.refer = function (str) {
         console.log('service.mainService.refer');
         return str + ' ほげほげほげ';
     };
-
+    window.simpleWebDevTool.service.mainService=mainService;
 })(jQuery);;/**
  * Created by shiba on 14/07/13.
  */
 
-'use strict';
-simpleWebDevTool.cache.ajaxCache = {};
-
-simpleWebDevTool.util.getAjaxAsync = function(url, callback) {
+simpleWebDevTool.util.getAjaxAsync = function(url) {
+    'use strict';
     console.log('getAjaxAsync url:' + url);
-    var ajaxCache = simpleWebDevTool.cache.ajaxCache; //TODO use localStorage
-    if (!ajaxCache[url]) {
-        $.ajax({
-            type: 'GET',
-            url: url,
-            async: true
-        }).done(function (data) {
-            console.log('success');
-            console.log(data);
-            //simpleWebDevTool.util.dummyWait(1000);
-            ajaxCache[url] = data;
-            if (callback) {
-                callback();
-            }
-        }).fail(function () {
-            console.error('error');
-        });
-    }
-    return ajaxCache[url];
+    var res = $.ajax({
+        type: 'GET',
+        url: url,
+        async: true
+    });
+    return res;
 };
 
 simpleWebDevTool.util.getAjaxIfExist = function(url) {
+    'use strict';
     console.log('getAjaxIfExist url:' + url);
     return simpleWebDevTool.cache.ajaxCache[url];
 };
 
 simpleWebDevTool.util.putAjaxAsync = function(url, reqData, callback) {
+    'use strict';
     console.log('putAjaxAsync url:' + url);
     var returnObj = {};
     $.ajax({
@@ -935,10 +921,9 @@ simpleWebDevTool.util.putAjaxAsync = function(url, reqData, callback) {
  * Created by shiba on 14/07/13.
  */
 
-'use strict';
-
 // this function is cache, you don't need to change
 simpleWebDevTool.util.getAjaxSyncWithCache = function(keyUrl) {
+    'use strict';
     var cache = [];
     if ( !cache[keyUrl] ) {
         $.ajax({

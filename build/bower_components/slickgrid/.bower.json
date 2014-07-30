@@ -10,5 +10,6 @@
   },
   "_source": "git://github.com/mleibman/SlickGrid.git",
   "_target": "~2.1.0",
-  "_originalSource": "slickgrid"
+  "_originalSource": "slickgrid",
+  "_direct": true
 }

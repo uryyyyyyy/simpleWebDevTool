@@ -7,7 +7,7 @@ simpleWebDevTool.component.sampleList = function(selector) {
     var list = $(selector);
     var currentData = {};
     list.append('<li></li>');
-    var stream = $(selector + ' li').asEventStream("click");
+    var stream = $(selector + ' li').asEventStream('click');
 
     return {
         refresh: function (newArray) {
@@ -23,7 +23,7 @@ simpleWebDevTool.component.sampleList = function(selector) {
 //                    var index = $(selector + ' li').index(this) + 1;
 //                    controller.listEvent(selector, index);
 //                });
-                stream = $(selector + ' li').asEventStream("click").map(
+                stream = $(selector + ' li').asEventStream('click').map(
                         function(event){
                             return Number(event.target.id) + 1;
                         });
@@ -43,7 +43,7 @@ simpleWebDevTool.component.sampleList = function(selector) {
 
 //        sample: function () {
 //            list.append('<li>' + 'moke' + '</li>');
-//            return $(selector + ' li').asEventStream("click").map($(selector + ' li').index(this) + 1);
+//            return $(selector + ' li').asEventStream('click').map($(selector + ' li').index(this) + 1);
 //        }
-    }
+    };
 };
