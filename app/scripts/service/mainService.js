@@ -31,14 +31,14 @@
             return listElems;
         },
 
-        load : function () {
+        load : function (id) {
             console.log('service.mainService.load');
             return Bacon.combineTemplate({
-                listData: dao.mainDao.getSampleList(2),
-                jsData: dao.mainDao.getJsTree(1),
-                slickData: dao.mainDao.getSlickGrid(1),
-                select2Data: dao.mainDao.getSelect2(1),
-                tinyMceData: dao.mainDao.getTinyMce(1)
+                listData: dao.mainDao.getSampleList(id),
+                jsData: dao.mainDao.getJsTree(id),
+                slickData: dao.mainDao.getSlickGrid(id),
+                select2Data: dao.mainDao.getSelect2(id),
+                tinyMceData: dao.mainDao.getTinyMce(id)
             });
         },
 

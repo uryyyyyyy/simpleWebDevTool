@@ -11,30 +11,25 @@ simpleWebDevTool.component = {};
 jQuery(function() {
     'use strict';
     var app = Sammy('#SimpleWebDevTool', function(app) {
-        var controller;
         // define a 'get' route that will be triggered at '#/path'
         app.get('#/path', function() {
             $('#template').html(_.template(simpleWebDevTool.util.render('template1')));
-            controller = simpleWebDevTool.controller.pathController();
-            controller.init();
+            simpleWebDevTool.controller.pathController().init();
         });
 
         app.get('#/path2', function() {
             $('#template').html(_.template(simpleWebDevTool.util.render('template2')));
-            controller = simpleWebDevTool.controller.path2Controller();
-            controller.init();
+            simpleWebDevTool.controller.path2Controller().init();
         });
         app.get('#/vue', function() {
             console.log('access to #/vue');
             $('#template').html(_.template(simpleWebDevTool.util.render('vueTemplate')));
-            controller = simpleWebDevTool.controller.vueController();
-            controller.load();
+            simpleWebDevTool.controller.vueController().load();
         });
-        app.get('#/jquery', function() {
+        app.get('#/jquery/:id', function(context) {
             console.log('access to #/jquery');
             $('#template').html(_.template(simpleWebDevTool.util.render('jqueryTemplate')));
-            controller = simpleWebDevTool.controller.jqueryController();
-            controller.load();
+            simpleWebDevTool.controller.jqueryController(context.params.id).load();
         });
         app.get('#/path2/:id', function(context) {
             // this context is a Sammy.EventContext

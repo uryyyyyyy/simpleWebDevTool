@@ -2,10 +2,9 @@
  * Created by shiba on 14/07/15.
  */
 
-'use strict';
-
 simpleWebDevTool.component.tinyMce = function(selector) {
 
+    'use strict';
     var currentData;
     var $select = $(selector);
 
@@ -38,11 +37,12 @@ simpleWebDevTool.component.tinyMce = function(selector) {
 };
 
 simpleWebDevTool.component.tinyMceTitle = function(selector) {
-
+    'use strict';
     var currentData;
+    var $select = $(selector);
     return{
         getValue : function() {
-            return $(selector).val();
+            return $select.val();
         },
 
         refresh : function(data) {
@@ -53,7 +53,7 @@ simpleWebDevTool.component.tinyMceTitle = function(selector) {
                     toolbar: 'undo redo',
                     menubar: false
                 });
-                $(selector).val(data.main_text);
+                $select.val(data.main_text);
             }
         }
     };

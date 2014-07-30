@@ -5,12 +5,8 @@ simpleWebDevTool.views = {};
 simpleWebDevTool.service = {};
 simpleWebDevTool.dao = {};
 simpleWebDevTool.util = {};
+simpleWebDevTool.cache = {};
 simpleWebDevTool.component = {};
-
-
-console.logBlack = function(msg){
-    console.log('%c' + msg, 'color:#fff;background:#000;');
-};
 
 jQuery(function() {
     'use strict';
@@ -439,18 +435,18 @@ simpleWebDevTool.controller.jqueryController = function(){
     var floating = simpleWebDevTool.component.sampleFloat('#float_');
 
     tinyMce.keyUpEStream.assign(function() {
-        console.logBlack('tinyMce.keyUpEStream');
+        console.log('tinyMce.keyUpEStream');
         var txt = service.refer(tinyMce.getHtml());
         _refresh({ textData: txt});
     });
 
     sampleList.clickEStream.assign(function(val) {
-        console.logBlack('sampleList.clickEStream');
+        console.log('sampleList.clickEStream');
         simpleForm.refresh('click the 1st list ' + val + 'th');
     });
 
     sampleList2.clickEStream.assign(function(val) {
-        console.logBlack('sampleList2.clickEStream');
+        console.log('sampleList2.clickEStream');
         simpleForm.refresh('click the 2nd list ' + val + 'th');
     });
 
@@ -469,36 +465,36 @@ simpleWebDevTool.controller.jqueryController = function(){
         _refresh({textData:JSON.stringify(data)});
     });
 
-    $('#addButton').asEventStream('click').onValue(function() {
-        console.logBlack('addButton');
+    $('#addButton').asEventStream('click').assign(function() {
+        console.log('addButton');
         var addStr = simpleForm.getValue();
         var listElems = sampleList.getList();
         listElems = service.add(listElems, addStr);
         _refresh({ listData: listElems});
     });
 
-    $('#searchButton').asEventStream('click').onValue(function() {
-        console.logBlack('searchButton');
+    $('#searchButton').asEventStream('click').assign(function() {
+        console.log('searchButton');
         var listElems = service.search(sampleList.getList(), simpleForm.getValue());
         _refresh({ listData: listElems});
         slickGrid.filterAndUpdate(Number(simpleForm.getValue()));
     });
 
-    $('#addElemButton').asEventStream('click').onValue(function() {
-        console.logBlack('addElemButton');
+    $('#addElemButton').asEventStream('click').assign(function() {
+        console.log('addElemButton');
         var listElems = service.addElem(sampleList.getList(), simpleForm.getValue());
         _refresh({ listData: listElems});
     });
 
-    $('#demoCreateButton').asEventStream('click').onValue(function() {
+    $('#demoCreateButton').asEventStream('click').assign(function() {
         jsTree.demoCreate();
     });
 
-    $('#demoRenameButton').asEventStream('click').onValue(function() {
+    $('#demoRenameButton').asEventStream('click').assign(function() {
         jsTree.demoRename();
     });
 
-    $('#demoDeleteButton').asEventStream('click').onValue(function() {
+    $('#demoDeleteButton').asEventStream('click').assign(function() {
         jsTree.demoDelete();
     });
 
@@ -507,7 +503,7 @@ simpleWebDevTool.controller.jqueryController = function(){
     });
 
     var _refresh = function(refreshData){
-        console.logBlack('refresh');
+        console.log('refresh');
         var tmp = _.cloneDeep(refreshData);
 
         sampleList.refresh(tmp.listData);
@@ -527,7 +523,7 @@ simpleWebDevTool.controller.jqueryController = function(){
     return {
         load : function(){
             //simpleWebDevTool.util.countStart();
-            console.logBlack('load');
+            console.log('load');
             service.load().assign(_refresh);
             //simpleWebDevTool.util.timeShow();
         }
@@ -742,28 +738,41 @@ simpleWebDevTool.controller.vueController = function(){
 
 (function() {
     'use strict';
-    var mainDao = {};
     var util = simpleWebDevTool.util;
 
-    mainDao.load = function(){
-        console.log('dao.mainDao.load');
-        return Bacon.combineTemplate({
-            listData: Bacon.fromPromise(util.getAjaxAsync('jsonApi/path/2')),
-            jsData: Bacon.fromPromise(util.getAjaxAsync('jsonApi/jstree/1')),
-            slickData: Bacon.fromPromise(util.getAjaxAsync('jsonApi/slickGrid/1')),
-            select2Data: Bacon.fromPromise(util.getAjaxAsync('jsonApi/select2/1')),
-            tinyMceData: Bacon.fromPromise(util.getAjaxAsync('jsonApi/tinyMce/1'))
-        });
-    };
+    simpleWebDevTool.dao.mainDao = {
+        getSampleList: function (id) {
+            console.log('dao.mainDao.load');
+            return Bacon.fromPromise(util.getAjaxAsync('jsonApi/path/' + id));
+        },
 
-    mainDao.save = function(reqData){
-        console.log('dao.mainDao.save');
-        return Bacon.combineTemplate({
-            response: util.postAjaxAsync('jsonApi/path/2', reqData)
-        });
-    };
+        getJsTree: function (id) {
+            console.log('dao.mainDao.load');
+            return Bacon.fromPromise(util.getAjaxAsync('jsonApi/jstree/' + id));
+        },
 
-    window.simpleWebDevTool.dao.mainDao = mainDao;
+        getSlickGrid: function (id) {
+            console.log('dao.mainDao.load');
+            return Bacon.fromPromise(util.getAjaxAsync('jsonApi/slickGrid/' + id));
+        },
+
+        getSelect2: function (id) {
+            console.log('dao.mainDao.load');
+            return Bacon.fromPromise(util.getAjaxAsync('jsonApi/select2/' + id));
+        },
+
+        getTinyMce: function (id) {
+            console.log('dao.mainDao.load');
+            return Bacon.fromPromise(util.getAjaxAsync('jsonApi/tinyMce/' + id));
+        },
+
+        save: function (reqData) {
+            console.log('dao.mainDao.save');
+            return Bacon.combineTemplate({
+                response: util.postAjaxAsync('jsonApi/path/2', reqData)
+            });
+        }
+    };
 })(jQuery);;'use strict';
 
 /**
@@ -818,40 +827,46 @@ InfoWindowStock.prototype = {
 (function() {
     'use strict';
     var dao = simpleWebDevTool.dao;
-    var mainService={};
+    simpleWebDevTool.service.mainService = {
 
-    mainService.add = function (listElems, addStr) {
-        console.log('service.mainService.add');
-        return _.map(listElems, function (num) {
-            return num + Number(addStr);
-        });
-    };
+        add : function (listElems, addStr) {
+            console.log('service.mainService.add');
+            return _.map(listElems, function (num) {
+                return num + Number(addStr);
+            });
+        },
 
-    mainService.search = function (listElems, searchStr) {
-        console.log('service.mainService.search');
-        return _.filter(listElems, function (num) {
-            return (String(num).indexOf(searchStr) !== -1);
-        });
-    };
+        search : function (listElems, searchStr) {
+            console.log('service.mainService.search');
+            return _.filter(listElems, function (num) {
+                return (String(num).indexOf(searchStr) !== -1);
+            });
+        },
 
-    mainService.addElem = function (listElems, searchStr) {
-        console.log('service.mainService.addElem');
-        for (var i = 0; i < Number(searchStr); ++i) {
-            listElems.push(Math.random());
+        addElem : function (listElems, searchStr) {
+            console.log('service.mainService.addElem');
+            for (var i = 0; i < Number(searchStr); ++i) {
+                listElems.push(Math.random());
+            }
+            return listElems;
+        },
+
+        load : function () {
+            console.log('service.mainService.load');
+            return Bacon.combineTemplate({
+                listData: dao.mainDao.getSampleList(2),
+                jsData: dao.mainDao.getJsTree(1),
+                slickData: dao.mainDao.getSlickGrid(1),
+                select2Data: dao.mainDao.getSelect2(1),
+                tinyMceData: dao.mainDao.getTinyMce(1)
+            });
+        },
+
+        refer : function (str) {
+            console.log('service.mainService.refer');
+            return str + ' ほげほげほげ';
         }
-        return listElems;
     };
-
-    mainService.load = function () {
-        console.log('service.mainService.load');
-        return dao.mainDao.load();
-    };
-
-    mainService.refer = function (str) {
-        console.log('service.mainService.refer');
-        return str + ' ほげほげほげ';
-    };
-    window.simpleWebDevTool.service.mainService = mainService;
 })(jQuery);;/**
  * Created by shiba on 14/07/13.
  */
