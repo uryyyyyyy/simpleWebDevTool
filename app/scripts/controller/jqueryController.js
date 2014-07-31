@@ -2,36 +2,45 @@
  * Created by shiba on 14/07/13.
  */
 
-simpleWebDevTool.controller.jqueryController = function()
+simpleWebDevTool.controller.jqueryController = function(optionId){
     'use strict';
+    var id = Number(optionId);
+    var component = simpleWebDevTool.component;
     var service = simpleWebDevTool.service.mainService;
-    var jsTree = simpleWebDevTool.component.jstree('#jstree_demo');
-    var slickGrid = simpleWebDevTool.component.slickGrid('#myGrid');
-    var tinyMce = simpleWebDevTool.component.tinyMce('#editable');
-    var tinyMceTitle = simpleWebDevTool.component.tinyMceTitle('#editable_title');
-    var simpleForm = simpleWebDevTool.component.sampleForm('#sampleForm');
-    var jsTreeSearchFrom = simpleWebDevTool.component.sampleForm('#jstree_text');
+    var jsTree = component.jstree('#jstree_demo');
+    var slickGrid = component.slickGrid('#myGrid');
+    var tinyMce = component.tinyMce('#editable');
+    var tinyMceTitle = component.tinyMceTitle('#editable_title');
+    var simpleForm = component.sampleForm('#sampleForm');
+    var jsTreeSearchFrom = component.sampleForm('#jstree_text');
     var textArea = $('#text');
-    var sampleList = simpleWebDevTool.component.sampleList('#list');
-    var sampleList2 = simpleWebDevTool.component.sampleList('#list2');
-    var select2 = simpleWebDevTool.component.basicSelector('#basicSelect');
-    var select2Multi = simpleWebDevTool.component.multiSelector('#multiSelect');
-    var sampleBox = simpleWebDevTool.component.sampleBox('#box');
-    var floating = simpleWebDevTool.component.sampleFloat('#float_');
+    var sampleList = component.sampleList('#list');
+    var sampleList2 = component.sampleList('#list2');
+    var select2 = component.basicSelector('#basicSelect');
+    var select2Multi = component.multiSelector('#multiSelect');
+    var sampleBox = component.sampleBox('#box');
+    var floating = component.sampleFloat('#float_');
+    var mergely = component.mergely('#compare');
+    var addButton = component.sampleButton('#addButton');
+    var searchButton = component.sampleButton('#searchButton');
+    var addElemButton = component.sampleButton('#addElemButton');
+    var demoCreateButton = component.sampleButton('#demoCreateButton');
+    var demoRenameButton = component.sampleButton('#demoRenameButton');
+    var demoDeleteButton = component.sampleButton('#demoDeleteButton');
 
     tinyMce.keyUpEStream.assign(function() {
-        console.logBlack('tinyMce.keyUpEStream');
+        console.log('tinyMce.keyUpEStream');
         var txt = service.refer(tinyMce.getHtml());
         _refresh({ textData: txt});
     });
 
     sampleList.clickEStream.assign(function(val) {
-        console.logBlack('sampleList.clickEStream');
+        console.log('sampleList.clickEStream');
         simpleForm.refresh('click the 1st list ' + val + 'th');
     });
 
     sampleList2.clickEStream.assign(function(val) {
-        console.logBlack('sampleList2.clickEStream');
+        console.log('sampleList2.clickEStream');
         simpleForm.refresh('click the 2nd list ' + val + 'th');
     });
 
@@ -50,36 +59,36 @@ simpleWebDevTool.controller.jqueryController = function()
         _refresh({textData:JSON.stringify(data)});
     });
 
-    $('#addButton').asEventStream('click').onValue(function() {
-        console.logBlack('addButton');
+    addButton.clickEStream.assign(function() {
+        console.log('addButton');
         var addStr = simpleForm.getValue();
         var listElems = sampleList.getList();
         listElems = service.add(listElems, addStr);
         _refresh({ listData: listElems});
     });
 
-    $('#searchButton').asEventStream('click').onValue(function() {
-        console.logBlack('searchButton');
+    searchButton.clickEStream.assign(function() {
+        console.log('searchButton');
         var listElems = service.search(sampleList.getList(), simpleForm.getValue());
         _refresh({ listData: listElems});
         slickGrid.filterAndUpdate(Number(simpleForm.getValue()));
     });
 
-    $('#addElemButton').asEventStream('click').onValue(function() {
-        console.logBlack('addElemButton');
+    addElemButton.clickEStream.assign(function() {
+        console.log('addElemButton');
         var listElems = service.addElem(sampleList.getList(), simpleForm.getValue());
         _refresh({ listData: listElems});
     });
 
-    $('#demoCreateButton').asEventStream('click').onValue(function() {
+    demoCreateButton.clickEStream.assign(function() {
         jsTree.demoCreate();
     });
 
-    $('#demoRenameButton').asEventStream('click').onValue(function() {
+    demoRenameButton.clickEStream.assign(function() {
         jsTree.demoRename();
     });
 
-    $('#demoDeleteButton').asEventStream('click').onValue(function() {
+    demoDeleteButton.clickEStream.assign(function() {
         jsTree.demoDelete();
     });
 
@@ -88,7 +97,7 @@ simpleWebDevTool.controller.jqueryController = function()
     });
 
     var _refresh = function(refreshData){
-        console.logBlack('refresh');
+        console.log('refresh');
         var tmp = _.cloneDeep(refreshData);
 
         sampleList.refresh(tmp.listData);
@@ -100,6 +109,7 @@ simpleWebDevTool.controller.jqueryController = function()
         sampleBox.refresh(tmp.listData);
         tinyMce.refresh(tmp.tinyMceData);
         tinyMceTitle.refresh(tmp.tinyMceData);
+        mergely.refresh(tmp.tinyMceData);
         if(tmp.textData){
             textArea.text(tmp.textData);
         }
@@ -108,8 +118,8 @@ simpleWebDevTool.controller.jqueryController = function()
     return {
         load : function(){
             //simpleWebDevTool.util.countStart();
-            console.logBlack('load');
-            service.load().assign(_refresh);
+            console.log('load');
+            service.load(id).assign(_refresh);
             //simpleWebDevTool.util.timeShow();
         }
     };
