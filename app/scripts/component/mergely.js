@@ -11,20 +11,17 @@ simpleWebDevTool.component.mergely = function(selector) {
         refresh : function(newData){
             if((!_.isEqual(currentData, newData)) && newData){
                 currentData = _.cloneDeep(newData);
-                $(selector).mergely({
+                $select.mergely({
                     cmsettings: { readOnly: false, lineNumbers: true },
                     lhs: function(setValue) {
                         setValue('the quick red fox\njumped over the hairy dog');
                     },
                     rhs: function(setValue) {
                         setValue('the quick brown fox\njumped over the lazy dog');
-                    }
+                    },
+                    editor_width : '250px'
                 });
             }
-        },
-
-        getSelectedData : function(){
-            return $(selector).select2('data');
         },
 
         clickEStream : $select.asEventStream('click')
