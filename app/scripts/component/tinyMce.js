@@ -25,9 +25,9 @@ simpleWebDevTool.component.tinyMce = function(selector) {
                         'insertdatetime media table contextmenu paste'
                     ],
                     toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
-                    image_list: data.image_list
+                    image_list: data.imageList
                 });
-                $select.html(data.main_text);
+                $select.html(data.mainText);
                 currentData = data;
             }
         },
@@ -53,7 +53,7 @@ simpleWebDevTool.component.tinyMceTitle = function(selector) {
                     toolbar: 'undo redo',
                     menubar: false
                 });
-                $select.val(data.main_text);
+                $select.val(data.mainText);
             }
         }
     };

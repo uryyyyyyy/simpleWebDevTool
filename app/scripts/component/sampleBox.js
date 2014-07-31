@@ -17,7 +17,7 @@ simpleWebDevTool.component.sampleBox = function(selector) {
                     var _id = elem+'_box';
                     $select.append(_.template(simpleWebDevTool.util.render('template_partial'), {_id: _id}));
                     var tiny = simpleWebDevTool.component.tinyMce('#' + _id);
-                    tiny.refresh({main_text:elem});
+                    tiny.refresh({mainText:elem});
                 });
             }
         },
