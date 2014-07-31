@@ -118,8 +118,10 @@ simpleWebDevTool.controller.jqueryController = function(optionId){
     return {
         load : function(){
             //simpleWebDevTool.util.countStart();
+            $("#loading").show();
             console.log('load');
             service.load(id).assign(_refresh);
+            $("#loading").fadeOut(500);
             //simpleWebDevTool.util.timeShow();
         }
     };
