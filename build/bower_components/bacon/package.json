@@ -1,7 +1,7 @@
 {
   "name": "baconjs",
   "description": "A small functional reactive programming lib for JavaScript.",
-  "version": "0.7.19",
+  "version": "0.7.18",
   "keywords": [
     "bacon.js", "bacon", "frp", "functional", "reactive", "programming",
     "stream", "streams", "EventStream", "Rx", "RxJs", "Observable"
@@ -30,7 +30,6 @@
     "grunt-contrib-coffee": "~0.10.0",
     "grunt-contrib-clean": "~0.5.0",
     "grunt-contrib-copy": "~0.5.0",
-    "grunt-contrib-watch": "~0.5",
     "grunt-text-replace": "~0.3.10",
     "benchmark": "1.0.0",
     "browserify": "~3.28.1",

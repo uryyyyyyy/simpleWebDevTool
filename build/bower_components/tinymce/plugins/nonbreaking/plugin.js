@@ -23,7 +23,7 @@ tinymce.PluginManager.add('nonbreaking', function(editor) {
 	});
 
 	editor.addButton('nonbreaking', {
-		title: 'Nonbreaking space',
+		title: 'Insert nonbreaking space',
 		cmd: 'mceNonBreaking'
 	});
 

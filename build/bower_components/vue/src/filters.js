@@ -35,7 +35,6 @@ filters.lowercase = function (value) {
  *  12345 => $12,345.00
  */
 filters.currency = function (value, sign) {
-    value = parseFloat(value)
     if (!value && value !== 0) return ''
     sign = sign || '$'
     var s = Math.floor(value).toString(),

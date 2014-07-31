@@ -11,7 +11,7 @@
     }
   };
 
-  Bacon.version = '0.7.19';
+  Bacon.version = '0.7.18';
 
   Bacon.fromBinder = function(binder, eventTransformer) {
     if (eventTransformer == null) {
@@ -260,7 +260,7 @@
           sink(end());
           reply = Bacon.noMore;
         } else {
-          value = values.shift();
+          value = values.splice(0, 1)[0];
           reply = sink(toEvent(value));
         }
       }
@@ -693,7 +693,6 @@
       this.flatMapError = __bind(this.flatMapError, this);
       this.id = ++idCounter;
       withDescription(desc, this);
-      this.initialDesc = this.desc;
     }
 
     Observable.prototype.onValue = function() {
@@ -1102,28 +1101,14 @@
     };
 
     Observable.prototype.name = function(name) {
-      this._name = name;
+      this.toString = function() {
+        return name;
+      };
       return this;
     };
 
     Observable.prototype.withDescription = function() {
       return describe.apply(null, arguments).apply(this);
-    };
-
-    Observable.prototype.dependsOn = function(observable) {
-      return DepCache.dependsOn(this, observable);
-    };
-
-    Observable.prototype.toString = function() {
-      if (this._name) {
-        return this._name;
-      } else {
-        return this.desc.toString();
-      }
-    };
-
-    Observable.prototype.internalDeps = function() {
-      return this.initialDesc.deps();
     };
 
     return Observable;
@@ -1133,8 +1118,6 @@
   Observable.prototype.reduce = Observable.prototype.fold;
 
   Observable.prototype.assign = Observable.prototype.onValue;
-
-  Observable.prototype.inspect = Observable.prototype.toString;
 
   flatMap_ = function(root, f, firstOnly, limit) {
     var deps, result;
@@ -1172,7 +1155,7 @@
       };
       checkQueue = function() {
         var event;
-        event = queue.shift();
+        event = queue.splice(0, 1)[0];
         if (event) {
           return spawn(event);
         }
@@ -1950,11 +1933,8 @@
       if (this.subscribe == null) {
         this.subscribe = this.obs.subscribeInternal;
       }
+      this.toString = this.obs.toString;
     }
-
-    Source.prototype.toString = function() {
-      return this.obs.toString.call(this);
-    };
 
     Source.prototype.markEnded = function() {
       return this.ended = true;
@@ -2089,20 +2069,31 @@
       this.context = context;
       this.method = method;
       this.args = args;
-      this.cached = null;
     }
 
-    Desc.prototype.deps = function() {
-      return this.cached || (this.cached = findDeps([this.context].concat(this.args)));
-    };
-
     Desc.prototype.apply = function(obs) {
-      obs.desc = this;
+      var deps, that;
+      that = this;
+      deps = _.cached((function() {
+        return findDeps([that.context].concat(that.args));
+      }));
+      obs.internalDeps = obs.internalDeps || deps;
+      obs.dependsOn = DepCache.dependsOn;
+      obs.deps = deps;
+      obs.toString = (function() {
+        return _.toString(that.context) + "." + _.toString(that.method) + "(" + _.map(_.toString, that.args) + ")";
+      });
+      obs.inspect = function() {
+        return obs.toString();
+      };
+      obs.desc = (function() {
+        return {
+          context: that.context,
+          method: that.method,
+          args: that.args
+        };
+      });
       return obs;
-    };
-
-    Desc.prototype.toString = function() {
-      return _.toString(this.context) + "." + _.toString(this.method) + "(" + _.map(_.toString, this.args) + ")";
     };
 
     return Desc;
@@ -2526,14 +2517,14 @@
   DepCache = (function() {
     var collectDeps, dependsOn, flatDeps, invalidate;
     flatDeps = {};
-    dependsOn = function(orig, o) {
+    dependsOn = function(b) {
       var myDeps;
-      myDeps = flatDeps[orig.id];
+      myDeps = flatDeps[this.id];
       if (!myDeps) {
-        myDeps = flatDeps[orig.id] = {};
-        collectDeps(orig, orig);
+        myDeps = flatDeps[this.id] = {};
+        collectDeps(this, this);
       }
-      return myDeps[o.id];
+      return myDeps[b.id];
     };
     collectDeps = function(orig, o) {
       var dep, _i, _len, _ref1, _results;
@@ -2569,7 +2560,7 @@
     };
     independent = function(waiter) {
       return !_.any(waiters, (function(other) {
-        return DepCache.dependsOn(waiter.obs, other.obs);
+        return waiter.obs.dependsOn(other.obs);
       }));
     };
     whenDoneWith = function(obs, f) {
@@ -2584,9 +2575,9 @@
     };
     findIndependent = function() {
       while (!independent(waiters[0])) {
-        waiters.push(waiters.shift());
+        waiters.push(waiters.splice(0, 1)[0]);
       }
-      return waiters.shift();
+      return waiters.splice(0, 1)[0];
     };
     flush = function() {
       var _results;
@@ -2609,7 +2600,7 @@
         } finally {
           rootEvent = void 0;
           while (afters.length) {
-            f = afters.shift();
+            f = afters.splice(0, 1)[0];
             f();
           }
           invalidateDeps();

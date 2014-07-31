@@ -21,10 +21,10 @@ jQuery(function() {
             $('#template').html(_.template(simpleWebDevTool.util.render('template2')));
             simpleWebDevTool.controller.path2Controller().init();
         });
-        app.get('#/vue', function() {
+        app.get('#/vue/:id', function(context) {
             console.log('access to #/vue');
             $('#template').html(_.template(simpleWebDevTool.util.render('vueTemplate')));
-            simpleWebDevTool.controller.vueController().load();
+            simpleWebDevTool.controller.vueController(context.params.id).load();
         });
         app.get('#/jquery/:id', function(context) {
             console.log('access to #/jquery');
@@ -163,20 +163,17 @@ simpleWebDevTool.component.mergely = function(selector) {
         refresh : function(newData){
             if((!_.isEqual(currentData, newData)) && newData){
                 currentData = _.cloneDeep(newData);
-                $(selector).mergely({
+                $select.mergely({
                     cmsettings: { readOnly: false, lineNumbers: true },
                     lhs: function(setValue) {
                         setValue('the quick red fox\njumped over the hairy dog');
                     },
                     rhs: function(setValue) {
                         setValue('the quick brown fox\njumped over the lazy dog');
-                    }
+                    },
+                    editor_width : '250px'
                 });
             }
-        },
-
-        getSelectedData : function(){
-            return $(selector).select2('data');
         },
 
         clickEStream : $select.asEventStream('click')
@@ -227,7 +224,7 @@ simpleWebDevTool.component.sampleBox = function(selector) {
                     var _id = elem+'_box';
                     $select.append(_.template(simpleWebDevTool.util.render('template_partial'), {_id: _id}));
                     var tiny = simpleWebDevTool.component.tinyMce('#' + _id);
-                    tiny.refresh({main_text:elem});
+                    tiny.refresh({mainText:elem});
                 });
             }
         },
@@ -429,9 +426,9 @@ simpleWebDevTool.component.tinyMce = function(selector) {
                         'insertdatetime media table contextmenu paste'
                     ],
                     toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image',
-                    image_list: data.image_list
+                    image_list: data.imageList
                 });
-                $select.html(data.main_text);
+                $select.html(data.mainText);
                 currentData = data;
             }
         },
@@ -457,7 +454,7 @@ simpleWebDevTool.component.tinyMceTitle = function(selector) {
                     toolbar: 'undo redo',
                     menubar: false
                 });
-                $select.val(data.main_text);
+                $select.val(data.mainText);
             }
         }
     };
@@ -590,206 +587,64 @@ simpleWebDevTool.controller.jqueryController = function(optionId){
  * Created by shiba on 14/07/13.
  */
 
-'use strict';
-
-simpleWebDevTool.controller.path2Controller = function(){
-    var controllerName = 'path2Controller';
-    var service = simpleWebDevTool.service.path2Service();
-
-    return {
-        func1 : function(){
-            console.log('func1 ' + controllerName);
-            service.func1();
-            console.log('func1 done');
-        },
-
-        func2 : function(){
-            console.log('func2 '  + controllerName);
-            service.func2();
-            console.log('func2 done');
-        },
-        func3 : function(){
-            var uiData = [1, 3];
-            console.log('func3 '  + controllerName);
-            service.save(uiData);
-            console.log('func3 done');
-        },
-        init : function(){
-            console.log('init '  + controllerName);
-            service.load();
-            console.log('init done');
-        },
-        refresh : function() {
-            console.log('refresh '  + controllerName);
-            var data = service.getData();
-            $('#list').empty();
-            _.forEach(data.data, function(elem){
-                $('#list').append('<li>'+ elem + '</li>');
-            });
-            $('#text').text(data.refHtml);
-        }
-    };
-};;/**
- * Created by shiba on 14/07/13.
- */
-
-'use strict';
-
-simpleWebDevTool.controller.pathController = function(){
-    var controllerName = 'pathController';
-    var service = simpleWebDevTool.service.pathService();
-
-    tinymce.init({
-        selector: 'h1.editable',
-        inline: true,
-        toolbar: 'undo redo',
-        menubar: false
-    });
-
-    tinymce.init({
-        selector: 'div.editable',
-        inline: true,
-        plugins: [
-            'advlist autolink lists link image charmap print preview anchor',
-            'searchreplace visualblocks code fullscreen',
-            'insertdatetime media table contextmenu paste'
-        ],
-        toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image'
-    });
-
-    $('div.editable').keyup(function () {
-        controller.refer();
-    });
-
-    return {
-        add : function(){
-            console.log('func1 ' + controllerName);
-            var addStr = $('#sampleForm').val();
-            service.add(addStr);
-            controller.refresh();
-            console.log('func1 done');
-        },
-        search : function(){
-            console.log('search '  + controllerName);
-            var searchStr = $('#sampleForm').val();
-            service.search(searchStr);
-            controller.refresh();
-            console.log('search done');
-        },
-        init : function(){
-            //simpleWebDevTool.util.countStart();
-            console.log('init '  + controllerName);
-            service.load();
-            //simpleWebDevTool.util.timeShow();
-        },
-        refer : function(){
-            var str = $('div.editable').html();
-            service.refer(str);
-            controller.refresh();
-        },
-        refresh : function() {
-            var data = service.getData();
-            $('#list').empty();
-            _.forEach(data.data, function(elem){
-                $('#list').append('<li>'+ elem + '</li>');
-            });
-            $('#text').text(data.refHtml);
-        }
-    };
-};;/**
- * Created by shiba on 14/07/13.
- */
-
-'use strict';
-
-simpleWebDevTool.controller.vueController = function(){
-    var controllerName = 'vueController';
+simpleWebDevTool.controller.vueController = function(optionId){
+    'use strict';
+    var id = Number(optionId);
+    var component = simpleWebDevTool.component;
     var service = simpleWebDevTool.service.mainService;
+    var addButton = component.sampleButton('#addButton');
+    var tinyMce = component.tinyMce('#editable');
+    var tinyMceTitle = component.tinyMceTitle('#editable_title');
+    var searchButton = component.sampleButton('#searchButton');
+    var addElemButton = component.sampleButton('#addElemButton');
     var vue = new Vue({
         el: '#template',
         data: {
-            texts: ['# hello'],
+            text: '# hello',
             list: [],
             form_:''
         }
     });
 
-    tinymce.init({
-        selector: 'h1.editable',
-        inline: true,
-        toolbar: 'undo redo',
-        menubar: false
+    tinyMce.keyUpEStream.assign(function() {
+        console.log('tinyMce.keyUpEStream');
+        vue.text = service.refer(tinyMce.getHtml());
     });
 
-    tinymce.init({
-        selector: 'div.editable',
-        inline: true,
-        plugins: [
-            'advlist autolink lists link image charmap print preview anchor',
-            'searchreplace visualblocks code fullscreen',
-            'insertdatetime media table contextmenu paste'
-        ],
-        toolbar: 'insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image'
+    addButton.clickEStream.assign(function() {
+        console.log('addButton');
+        var addStr = vue.form_;
+        var listElems = vue.list;
+        vue.list = service.add(listElems, addStr);
     });
 
-    $('div.editable').keyup(function () {
-        controller.refer();
+    searchButton.clickEStream.assign(function() {
+        console.log('searchButton');
+        vue.list = service.search(vue.list, vue.form_);
     });
 
-    var returnObj = {};
+    addElemButton.clickEStream.assign(function() {
+        console.log('addElemButton');
+        vue.list = service.addElem(vue.list, vue.form_);
+    });
 
-    returnObj.add = function(){
-        console.log('func1 ' + controllerName);
-        var addStr = $('#sampleForm').val();
-        var list = service.add(vue.list, addStr);
-        controller.refresh({listData : list});
-        console.log('func1 done');
-    };
-
-    returnObj.search = function(){
-        console.log('search '  + controllerName);
-        var searchStr = $('#sampleForm').val();
-        var list = service.search(vue.list, searchStr);
-        controller.refresh({listData:list});
-        console.log('search done');
-    };
-
-    returnObj.addElem = function(){
-        console.log('search '  + controllerName);
-        var searchStr = $('#sampleForm').val();
-        var list = service.addElem(vue.list, searchStr);
-        controller.refresh({listData:list});
-        console.log('search done');
-    };
-
-    returnObj.init = function() {
-        var tmp = _.cloneDeep(service.getData());
-        controller.refresh(tmp);
-    };
-
-    returnObj.load = function(){
-        //simpleWebDevTool.util.countStart();
-        console.logBlack('init '  + controllerName);
-        service.load();
-        controller.init();
-        //simpleWebDevTool.util.timeShow();
-    };
-
-    returnObj.refer = function(){
-        var str = $('div.editable').html();
-        service.refer(str);
-        controller.refresh();
-    };
-
-    returnObj.refresh = function(refreshData) {
-        console.logBlack('refresh');
+    var _refresh = function(refreshData) {
+        console.log('refresh');
         var tmp = _.cloneDeep(refreshData);
-
         vue.list = tmp.listData;
-        vue.texts = tmp.textData;
+        vue.text = tmp.tinyMceData.mainText;
+        tinyMce.refresh(tmp.tinyMceData);
+        tinyMceTitle.refresh(tmp.tinyMceData);
     };
 
-    return returnObj;
+    return {
+        load : function(){
+            //simpleWebDevTool.util.countStart();
+            console.log('load');
+            service.load(id).assign(_refresh);
+            //simpleWebDevTool.util.timeShow();
+        }
+    };
 };;/**
  * Created by shiba on 14/07/13.
  */

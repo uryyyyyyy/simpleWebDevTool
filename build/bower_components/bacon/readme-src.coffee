@@ -34,11 +34,7 @@ And remember to give me feedback on the bacon! Let me know if you've
 used it. Tell me how it worked for you. What's missing? What's wrong?
 Please contribute!
 
-[![Build Status](https://travis-ci.org/baconjs/bacon.js.svg?branch=master)](https://travis-ci.org/baconjs/bacon.js)
-[![NPM version](http://img.shields.io/npm/v/baconjs.svg)](https://www.npmjs.org/package/baconjs)
-[![NuGet version](http://img.shields.io/nuget/v/Bacon.js.svg)](https://www.nuget.org/packages/Bacon.js)
-[![Dependency Status](https://david-dm.org/baconjs/bacon.js.svg)](https://david-dm.org/baconjs/bacon.js)
-[![devDependency Status](https://david-dm.org/baconjs/bacon.js/dev-status.svg)](https://david-dm.org/baconjs/bacon.js#info=devDependencies)
+[![Build Status](https://travis-ci.org/baconjs/bacon.js.png?branch=master)](https://travis-ci.org/baconjs/bacon.js)
 """
 
 doc.toc()
@@ -52,8 +48,8 @@ Version 0.7.12 can also be found from cdnjs hosting:
     http://cdnjs.cloudflare.com/ajax/libs/bacon.js/0.7.12/bacon.js
     http://cdnjs.cloudflare.com/ajax/libs/bacon.js/0.7.12/bacon.min.js
 
-Visual Studio users can obtain version 0.7.16 via NuGet Packages
-    https://www.nuget.org/packages/Bacon.js/0.7.16
+Visual Studio users can obtain version 0.7.14 via NuGet Packages
+    https://www.nuget.org/packages/Bacon.js/0.7.14
 
 If you're targeting to [node.js](http://nodejs.org/), you can
 
@@ -596,8 +592,8 @@ The [Function Construction rules](#function-construction-rules) below apply here
 """
 
 doc.fn "observable.flatMapFirst(f)", """
-like flatMap, but only spawns a new
-stream if the previously spawned stream has ended.
+like flatMap, but doesn't spawns a new
+stream only if the previously spawned stream has ended.
 
 The [Function Construction rules](#function-construction-rules) below apply here.
 """
@@ -1183,7 +1179,7 @@ y = Bacon.fromArray([10, 20, 30])
 z = Bacon.fromArray([100, 200, 300])
 Bacon.zipAsArray(x, y, z)
 
-# produces values [1, 10, 100], [2, 20, 200] and [3, 30, 300]
+# produces values 111, 222, 333
 ```
 """
 
@@ -1495,8 +1491,8 @@ Bacon.when(
 ```
 
 Now, every time a new 'atom' is spawned from one of the observables,
-this atom is added to the mixture. If at any time there are two hydrogen
-atoms, and an oxygen atom, the corresponding atoms are *consumed*,
+this atom is added to the mixture. If at any time there are two oxygen
+atoms, and a hydrogen atom, the corresponding atoms are *consumed*,
 and output is produced via `make_water`.
 
 The same semantics apply for the second rule to create carbon
@@ -1722,11 +1718,7 @@ Run browser tests:
 
 Run performance tests:
 
-    coffee performance/PerformanceTest.coffe
-
-Run memory usage tests:
-
-    coffee --nodejs '--expose-gc' performance/MemoryTest.coffee
+    coffee performance/*
 """
 
 doc.section "Dependencies"
@@ -1739,7 +1731,7 @@ doc.section "Compatibility with other libs"
 doc.text """
 Bacon.js doesn't mess with prototypes or the global object. Only exceptions below.
 
-* It exports the Bacon object, except in Node.js. In a browser, this is added to the window object.
+* It exports the Bacon object. In a browser, this is added to the window object.
 * If jQuery is defined, it adds the asEventStream method to jQuery (similarly to Zepto)
 
 So, it should be pretty much compatible and a nice citizen.
@@ -1802,10 +1794,16 @@ define(function (require) {
 
 doc.section "Why Bacon?"
 doc.text """
-Bacon.js exists largely because I got frustrated with RxJs, which is a good library, but at that time
-didn't have very good documentation and wasn't open-source. Things have improved a lot in the Rx
-world since that. Yet, there are still compelling reasons to use Bacon.js instead. Like, for instance,
-more consistent stream/property behavior and (arguably) simplicity of use.
+Why not RxJs or something else?
+
+- There is no "something else"
+- I want my bacon to be open source
+- I want good documentation for my bacon
+- I think the Observable abstraction is not good enough. It leaves too much room for variations in
+behaviour (like hot/cold observables). I feel much more comfortable with EventStream and Property.
+- Bacon needs automatic tests. They also serve as documentation.
+- I don't like messing with the Array prototype
+- Because.
 """
 
 doc.section "Contribute"

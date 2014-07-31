@@ -9,5 +9,6 @@
   },
   "_source": "git://github.com/krisnoble/Portamento.git",
   "_target": "*",
-  "_originalSource": "portamento"
+  "_originalSource": "portamento",
+  "_direct": true
 }

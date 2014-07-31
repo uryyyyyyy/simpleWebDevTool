@@ -46,9 +46,7 @@ module.exports = {
         var el = this.iframeBind
             ? this.el.contentWindow
             : this.el
-        if (this.handler) {
-            el.removeEventListener(this.arg, this.handler)
-        }
+        el.removeEventListener(this.arg, this.handler)
     },
 
     unbind: function () {

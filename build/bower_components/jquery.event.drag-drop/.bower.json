@@ -23,5 +23,6 @@
   },
   "_source": "git://github.com/dextermilo/jquery.threedubmedia.git",
   "_target": "~2.2.1",
-  "_originalSource": "jquery.event.drag-drop"
+  "_originalSource": "jquery.event.drag-drop",
+  "_direct": true
 }

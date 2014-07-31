@@ -1,5 +1,5 @@
 {
-    "image_list": [
+    "imageList": [
     {
         "title": "hades",
         "value": "images/hades.png"
@@ -8,5 +8,5 @@
         "title": "tick",
         "value": "images/tick.png"
     }],
-    "main_text":"editable text"
+    "mainText":"editable text"
 }

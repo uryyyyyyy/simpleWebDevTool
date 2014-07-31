@@ -17,19 +17,13 @@ module.exports = {
     },
 
     update: function (value) {
-        var prop = this.prop,
-            isImportant
-        /* jshint eqeqeq: true */
-        // cast possible numbers/booleans into strings
-        if (value != null) value += ''
+        var prop = this.prop
         if (prop) {
-            if (value) {
-                isImportant = value.slice(-10) === '!important'
-                    ? 'important'
-                    : ''
-                if (isImportant) {
-                    value = value.slice(0, -10).trim()
-                }
+            var isImportant = value.slice(-10) === '!important'
+                ? 'important'
+                : ''
+            if (isImportant) {
+                value = value.slice(0, -10).trim()
             }
             this.el.style.setProperty(prop, value, isImportant)
             if (this.prefixed) {

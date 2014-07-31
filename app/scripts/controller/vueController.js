@@ -47,7 +47,7 @@ simpleWebDevTool.controller.vueController = function(optionId){
         console.log('refresh');
         var tmp = _.cloneDeep(refreshData);
         vue.list = tmp.listData;
-        vue.text = tmp.tinyMceData.main_text;
+        vue.text = tmp.tinyMceData.mainText;
         tinyMce.refresh(tmp.tinyMceData);
         tinyMceTitle.refresh(tmp.tinyMceData);
     };
