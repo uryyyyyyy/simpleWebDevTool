@@ -19,6 +19,7 @@
     "select2": "~3.5.0",
     "portamento": "*",
     "bacon": "~0.7.18",
-    "mergely": "~3.3.6"
+    "mergely": "~3.3.6",
+    "ckeditor": "~4.4.3"
   }
 }
