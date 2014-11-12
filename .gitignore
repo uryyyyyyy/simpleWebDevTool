@@ -1,5 +1,7 @@
-node_modules
-app/bower_components
+node_modules/
+app/bower_components/
 access_logs.db
-.idea
+.idea/
 simpleWebDevTool.iml
+.tmp/
+build/
