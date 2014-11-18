@@ -19,8 +19,3 @@ simpleWebDevTool.util.showNgMsg = function(res) {
 		$('#alert').append(_.template(util.render('alert/errorTemplate'), { 'value': _.escape(res.responseJSON.errMsg)}));
 	}
 };
-
-simpleWebDevTool.util.isUndefined = function(res) {
-	'use strict';
-	return res !== undefined;
-};

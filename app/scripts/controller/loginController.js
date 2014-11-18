@@ -9,13 +9,18 @@ simpleWebDevTool.controller.loginController = function(){
 	var userIdForm = component.textForm('#user_id_form');
 	var passwordForm = component.textForm('#password_form');
 
+	var setLogoutForm_ = function(res) {
+		$('#login_logout_form').html(_.template(util.render('logoutFormTemplate')));
+		simpleWebDevTool.controller.logoutController(res.userName);
+	};
+
 	var login = function(){
 		var loginData = {
 			userId: userIdForm.getValue(),
 			pass: passwordForm.getValue()
 		};
 		masterDao.login(loginData)
-			.then(util.setLogoutForm);
+			.then(setLogoutForm_);
 	};
 
 	//event handlers

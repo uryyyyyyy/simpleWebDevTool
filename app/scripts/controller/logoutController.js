@@ -7,9 +7,14 @@ simpleWebDevTool.controller.logoutController = function(userName){
 	var masterDao = simpleWebDevTool.dao.masterDao();
 	var logoutBtn = component.button('#logout_btn');
 
+	var setLoginForm_ = function(res) {
+		$('#login_logout_form').html(_.template(util.render('loginFormTemplate')));
+		simpleWebDevTool.controller.loginController();
+	};
+
 	var logout = function(){
 		masterDao.logout()
-			.then(util.setLoginForm);
+			.then(setLoginForm_);
 	};
 
 	//event handlers

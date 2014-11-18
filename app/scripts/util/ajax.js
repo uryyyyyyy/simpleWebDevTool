@@ -23,28 +23,6 @@ simpleWebDevTool.util.postAjaxAsync = function(url, reqData) {
 	});
 };
 
-simpleWebDevTool.util.getJson = function(promiseObject, okCallBack) {
-	'use strict';
-	var util = simpleWebDevTool.util;
-	promiseObject.onValue(util.showOkMsg(okCallBack));
-	promiseObject.onError(util.showNgMsg);
-};
-
-simpleWebDevTool.util.getJsonWithNoComment = function(promiseObject, okCallBack) {
-	'use strict';
-	var util = simpleWebDevTool.util;
-	promiseObject.onValue(okCallBack);
-	promiseObject.onError(util.showNgMsg);
-};
-
-simpleWebDevTool.util.getAllJson = function(promiseObjects, okCallBack) {
-	'use strict';
-	var util = simpleWebDevTool.util;
-	var bacon = Bacon.combineTemplate(promiseObjects);
-	bacon.onValue(okCallBack);
-	bacon.onError(util.showNgMsg);
-};
-
 simpleWebDevTool.util.postFileAsync = function(url, file) {
 	'use strict';
 	console.log('POST url:' + url);
@@ -57,22 +35,3 @@ simpleWebDevTool.util.postFileAsync = function(url, file) {
 		contentType : false //specification
 	});
 };
-
-simpleWebDevTool.util.setLogoutForm = function(res) {
-	'use strict';
-	var util = simpleWebDevTool.util;
-	var controller = simpleWebDevTool.controller;
-
-	$('#login_logout_form').html(_.template(util.render('logoutFormTemplate')));
-	controller.logoutController(res.userName);
-};
-
-simpleWebDevTool.util.setLoginForm = function(res) {
-	'use strict';
-	var util = simpleWebDevTool.util;
-	var controller = simpleWebDevTool.controller;
-
-	$('#login_logout_form').html(_.template(util.render('loginFormTemplate')));
-	controller.loginController();
-};
-

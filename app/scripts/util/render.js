@@ -22,21 +22,3 @@ simpleWebDevTool.util.render = function(tmplName) {
 	}
 	return tmplCache[tmplName];
 };
-
-simpleWebDevTool.util.renderPartial = function(tmplName) {
-	var tmplCache = simpleWebDevTool.cache.tmplCache;
-
-	if ( ! tmplCache[tmplName] ) {
-		var tmplUrl = 'scripts/component/' + tmplName + '.html';
-		$.ajax({
-			url: tmplUrl,
-			method: 'GET',
-			async: false,
-			dataType: 'html',
-			success: function(data) {
-				tmplCache[tmplName] = data;
-			}
-		});
-	}
-	return tmplCache[tmplName];
-};

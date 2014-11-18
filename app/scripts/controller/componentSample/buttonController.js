@@ -8,7 +8,7 @@ simpleWebDevTool.controller.componentSample.buttonController = function(){
 	var service = simpleWebDevTool.service.componentSample.buttonService();
 
 	//set components
-	var sample_button = component.button('#sample_button');
+	var sampleButton = component.button('#sample_button');
 	var sampleFileForm = component.FileForm('#sample_file');
 
 	//create private method
@@ -17,7 +17,7 @@ simpleWebDevTool.controller.componentSample.buttonController = function(){
 	};
 
 	//attach eventHandlers
-	sample_button.attachClickEvent(_import);
+	sampleButton.attachClickEvent(_import);
 
 	//initialize
 
