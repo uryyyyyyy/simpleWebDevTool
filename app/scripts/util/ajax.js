@@ -75,3 +75,4 @@ simpleWebDevTool.util.setLoginForm = function(res) {
 	$('#login_logout_form').html(_.template(util.render('loginFormTemplate')));
 	controller.loginController();
 };
+

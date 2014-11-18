@@ -1,103 +1,93 @@
 <!doctype html>
 <html id="SimpleWebDevTool">
-	<head>
-		<meta charset="utf-8">
-		<title>SimpleWebDevTool</title>
-		<meta name="description" content="">
-		<meta name="viewport" content="width=device-width">
-		<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-		<!-- bower:css -->
-		<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.min.css">
-			<link rel="stylesheet" href="bower_components/slickgrid/slick.grid.css"/>
-			<link rel="stylesheet" href="bower_components/slickgrid/controls/slick.pager.css"/>
-			<link rel="stylesheet" href="bower_components/jstree/dist/themes/default/style.css"/>
-			<link rel="stylesheet" href="bower_components/select2/select2.css"/>
-			<link rel="stylesheet" href="bower_components/mergely/mergely.css"/>
-			<link rel="stylesheet" href="bower_components/codemirror/lib/codemirror.css"/>
-		<!-- endbower -->
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<meta name="description" content="">
+	<meta name="viewport" content="width=device-width">
+	<!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
+	<!-- bower:css -->
+	<link rel="stylesheet" href="bower_components/bootstrap-table/dist/bootstrap-table.min.css">
+	<link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
+	<link rel="stylesheet" href="bower_components/jquery-ui/themes/smoothness/jquery-ui.css">
+	<link rel="stylesheet" href="bower_components/select2/select2.css">
+	<!-- endbower -->
 
-		<!-- build:css styles.min.css -->
-		<link rel="stylesheet" href="styles/main.css">
-			<link rel="stylesheet" href="styles/slickGrid.css">
-			<link rel="stylesheet" href="styles/PortamentoSample.css">
-			<!-- endbuild -->
-		<!-- other CSS -->
-		<!-- other end -->
-	</head>
-	<body>
+	<!-- build:css styles.min.css -->
+	<link rel="stylesheet" href="styles/main.css">
+	<!-- endbuild -->
+	<!-- other CSS -->
+	<!-- other end -->
+</head>
+<body>
 
-		<!-- Add your site or application content here -->
-		<div id="main" class="container">
-			<div class="header">
-				<ul class="nav nav-pills pull-right">
-					<li class="active"><a href="#">Home</a></li>
-					<li><a href="#/jquery/1">jquery</a></li>
-					<li><a href="#/editor">editor</a></li>
+<!-- Add your site or application content here -->
+<section class="container">
+	<header class="navbar navbar-default">
+		<a class="navbar-brand" href="#">SimpleWebDevTool</a>
+		<ul class="nav navbar-nav">
+			<li class="dropdown">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown">Components<span class="caret"></span></a>
+				<ul class="dropdown-menu" role="menu">
+					<li><a href="#/component/button">button</a></li>
+					<li class="divider"></li>
+					<li><a href="#">Not Yet</a></li>
 				</ul>
-				<h3 class="text-muted"><i class="icon-camera-retro icon-large brown"></i><span class="glyphicon glyphicon-tower"	style="color: red;"></span>simpleWebDevTool</h3>
-				<i class="fa fa-floppy-o brown text-warning"></i> 
-				<span class="fa-stack fa-lg">
-					<i class="fa fa-camera fa-stack-1x"></i>
-					<i class="fa fa-ban fa-stack-2x text-danger"></i>
-				</span>
-			</div>
+			</li>
+			<li class="dropdown">
+				<a href="#" class="dropdown-toggle" data-toggle="dropdown">Other<span class="caret"></span></a>
+				<ul class="dropdown-menu" role="menu">
+				</ul>
+			</li>
+		</ul>
+		<section id="login_logout_form" class="navbar-form navbar-right"></section>
+	</header>
 
-			<section id="alert"></section><!--for alert-->
-			<div id="template"></div>
+	<section id="alert"></section><!--for alert-->
+	<section id="template" class="container">TOP Page</section><!--for content-->
 
-			<div class="footer">
-				<p><span class="glyphicon glyphicon-tower"></span> from uryyyyyyy </p>
-			</div>
-		</div>
+	<footer class="footer">
+		<p> supported by ATE </p>
+	</footer>
+</section>
 
-		<!-- bower:js -->
-		<script src="bower_components/jquery/dist/jquery.min.js"></script>
-		<script src="bower_components/jquery-ui/jquery-ui.js"></script>
-		<script src="bower_components/jquery.event.drag-drop/event.drag/jquery.event.drag.js"></script>
-		<script src="bower_components/lodash/dist/lodash.min.js"></script>
-		<script src="bower_components/tinymce/tinymce.min.js"></script>
-		<script src="bower_components/vue/dist/vue.min.js"></script>
-		<script src="bower_components/jstree/dist/jstree.js"></script>
-		<script src="bower_components/slickgrid/slick.core.js"></script>
-		<script src="bower_components/slickgrid/slick.formatters.js"></script>
-		<script src="bower_components/slickgrid/slick.grid.js"></script>
-		<script src="bower_components/slickgrid/slick.dataview.js"></script>
-		<script src="bower_components/slickgrid/controls/slick.pager.js"></script>
-		<script src="bower_components/sammy/lib/min/sammy-0.7.5.min.js"></script>
-		<script src="bower_components/select2/select2.min.js"></script>
-		<script src="bower_components/portamento/portamento.js"></script>
-		<script src="bower_components/bacon/dist/Bacon.min.js"></script>
-		<script src="bower_components/codemirror/lib/codemirror.js"></script>
-		<script src="bower_components/mergely/mergely.min.js"></script>
-		<!-- endbower -->
+<!-- [shiba] bower_components are depend each relative-path complicated, so these cannot be minify -->
+<!-- bower:js -->
+<script src="bower_components/jquery/dist/jquery.min.js"></script>
+<script src="bower_components/jquery-ui/jquery-ui.min.js"></script>
+<script src="bower_components/lodash/dist/lodash.min.js"></script>
+<script src="bower_components/bacon/dist/Bacon.min.js"></script>
+<script src="bower_components/sammy/lib/min/sammy-0.7.6.min.js"></script>
+<script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+<script src="bower_components/bootstrap-table/dist/bootstrap-table.min.js"></script>
+<script src="bower_components/select2/select2.min.js"></script>
+<!-- endbower -->
 
-		<!-- other library -->
+<!-- other library -->
 
-		<!-- library end -->
+<!-- library end -->
 
-		<!-- build:js scripts.min.js -->
-		<script src="scripts/appRoute.js"></script>
-		<script src="scripts/controller/jqueryController.js"></script>
-		<script src="scripts/controller/editorController.js"></script>
-		<script src="scripts/service/mainService.js"></script>
-		<script src="scripts/service/editorService.js"></script>
-		<script src="scripts/dao/mainDao.js"></script>
-		<script src="scripts/util/ajax.js"></script>
-		<script src="scripts/util/alert.js"></script>
-		<script src="scripts/util/render.js"></script>
-		<script src="scripts/util/timer.js"></script>
-		<script src="scripts/util/jsonCache.js"></script>
-		<script src="scripts/component/jstreeSample.js"></script>
-		<script src="scripts/component/slickGridSample.js"></script>
-		<script src="scripts/component/tinyMce.js"></script>
-		<script src="scripts/component/sampleList.js"></script>
-		<script src="scripts/component/basicSelector.js"></script>
-		<script src="scripts/component/multiSelector.js"></script>
-		<script src="scripts/component/sampleForm.js"></script>
-		<script src="scripts/component/sampleBox.js"></script>
-		<script src="scripts/component/sampleFloat.js"></script>
-		<script src="scripts/component/sampleButton.js"></script>
-		<script src="scripts/component/mergely.js"></script>
-		<!-- endbuild -->
-	</body>
+<!-- build:js scripts.min.js -->
+<script src="scripts/appRoute.js"></script>
+<script src="scripts/controller/globalController.js"></script>
+<script src="scripts/controller/loginController.js"></script>
+<script src="scripts/controller/logoutController.js"></script>
+<script src="scripts/controller/componentSample/buttonController.js"></script>
+<script src="scripts/service/componentSample/buttonService.js"></script>
+<script src="scripts/dao/masterDao.js"></script>
+<script src="scripts/dao/componentSampleDao.js"></script>
+<script src="scripts/util/alert.js"></script>
+<script src="scripts/util/ajax.js"></script>
+<script src="scripts/util/render.js"></script>
+<script src="scripts/util/select2Converter.js"></script>
+<script src="scripts/component/textForm.js"></script>
+<script src="scripts/component/button.js"></script>
+<script src="scripts/component/FileForm.js"></script>
+<script src="scripts/component/FilesForm.js"></script>
+<script src="scripts/component/bootStrapTable.js"></script>
+<script src="scripts/component/datePicker.js"></script>
+<script src="scripts/component/selector.js"></script>
+<script src="scripts/component/multiSelector.js"></script>
+<!-- endbuild -->
+</body>
 </html>

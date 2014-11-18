@@ -1,8 +1,10 @@
 
 var simpleWebDevTool = {};
 simpleWebDevTool.controller = {};
+simpleWebDevTool.controller.componentSample = {};
 simpleWebDevTool.views = {};
 simpleWebDevTool.service = {};
+simpleWebDevTool.service.componentSample = {};
 simpleWebDevTool.dao = {};
 simpleWebDevTool.util = {};
 simpleWebDevTool.cache = {};
@@ -23,6 +25,17 @@ jQuery(function() {
 			simpleWebDevTool.controller.editorController();
 		});
 
+		app.get('#/component/button', function(context) {
+			console.log('#/component/button');
+			$('#template').html(_.template(simpleWebDevTool.util.render('componentSample/buttonTemplate')));
+			simpleWebDevTool.controller.componentSample.buttonController();
+		});
+
+		app.notFound = function(context) {
+			console.log('access to #');
+			$('#template').html(_.template(simpleWebDevTool.util.render('homeTemplate')));
+		}
 	});
 	app.run();
+	simpleWebDevTool.controller.globalController();
 });

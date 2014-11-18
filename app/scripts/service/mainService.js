@@ -41,5 +41,5 @@ simpleWebDevTool.service.mainService = function(){
 			console.log('service.mainService.refer');
 			return str + ' ほげほげほげ';
 		}
-	}
+	};
 };

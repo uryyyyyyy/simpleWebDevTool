@@ -1,5 +1,5 @@
 
-simpleWebDevTool.component.multiSelector = function(selector) {
+simpleWebDevTool.component.selector = function(selector) {
 	'use strict';
 	var $select = $(selector);
 	var currentData = {};
@@ -9,24 +9,23 @@ simpleWebDevTool.component.multiSelector = function(selector) {
 			currentData = _.cloneDeep(newData);
 			$select.select2({
 				data: newData,
-				minimumInputLength: 1,
-				multiple: true
+				minimumInputLength: 1
 			});
 		}
 	};
 
 	//if you want selectedId -> $select.select2('val')
-	var _getSelectedDataList = function(){
+	var _getSelectedData = function(){
 		return $select.select2('data');
 	};
 
-	var _setSelectedDataList = function(idList){
-		$select.select2('val', idList);
+	var _setSelectedData = function(id){
+		$select.select2('val', id);
 	};
 
 	return {
 		initialize : _initialize,
-		getSelectedDataList : _getSelectedDataList,
-		setSelectedDataList : _setSelectedDataList
+		getSelectedData : _getSelectedData,
+		setSelectedData : _setSelectedData
 	};
 };
