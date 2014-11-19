@@ -1,20 +1,22 @@
-/**
- * Created by shiba on 14/07/13.
- */
 
-(function() {
+simpleWebDevTool.dao.componentSampleDao = function(){
 	'use strict';
-	simpleWebDevTool.dao.componentSampleDao = function(){
-		var util = simpleWebDevTool.util;
-		return{
+	var util = simpleWebDevTool.util;
+	return{
 
-			import : function () {
-				console.log('dao.import');
-				var promise = util.postAjaxAsync('jsonApi/component/import', {});
-				promise.fail(util.showNgMsg);
-				return promise.then(util.showOkMsg);
-			}
+		import : function () {
+			console.log('dao.import');
+			var promise = util.postAjaxAsync('jsonApi/component/import', {});
+			promise.fail(util.showNgMsg);
+			return promise.then(util.showOkMsg);
+		},
 
-		};
+		getJsTree : function () {
+			console.log('dao.getJsTree');
+			var promise = util.getAjaxAsync('jsonApi/component/jsTree');
+			promise.fail(util.showNgMsg);
+			return promise.then(util.showOkMsg);
+		}
+
 	};
-})(jQuery);
+};

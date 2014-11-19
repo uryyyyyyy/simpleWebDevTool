@@ -1,5 +1,5 @@
 app/scripts/appRoute.js
-app/scripts/component/jstreeSample.js
+app/scripts/component/jsTree.js
 app/scripts/component/tinyMce.js
 app/scripts/component/sampleBox.js
 app/scripts/component/mergely.js

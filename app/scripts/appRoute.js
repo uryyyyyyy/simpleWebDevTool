@@ -31,6 +31,12 @@ jQuery(function() {
 			simpleWebDevTool.controller.componentSample.buttonController();
 		});
 
+		app.get('#/component/jsTree', function(context) {
+			console.log('#/component/jsTree');
+			$('#template').html(_.template(simpleWebDevTool.util.render('componentSample/jsTreeTemplate')));
+			simpleWebDevTool.controller.componentSample.jsTreeController();
+		});
+
 		app.notFound = function(context) {
 			console.log('access to #');
 			$('#template').html(_.template(simpleWebDevTool.util.render('homeTemplate')));

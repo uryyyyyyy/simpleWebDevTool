@@ -1,7 +1,7 @@
 
 simpleWebDevTool.controller.componentSample.buttonController = function(){
 	'use strict';
-	console.log('componentSample.buttonController');
+	console.log('initialize controller');
 
 	//import modules
 	var component = simpleWebDevTool.component;

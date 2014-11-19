@@ -1,5 +1,5 @@
 
-simpleWebDevTool.service.componentSample.buttonService = function(){
+simpleWebDevTool.service.componentSample.jsTreeService = function(){
 	'use strict';
 	console.log('initialize service');
 	var dao = simpleWebDevTool.dao.componentSampleDao();
@@ -7,8 +7,8 @@ simpleWebDevTool.service.componentSample.buttonService = function(){
 
 	return{
 
-		import : function() {
-			return dao.import();
+		load : function() {
+			return dao.getJsTree();
 		}
 
 	};

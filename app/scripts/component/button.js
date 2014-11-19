@@ -10,6 +10,6 @@ simpleWebDevTool.component.button = function(selector) {
 	};
 
 	return {
-		attachClickEvent : _attachClickEvent,
+		attachClickEvent : _attachClickEvent
 	};
 };
