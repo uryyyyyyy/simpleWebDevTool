@@ -30,11 +30,15 @@ jQuery(function() {
 			$('#template').html(_.template(simpleWebDevTool.util.render('componentSample/buttonTemplate')));
 			simpleWebDevTool.controller.componentSample.buttonController();
 		});
-
 		app.get('#/component/jsTree', function(context) {
 			console.log('#/component/jsTree');
 			$('#template').html(_.template(simpleWebDevTool.util.render('componentSample/jsTreeTemplate')));
 			simpleWebDevTool.controller.componentSample.jsTreeController();
+		});
+		app.get('#/component/dialog', function(context) {
+			console.log('#/component/dialog');
+			$('#template').html(_.template(simpleWebDevTool.util.render('componentSample/dialogTemplate')));
+			simpleWebDevTool.controller.componentSample.dialogController();
 		});
 
 		app.notFound = function(context) {

@@ -32,6 +32,7 @@
 				<ul class="dropdown-menu" role="menu">
 					<li><a href="#/component/button">button</a></li>
 					<li><a href="#/component/jsTree">jsTree</a></li>
+					<li><a href="#/component/dialog">dialog</a></li>
 					<li class="divider"></li>
 					<li><a href="#">Not Yet</a></li>
 				</ul>
@@ -45,11 +46,15 @@
 		<section id="login_logout_form" class="navbar-form navbar-right"></section>
 	</header>
 
-	<section id="alert"></section><!--for alert-->
-	<section id="template" class="container">TOP Page</section><!--for content-->
+	<!--for alert-->
+	<section id="alert"></section>
+	<!--for content-->
+	<section id="template" class="container">TOP Page</section>
+	<!--for modal dialog-->
+	<section class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"></section>
 
 	<footer class="footer">
-		<p> supported by ATE </p>
+		<p> supported by uryyyyyyy </p>
 	</footer>
 </section>
 
@@ -77,6 +82,9 @@
 <script src="scripts/controller/logoutController.js"></script>
 <script src="scripts/controller/componentSample/buttonController.js"></script>
 <script src="scripts/controller/componentSample/jsTreeController.js"></script>
+<script src="scripts/controller/componentSample/dialogController.js"></script>
+<script src="scripts/controller/componentSample/dialog/sampleController.js"></script>
+
 <script src="scripts/service/componentSample/buttonService.js"></script>
 <script src="scripts/service/componentSample/jsTreeService.js"></script>
 <script src="scripts/dao/masterDao.js"></script>
@@ -85,6 +93,7 @@
 <script src="scripts/util/ajax.js"></script>
 <script src="scripts/util/render.js"></script>
 <script src="scripts/util/select2Converter.js"></script>
+
 <script src="scripts/component/textForm.js"></script>
 <script src="scripts/component/form.js"></script>
 <script src="scripts/component/jsTree.js"></script>
@@ -95,6 +104,8 @@
 <script src="scripts/component/datePicker.js"></script>
 <script src="scripts/component/selector.js"></script>
 <script src="scripts/component/multiSelector.js"></script>
+<script src="scripts/component/modalDialog.js"></script>
+
 <!-- endbuild -->
 </body>
 </html>

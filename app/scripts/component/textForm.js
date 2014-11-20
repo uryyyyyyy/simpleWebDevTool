@@ -14,7 +14,9 @@ simpleWebDevTool.component.textForm = function(selector) {
 
 	var _attachEnterEvent = function(callback){
 		$select.on('keydown', function (e) {
-			Bacon.once(e).filter(_isEnter).onValue(callback);
+			if(_isEnter){
+				callback(e);
+			}
 		});
 	};
 
