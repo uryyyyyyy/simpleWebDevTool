@@ -69,7 +69,7 @@ http://stackoverflow.com/questions/16748737/grunt-watch-error-waiting-fatal-erro
 * 学習コストの割に楽になる気がしない。
 * Angularにロックインされる。
 （Data-bindingだけしたければVue.js使え）
-
+* 2.0が良さそうならそこから使い始めようかな。
 
 ### BackBone.js
 
@@ -207,7 +207,6 @@ http://tech.nitoyon.com/ja/blog/2014/07/18/data-binding/
 
 * jQuery (2系) -> DOM操作 各種コンポーネント
 * Lodash -> JSのハマりどころを避ける・Template ≒ underscore.js
-* bacon -> Event・非同期通信の制御
 * sammy -> SPA用のRoutingを担う。他のライブラリで代用可。
 * QUnit -> テスト時のみ利用。
 
@@ -265,7 +264,6 @@ Component内で閉じないEventはEventStreamでControllerに流す。
 
 外部（サーバー）との通信を担う。
 同期の場合はLoadでそのまま表示させる。
-非同期の場合は、bacon.jsでPromiseをラップして返す。
 
 ### Template
 
@@ -333,6 +331,3 @@ Ajax通信を模した開発を行える。
 
 ## TODO
 
-* tab sample (or data-cache across the pages)
-* speed test(view rendering)
-* BackBone routing
