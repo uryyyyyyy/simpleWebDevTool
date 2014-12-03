@@ -40,6 +40,11 @@ jQuery(function() {
 			$('#template').html(_.template(simpleWebDevTool.util.render('componentSample/dialogTemplate')));
 			simpleWebDevTool.controller.componentSample.dialogController();
 		});
+		app.get('#/component/ckEditor', function() {
+			console.log('#/component/ckEditor');
+			$('#template').html(_.template(simpleWebDevTool.util.render('componentSample/ckEditorTemplate')));
+			simpleWebDevTool.controller.componentSample.ckEditorController();
+		});
 
 		app.notFound = function(context) {
 			console.log('access to #');
